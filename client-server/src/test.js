@@ -1,14 +1,14 @@
-const admin = require("firebase-admin");
+import { initializeApp, credential as _credential, messaging } from "firebase-admin";
 
 // Initialize Firebase Admin SDK
-const serviceAccount = require("../quikfino.json");
+import serviceAccount from "../quikfino.json";
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+initializeApp({
+  credential: _credential.cert(serviceAccount),
 });
 
 // Get Access Token
-admin.credential
+_credential
   .cert(serviceAccount)
   .getAccessToken()
   .then((token) => {
@@ -28,8 +28,7 @@ admin.credential
     };
 
     // Send notification
-    admin
-      .messaging()
+    messaging()
       .send(message)
       .then((response) => {
         console.log("Successfully sent message:", response);
