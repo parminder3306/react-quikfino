@@ -2,7 +2,7 @@
   "name": "quikfino",
   "private": true,
   "version": "1.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "start": "react-native start",
     "apk": "react-native run-android",
