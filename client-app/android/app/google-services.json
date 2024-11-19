@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "204882739744",
+    "project_id": "quikfino",
+    "storage_bucket": "quikfino.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204882739744:android:07d7968c039c460485f245",
+        "android_client_info": {
+          "package_name": "com.quikfino"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "204882739744-7ulh813strll9m8cjgc4m5eejp2kbrhf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNlYtSXw16BHBRC8xMue9zyBQ6Hxv9dC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "204882739744-7ulh813strll9m8cjgc4m5eejp2kbrhf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
