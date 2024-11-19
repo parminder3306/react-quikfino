@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { port, connectDB, sequelize } from "./config/db.js";
+import { port, connectDB, sequelize } from "./config/dbConfig.js";
 // import authRoutes from "./routes/authRoutes.js"; // Uncomment when needed
 
 // Initialize express app
