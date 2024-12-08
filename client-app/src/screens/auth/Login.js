@@ -19,7 +19,7 @@ import Session from "../../utils/Session";
 import ToastBar from "../../utils/ToastBar";
 
 // Custom API
-import Login from "../../api/Login";
+import Login from "../../api/Api";
 
 // Custom styles
 import Style from "../../styles/Style";
