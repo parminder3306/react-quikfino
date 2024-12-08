@@ -19,7 +19,7 @@ import Rewards from "./main/Rewards";
 import Profile from "./main/Profile";
 
 // Custom hooks
-import { Icon, ButtonIcon, BigButtonIcon } from "../hooks/Icon";
+import Icon from "../hooks/Icon";
 
 // Custom styles
 import Style from "../styles/Style";
@@ -42,7 +42,7 @@ const Main = ({ navigation, route }) => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => (
-          <Icon
+          <Icon.SIcon
             icon={iconMap[route.name]}
             size={route.name === "Send" ? 24 : 20}
             color={route.name === "Send" ? "#FFFFFF" : color}
@@ -73,7 +73,7 @@ const Main = ({ navigation, route }) => {
         component={Send}
         options={{
           tabBarButton: () => (
-            <BigButtonIcon
+            <Icon.BigButtonIcon
               icon={faMoneyBillTransfer}
               size={24}
               color={"#FFFFFF"}
