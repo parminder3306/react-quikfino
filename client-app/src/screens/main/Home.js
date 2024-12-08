@@ -32,7 +32,7 @@ const Home = () => {
       <View style={styles.bannerContainer}>
         <Image
           source={{
-            uri: "https://via.placeholder.com/400x100?text=Get+up+to+5+Lakh+Loan",
+            uri: "https://t3.ftcdn.net/jpg/02/77/69/26/360_F_277692680_b65wdSQDuWZRrKwIUmGQo0zwND6n0MZR.jpg",
           }}
           style={styles.bannerImage}
         />

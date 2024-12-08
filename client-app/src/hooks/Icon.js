@@ -23,11 +23,10 @@ const BigButtonIcon = ({ icon, size, color, navigateTo }) => {
     <TouchableOpacity
       onPress={() => navigation.navigate(navigateTo)}
       activeOpacity={0.8}
+      style={Style.bigButtonContainer}
     >
-      <View style={Style.bigButtonContainer}>
-        <View style={Style.bigButton}>
-          <FontAwesomeIcon icon={icon} size={size} color={color} />
-        </View>
+      <View style={Style.bigButton}>
+        <FontAwesomeIcon icon={icon} size={size} color={color} />
       </View>
     </TouchableOpacity>
   );
