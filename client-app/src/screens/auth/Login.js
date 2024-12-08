@@ -16,7 +16,7 @@ import { useGoToMain } from "../../hooks/Redirect";
 
 // Custom utils
 import Session from "../../utils/Session";
-import ToastBar from "../../utils/ToastBar";
+import Toast from "../../utils/Toast";
 
 // Custom API
 import Api from "../../api/Api";
@@ -37,17 +37,17 @@ const Login = ({ navigation }) => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      ToastBar("Please fill in both email and password!");
+      Toast.Snackbar("Please fill in both email and password!");
       return;
     }
 
     if (!validateEmail(email)) {
-      ToastBar("Please enter a valid email address.");
+      Toast.Snackbar("Please enter a valid email address.");
       return;
     }
 
     if (password.length < 6) {
-      ToastBar("Password must be at least 6 characters.");
+      Toast.Snackbar("Password must be at least 6 characters.");
       return;
     }
 
@@ -56,15 +56,15 @@ const Login = ({ navigation }) => {
       // const useApiData = await Api.Login(email, password);
       if (email === "parminder3306@gmail.com" && password === "123456") {
         Session.set({ email });
-        ToastBar(email);
+        Toast.Snackbar(email);
         useGoToMain(navigation);
       } else {
-        ToastBar("Wrong details!");
+        Toast.Snackbar("Wrong details!");
       }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      ToastBar(`Login Failed: ${error.message}`);
+      Toast.Snackbar(`Login Failed: ${error.message}`);
     }
   };
 
