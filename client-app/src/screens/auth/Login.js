@@ -19,7 +19,7 @@ import Session from "../../utils/Session";
 import ToastBar from "../../utils/ToastBar";
 
 // Custom API
-import useLoginApi from "../../api/useLoginApi";
+import Login from "../../api/Login";
 
 // Custom styles
 import Style from "../../styles/Style";
@@ -53,7 +53,7 @@ const Login = ({ navigation }) => {
 
     try {
       setIsLoading(true);
-      // const useApiData = await useLoginApi(email, password);
+      // const useApiData = await Login(email, password);
       if (email === "parminder3306@gmail.com" && password === "123456") {
         Session.set({ email });
         ToastBar(email);

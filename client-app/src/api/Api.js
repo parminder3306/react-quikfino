@@ -15,4 +15,4 @@ export const Login = async ({ email, password }) => {
   }
 };
 
-export default useLoginApi;
+export default Login;
