@@ -19,10 +19,10 @@ import Rewards from "./main/Rewards";
 import Profile from "./main/Profile";
 
 // Custom hooks
-import { Icon, ButtonIcon, BigButtonIcon } from "../hooks/useIcon";
+import { Icon, ButtonIcon, BigButtonIcon } from "../hooks/Icon";
 
 // Custom styles
-import useAppStyle from "../styles/useAppStyle";
+import Style from "../styles/Style";
 
 // Static assets
 import headerLogo from "../../assets/icons/header-logo.png";
@@ -48,10 +48,10 @@ const Main = ({ navigation, route }) => {
             color={route.name === "Send" ? "#FFFFFF" : color}
           />
         ),
-        tabBarStyle: useAppStyle.tabBar,
+        tabBarStyle: Style.tabBar,
         tabBarActiveTintColor: "#FF6E40",
         tabBarInactiveTintColor: "#AAAAAA",
-        headerStyle: useAppStyle.header,
+        headerStyle: Style.header,
       })}
     >
       <Tab.Screen

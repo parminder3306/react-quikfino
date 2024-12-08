@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-const useAppStyle = StyleSheet.create({
+const Style = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
@@ -120,4 +120,4 @@ const useAppStyle = StyleSheet.create({
   },
 });
 
-export default useAppStyle;
+export default Style;

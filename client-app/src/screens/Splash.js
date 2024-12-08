@@ -5,7 +5,7 @@ import { View, Animated } from "react-native";
 import FadeAnimation from "../utils/FadeAnimation";
 
 // Custom style
-import useSplashStyle from "../styles/useAppStyle";
+import useSplashStyle from "../styles/Style";
 
 // Custom image
 import splashLogo from "../../assets/icons/logo.png";

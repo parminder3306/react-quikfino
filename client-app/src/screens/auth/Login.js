@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 // Custom hooks
-import { useGoToMain } from "../../hooks/useRedirect";
+import { useGoToMain } from "../../hooks/Redirect";
 
 // Custom utils
 import Session from "../../utils/Session";
@@ -22,7 +22,7 @@ import ToastBar from "../../utils/ToastBar";
 import useLoginApi from "../../api/useLoginApi";
 
 // Custom styles
-import useAppStyle from "../../styles/useAppStyle";
+import Style from "../../styles/Style";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -69,12 +69,12 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <View style={useAppStyle.container}>
-      <Text style={useAppStyle.loginTitle}>Welcome Back</Text>
-      <Text style={useAppStyle.loginSubtitle}>Please log in to continue</Text>
+    <View style={Style.container}>
+      <Text style={Style.loginTitle}>Welcome Back</Text>
+      <Text style={Style.loginSubtitle}>Please log in to continue</Text>
 
       <TextInput
-        style={useAppStyle.input}
+        style={Style.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
@@ -82,9 +82,9 @@ const Login = ({ navigation }) => {
         autoCapitalize="none"
       />
 
-      <View style={useAppStyle.passwordContainer}>
+      <View style={Style.passwordContainer}>
         <TextInput
-          style={useAppStyle.input}
+          style={Style.input}
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
@@ -92,7 +92,7 @@ const Login = ({ navigation }) => {
         />
         <TouchableOpacity
           onPress={() => setShowPassword(!showPassword)}
-          style={useAppStyle.inputRightIcon}
+          style={Style.inputRightIcon}
         >
           <FontAwesomeIcon
             icon={showPassword ? faEyeSlash : faEye}
@@ -103,25 +103,25 @@ const Login = ({ navigation }) => {
       </View>
 
       <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
-        <Text style={useAppStyle.link}>Forgot Password?</Text>
+        <Text style={Style.link}>Forgot Password?</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={useAppStyle.buttonPrimary}
+        style={Style.buttonPrimary}
         onPress={handleLogin}
         disabled={isLoading}
       >
         {isLoading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <Text style={useAppStyle.buttonText}>Log In</Text>
+          <Text style={Style.buttonText}>Log In</Text>
         )}
       </TouchableOpacity>
 
-      <View style={useAppStyle.signupContainer}>
-        <Text style={useAppStyle.noAccountText}>Don't have an account?</Text>
+      <View style={Style.signupContainer}>
+        <Text style={Style.noAccountText}>Don't have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={[useAppStyle.link, useAppStyle.signupLink]}>
+          <Text style={[Style.link, Style.signupLink]}>
             Sign Up
           </Text>
         </TouchableOpacity>
