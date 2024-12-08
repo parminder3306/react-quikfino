@@ -1,29 +1,32 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MMKV } from "react-native-mmkv";
+
+// Initialize MMKV
+const storage = new MMKV();
 
 const sessionName = "userSession";
 
 const Session = {
-  get: async () => {
+  get: () => {
     try {
-      const session = await AsyncStorage.getItem(sessionName);
-      return session ? JSON.parse(session) : null;
+      const session = storage.getString(sessionName); // Retrieve string
+      return session ? JSON.parse(session) : null; // Parse JSON if exists
     } catch (error) {
       console.error("Error retrieving session:", error);
       return null;
     }
   },
 
-  set: async (sessionData) => {
+  set: (sessionData) => {
     try {
-      await AsyncStorage.setItem(sessionName, JSON.stringify(sessionData));
+      storage.set(sessionName, JSON.stringify(sessionData)); // Store JSON as string
     } catch (error) {
       console.error("Error saving session:", error);
     }
   },
 
-  clear: async () => {
+  clear: () => {
     try {
-      await AsyncStorage.removeItem(sessionName);
+      storage.delete(sessionName); // Remove the key from MMKV
     } catch (error) {
       console.error("Error removing session:", error);
     }

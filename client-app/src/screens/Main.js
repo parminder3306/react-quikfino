@@ -9,9 +9,6 @@ import {
   faMoneyBillTrendUp,
   faGift,
   faUser,
-  faPowerOff,
-  faBell,
-  faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Custom screens
@@ -22,14 +19,13 @@ import Rewards from "./main/Rewards";
 import Profile from "./main/Profile";
 
 // Custom hooks
-import { useBackToLogin } from "../hooks/useRedirect";
-import { useBottomTabIcon, useHeaderRightIcon } from "../hooks/useIcon";
+import { Icon, ButtonIcon, BigButtonIcon } from "../hooks/useIcon";
 
 // Custom styles
 import useAppStyle from "../styles/useAppStyle";
 
 // Static assets
-const headerLogo = require("../../assets/icons/header-logo.png");
+import headerLogo from "../../assets/icons/header-logo.png";
 
 const Main = ({ navigation, route }) => {
   const { sessionData } = route.params;
@@ -45,10 +41,17 @@ const Main = ({ navigation, route }) => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color }) => {
-          return useBottomTabIcon(iconMap[route.name], color);
-        },
+        tabBarIcon: ({ color }) => (
+          <Icon
+            icon={iconMap[route.name]}
+            size={route.name === "Send" ? 24 : 20}
+            color={route.name === "Send" ? "#FFFFFF" : color}
+          />
+        ),
         tabBarStyle: useAppStyle.tabBar,
+        tabBarActiveTintColor: "#FF6E40",
+        tabBarInactiveTintColor: "#AAAAAA",
+        headerStyle: useAppStyle.header,
       })}
     >
       <Tab.Screen
@@ -57,60 +60,31 @@ const Main = ({ navigation, route }) => {
         options={{
           headerTitle: () => (
             <Image
-              source={require("../../assets/icons/header-logo.png")}
+              source={headerLogo}
               style={{ width: 100, height: 40 }}
               resizeMode="contain"
             />
           ),
-          headerRight: () =>
-            useHeaderRightIcon(faBell, () => useBackToLogin(navigation)),
-          headerStyle: useAppStyle.header,
-          tabBarActiveTintColor: "#FF5C4F",
-          tabBarInactiveTintColor: "#969696",
         }}
         initialParams={{ sessionData: { email: "Parminder Singh" } }}
       />
-
-      <Tab.Screen
-        name="Recipients"
-        component={Recipients}
-        options={{
-          headerRight: () =>
-            useHeaderRightIcon(faCirclePlus, () => useBackToLogin(navigation)),
-          headerStyle: useAppStyle.header,
-          tabBarActiveTintColor: "#FF5C4F",
-          tabBarInactiveTintColor: "#969696",
-        }}
-      />
+      <Tab.Screen name="Recipients" component={Recipients} />
       <Tab.Screen
         name="Send"
         component={Send}
         options={{
-          headerStyle: useAppStyle.header,
-          tabBarActiveTintColor: "#FF5C4F",
-          tabBarInactiveTintColor: "#969696",
+          tabBarButton: () => (
+            <BigButtonIcon
+              icon={faMoneyBillTrendUp}
+              size={24}
+              color={"#FFFFFF"}
+              onPress={() => navigation.navigate("Send")}
+            />
+          ),
         }}
       />
-      <Tab.Screen
-        name="Rewards"
-        component={Rewards}
-        options={{
-          headerStyle: useAppStyle.header,
-          tabBarActiveTintColor: "#FF5C4F",
-          tabBarInactiveTintColor: "#969696",
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          headerRight: () =>
-            useHeaderRightIcon(faPowerOff, () => useBackToLogin(navigation)),
-          headerStyle: useAppStyle.header,
-          tabBarActiveTintColor: "#FF5C4F",
-          tabBarInactiveTintColor: "#969696",
-        }}
-      />
+      <Tab.Screen name="Rewards" component={Rewards} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };

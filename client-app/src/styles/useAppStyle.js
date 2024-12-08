@@ -10,12 +10,9 @@ const useAppStyle = StyleSheet.create({
   },
   header: {
     backgroundColor: "#FFFFFF",
-    elevation: 2,
-    borderBottomWidth: 0,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    elevation: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EEEEEE",
   },
   headerContainer: {
     flexDirection: "row",
@@ -38,13 +35,9 @@ const useAppStyle = StyleSheet.create({
   },
   tabBar: {
     backgroundColor: "#FFFFFF",
-    height: 60,
+    height: 65,
     borderTopWidth: 0,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 2,
+    elevation: 0,
   },
   sPlashLogo: {
     width: 300,
@@ -88,7 +81,7 @@ const useAppStyle = StyleSheet.create({
   buttonPrimary: {
     width: "100%",
     height: 50,
-    backgroundColor: "#FF5C4F",
+    backgroundColor: "#12D488",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
@@ -99,8 +92,26 @@ const useAppStyle = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  bigButtonContainer: {
+    top: -20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bigButton: {
+    width: 70,
+    height: 70,
+    backgroundColor: "#FF6E40",
+    borderRadius: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+    elevation: 5,
+  },
   link: {
-    color: "#FF5C4F",
+    color: "#12D488",
     fontSize: 16,
   },
   signupContainer: {
