@@ -81,7 +81,7 @@ const Style = StyleSheet.create({
   buttonPrimary: {
     width: "100%",
     height: 50,
-    backgroundColor: "#12D488",
+    backgroundColor: "#FF6E40",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
@@ -111,7 +111,7 @@ const Style = StyleSheet.create({
     elevation: 5,
   },
   link: {
-    color: "#12D488",
+    color: "#FF6E40",
     fontSize: 16,
   },
   signupContainer: {

@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   faHouse,
   faAddressBook,
-  faMoneyBillTrendUp,
+  faMoneyBillTransfer,
   faGift,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -33,7 +33,7 @@ const Main = ({ navigation, route }) => {
   const iconMap = {
     Home: faHouse,
     Recipients: faAddressBook,
-    Send: faMoneyBillTrendUp,
+    Send: faMoneyBillTransfer,
     Rewards: faGift,
     Profile: faUser,
   };
@@ -68,22 +68,20 @@ const Main = ({ navigation, route }) => {
         }}
         initialParams={{ sessionData: { email: "Parminder Singh" } }}
       />
-      <Tab.Screen name="Recipients" component={Recipients} />
       <Tab.Screen
         name="Send"
         component={Send}
         options={{
           tabBarButton: () => (
             <BigButtonIcon
-              icon={faMoneyBillTrendUp}
+              icon={faMoneyBillTransfer}
               size={24}
               color={"#FFFFFF"}
-              onPress={() => navigation.navigate("Send")}
+              navigateTo="Send"
             />
           ),
         }}
       />
-      <Tab.Screen name="Rewards" component={Rewards} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );

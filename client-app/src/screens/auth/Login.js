@@ -19,7 +19,7 @@ import Session from "../../utils/Session";
 import ToastBar from "../../utils/ToastBar";
 
 // Custom API
-import Login from "../../api/Api";
+import Api from "../../api/Api";
 
 // Custom styles
 import Style from "../../styles/Style";
@@ -53,7 +53,7 @@ const Login = ({ navigation }) => {
 
     try {
       setIsLoading(true);
-      // const useApiData = await Login(email, password);
+      // const useApiData = await Api.Login(email, password);
       if (email === "parminder3306@gmail.com" && password === "123456") {
         Session.set({ email });
         ToastBar(email);
@@ -121,9 +121,7 @@ const Login = ({ navigation }) => {
       <View style={Style.signupContainer}>
         <Text style={Style.noAccountText}>Don't have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={[Style.link, Style.signupLink]}>
-            Sign Up
-          </Text>
+          <Text style={[Style.link, Style.signupLink]}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>
