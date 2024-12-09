@@ -3,8 +3,7 @@ import { Sequelize } from "sequelize";
 
 // dotenv.config();
 
-// Environment variables
-const port = 5000;
+const port = 86;
 const jwtSecret = "Janny@123";
 
 const dbConfig = {
@@ -15,7 +14,6 @@ const dbConfig = {
   dialect: "mysql",
 };
 
-// Sequelize instance
 const sequelize = new Sequelize(
   dbConfig.database,
   dbConfig.username,
@@ -23,18 +21,17 @@ const sequelize = new Sequelize(
   {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
-    logging: false, // Disable SQL query logs for cleaner output
+    logging: false,
   }
 );
 
-// Database connection function
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log("✅ MySQL connected successfully.");
   } catch (error) {
     console.error("❌ Unable to connect to the database:", error.message);
-    process.exit(1); // Exit process if the connection fails
+    process.exit(1);
   }
 };
 

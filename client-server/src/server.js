@@ -1,26 +1,24 @@
 import express from "express";
 import cors from "cors";
 import { port, connectDB, sequelize } from "./config/dbConfig.js";
-// import authRoutes from "./routes/authRoutes.js"; // Uncomment when needed
+import routes from "./Routes.js";
 
-// Initialize express app
 const app = express();
 
 // Middleware
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
 // Routes
-// app.use("/api/auth", authRoutes); // Uncomment when routes are defined
+app.use("/api/v1", routes);
 
-// Sync Sequelize models with the database
 const syncDatabase = async () => {
   try {
     await sequelize.sync();
     console.log("✅ Database synchronized.");
   } catch (error) {
     console.error("❌ Error syncing database:", error.message);
-    throw error; // Re-throw to handle it during server startup
+    throw error;
   }
 };
 
@@ -31,7 +29,7 @@ const startServer = async () => {
     app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
   } catch (error) {
     console.error("❌ Failed to start server:", error.message);
-    process.exit(1);
+    process.exit(1); // Exit the process if server startup fails
   }
 };
 
