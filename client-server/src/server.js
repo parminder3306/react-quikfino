@@ -4,13 +4,13 @@ import cors from "cors";
 import env from "./config/dotEnv.js";
 import db from "./config/dbConfig.js";
 
-import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 
 // app.use(cors());
 app.use(express.json());
-app.use("/api/v1", userRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 const connectDB = async () => {
   try {
