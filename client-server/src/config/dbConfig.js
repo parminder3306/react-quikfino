@@ -1,38 +1,27 @@
-import { Sequelize } from "sequelize";
-// import dotenv from "dotenv";
-
-// dotenv.config();
-
-const port = 86;
-const jwtSecret = "Janny@123";
+import knex from "knex";
+import env from "./dotEnv.js";
 
 const dbConfig = {
-  database: "quikfino",
-  username: "root",
-  password: null,
-  host: "localhost",
-  dialect: "mysql",
+  client: "mysql2",
+  connection: {
+    host: env.DB_HOST,
+    user: env.DB_USER,
+    password: env.DB_PASS,
+    database: env.DB_NAME,
+  },
+  pool: {
+    min: 2,
+    max: 20,
+  },
+  migrations: {
+    tableName: "knex_migrations",
+    directory: "./db/migrations",
+  },
+  seeds: {
+    directory: "./db/seeds",
+  },
 };
 
-const sequelize = new Sequelize(
-  dbConfig.database,
-  dbConfig.username,
-  dbConfig.password,
-  {
-    host: dbConfig.host,
-    dialect: dbConfig.dialect,
-    logging: false,
-  }
-);
+const db = knex(dbConfig);
 
-const connectDB = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("✅ MySQL connected successfully.");
-  } catch (error) {
-    console.error("❌ Unable to connect to the database:", error.message);
-    process.exit(1);
-  }
-};
-
-export { port, jwtSecret, sequelize, connectDB };
+export default db;

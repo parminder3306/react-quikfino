@@ -1,35 +1,34 @@
 import express from "express";
 import cors from "cors";
-import { port, connectDB, sequelize } from "./config/dbConfig.js";
-import routes from "./Routes.js";
+
+import env from "./config/dotEnv.js";
+import db from "./config/dbConfig.js";
+import userRoutes from "./Routes.js";
 
 const app = express();
 
-// Middleware
 // app.use(cors());
 app.use(express.json());
+app.use("/api/v1", userRoutes);
 
-// Routes
-app.use("/api/v1", routes);
-
-const syncDatabase = async () => {
+const connectDB = async () => {
   try {
-    await sequelize.sync();
-    console.log("✅ Database synchronized.");
-  } catch (error) {
-    console.error("❌ Error syncing database:", error.message);
-    throw error;
+    await db.raw("SELECT 1+1 AS result");
+    console.log("🚀 Database connection successful");
+  } catch (err) {
+    console.error("❌ Database connection failed:", err);
   }
 };
 
 const startServer = async () => {
   try {
     await connectDB();
-    await syncDatabase();
-    app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
+    app.listen(env.PORT, () =>
+      console.log(`🚀 Server running on port ${env.PORT}`)
+    );
   } catch (error) {
     console.error("❌ Failed to start server:", error.message);
-    process.exit(1); // Exit the process if server startup fails
+    process.exit(1);
   }
 };
 
