@@ -1,9 +1,5 @@
-// Import the database instance
-import { db } from "./db";
+import db from "../config/dbConfig.js";
 
-/**
- * User Model: Provides methods to interact with the `users` table.
- */
 class UserModel {
   static tableName = "users";
 
@@ -25,13 +21,22 @@ class UserModel {
   }
 
   /**
+   * Fetch a user by email.
+   * @param {string} email - User email.
+   * @returns {Promise<Object|null>} The user object or null if not found.
+   */
+  static async getByEmail(email) {
+    return db(this.tableName).where({ email }).first();
+  }
+
+  /**
    * Create a new user.
    * @param {Object} userData - Data for the new user.
    * @returns {Promise<number>} The ID of the created user.
    */
   static async create(userData) {
     const [id] = await db(this.tableName).insert(userData);
-    return id;
+    return { id };
   }
 
   /**

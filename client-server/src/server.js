@@ -3,7 +3,8 @@ import cors from "cors";
 
 import env from "./config/dotEnv.js";
 import db from "./config/dbConfig.js";
-import userRoutes from "./Routes.js";
+
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -14,9 +15,10 @@ app.use("/api/v1", userRoutes);
 const connectDB = async () => {
   try {
     await db.raw("SELECT 1+1 AS result");
-    console.log("🚀 Database connection successful");
-  } catch (err) {
-    console.error("❌ Database connection failed:", err);
+    console.log("🚀 Database connected successfully");
+  } catch (error) {
+    console.error("❌ Database connection failed:", error.message);
+    throw error;
   }
 };
 
@@ -24,10 +26,10 @@ const startServer = async () => {
   try {
     await connectDB();
     app.listen(env.PORT, () =>
-      console.log(`🚀 Server running on port ${env.PORT}`)
+      console.log(`🚀 Server is up and running on port ${env.PORT}`)
     );
   } catch (error) {
-    console.error("❌ Failed to start server:", error.message);
+    console.error("❌ Server startup failed:", error.message);
     process.exit(1);
   }
 };
