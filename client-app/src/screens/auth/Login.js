@@ -12,14 +12,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 // Custom hooks
+import Api from "../../hooks/Api";
 import { useGoToMain } from "../../hooks/Redirect";
 
 // Custom utils
 import Session from "../../utils/Session";
 import Toast from "../../utils/Toast";
-
-// Custom API
-import Api from "../../api/Api";
 
 // Custom styles
 import Style from "../../styles/Style";
@@ -53,18 +51,17 @@ const Login = ({ navigation }) => {
 
     try {
       setIsLoading(true);
-      // const useApiData = await Api.Login(email, password);
-      if (email === "parminder3306@gmail.com" && password === "123456") {
-        Session.set({ email });
-        Toast.Snackbar(email);
+      const result = await Api.Login(email, password);
+      if (result) {
+        const { user, token } = result;
+        Session.set({ token: token });
         useGoToMain(navigation);
-      } else {
-        Toast.Snackbar("Wrong details!");
+        console.log("Login successful:", user);
       }
-      setIsLoading(false);
     } catch (error) {
+      Toast.Snackbar("Login failed. Please try again.");
+    } finally {
       setIsLoading(false);
-      Toast.Snackbar(`Login Failed: ${error.message}`);
     }
   };
 
@@ -97,7 +94,7 @@ const Login = ({ navigation }) => {
           <FontAwesomeIcon
             icon={showPassword ? faEyeSlash : faEye}
             size={22}
-            color="gray"
+            color="#FF6E40"
           />
         </TouchableOpacity>
       </View>

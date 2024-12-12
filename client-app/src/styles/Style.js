@@ -64,6 +64,7 @@ const Style = StyleSheet.create({
     paddingLeft: 15,
     marginBottom: 15,
     fontSize: 16,
+    color: "#000",
   },
   passwordContainer: {
     width: "100%",

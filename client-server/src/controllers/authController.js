@@ -45,21 +45,15 @@ const Login = async (req, res) => {
       code: 200,
       message: "Login successful.",
       result: {
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        },
+        user,
         token,
       },
     });
   } catch (error) {
-    console.error("Login error:", error.message);
     return res.status(500).json({
       status: "ERROR",
       code: 500,
       message: "Internal server error.",
-      error: error.message || "An unexpected error occurred.",
     });
   }
 };
