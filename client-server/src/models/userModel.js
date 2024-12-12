@@ -4,15 +4,17 @@ class UserModel {
   static tableName = "users";
 
   static async getAll() {
-    return db(this.tableName).select("*");
+    return await db(this.tableName).select("*");
   }
 
-  static async getById(id) {
-    return db(this.tableName).where({ id }).first();
+  static async select(columns) {
+    return await db(this.tableName).select(columns);
   }
 
-  static async getByEmail(email) {
-    return db(this.tableName).where({ email }).first();
+  static async selectByCondition(columns = ["*"], condition = {}) {
+    console.log("columns:", columns);
+    console.log("condition:", condition);
+    return await db(this.tableName).select(columns).where(condition);
   }
 
   static async create(userData) {
@@ -20,12 +22,16 @@ class UserModel {
     return id;
   }
 
-  static async updateById(id, userData) {
-    return db(this.tableName).where({ id }).update(userData);
+  static async update(condition, userData) {
+    return await db(this.tableName).where(condition).update(userData);
   }
 
-  static async deleteById(id) {
-    return db(this.tableName).where({ id }).del();
+  static async delete(condition) {
+    return await db(this.tableName).where(condition).del();
+  }
+
+  static async getPaginated(offset, limit) {
+    return await db(this.tableName).select("*").offset(offset).limit(limit);
   }
 }
 

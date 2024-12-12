@@ -8,7 +8,9 @@ const Login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await UserModel.getByEmail(email);
+    const user = await UserModel.selectByCondition(["*"], {
+      email: email,
+    });
     if (!user) throw new Error("Invalid credentials");
 
     const isMatch = await bcrypt.compare(password, user.password);
