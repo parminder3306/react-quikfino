@@ -11,6 +11,10 @@ class UserModel {
     return db(this.tableName).where({ id }).first();
   }
 
+  static async getByEmail(email) {
+    return db(this.tableName).where({ email }).first();
+  }
+
   static async create(userData) {
     const [id] = await db(this.tableName).insert(userData);
     return id;
