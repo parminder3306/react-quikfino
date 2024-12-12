@@ -1,37 +1,62 @@
-import db from "../config/dbConfig.js";
+import db from "../config/DB.js";
 
 class UserModel {
   static tableName = "users";
 
-  static async getAll() {
-    return await db(this.tableName).select("*");
+  // Find a single record by condition
+  static async findOne(condition, columns = ["*"]) {
+    return await db(this.tableName).select(columns).where(condition).first();
   }
 
-  static async select(columns) {
-    return await db(this.tableName).select(columns);
-  }
-
-  static async selectByCondition(columns = ["*"], condition = {}) {
-    console.log("columns:", columns);
-    console.log("condition:", condition);
+  // Find all records or matching records by condition
+  static async findAll(condition = {}, columns = ["*"]) {
     return await db(this.tableName).select(columns).where(condition);
   }
 
-  static async create(userData) {
-    const [id] = await db(this.tableName).insert(userData);
+  // Insert a new record
+  static async create(data) {
+    const [id] = await db(this.tableName).insert(data).returning("id");
     return id;
   }
 
-  static async update(condition, userData) {
-    return await db(this.tableName).where(condition).update(userData);
+  // Update existing records by condition
+  static async update(condition, data) {
+    return await db(this.tableName).where(condition).update(data);
   }
 
+  // Delete records by condition
   static async delete(condition) {
     return await db(this.tableName).where(condition).del();
   }
 
-  static async getPaginated(offset, limit) {
-    return await db(this.tableName).select("*").offset(offset).limit(limit);
+  // Find by primary key
+  static async findById(id, columns = ["*"]) {
+    return await db(this.tableName).select(columns).where({ id }).first();
+  }
+
+  // Count rows matching a condition
+  static async count(condition = {}) {
+    const [{ count }] = await db(this.tableName)
+      .where(condition)
+      .count("id as count");
+    return parseInt(count, 10);
+  }
+
+  // Find or create a record
+  static async findOrCreate(condition, data) {
+    let record = await this.findOne(condition);
+    if (!record) {
+      const id = await this.create(data);
+      record = await this.findById(id);
+    }
+    return record;
+  }
+
+  // Find all records and count them
+  static async findAndCountAll(condition = {}, columns = ["*"]) {
+    const results = await this.findAll(condition, columns);
+    const totalCount = await this.count(condition);
+    return { count: totalCount, rows: results };
   }
 }
 

@@ -1,35 +1,73 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import env from "../config/dotEnv.js";
-import UserModel from "../models/userModel.js";
+import env from "../config/Env.js";
+import UserModel from "../models/UserModel.js";
+import { loginValidation } from "../validations/AuthValidation.js";
 
 const Login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { error, value } = loginValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        status: "ERROR",
+        code: 400,
+        message: error.details[0].message,
+      });
+    }
 
-    const user = await UserModel.selectByCondition(["*"], {
-      email: email,
-    });
-    if (!user) throw new Error("Invalid credentials");
+    const { email, password } = value;
+
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(401).json({
+        status: "ERROR",
+        code: 401,
+        message: "Invalid credentials.",
+      });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) throw new Error("Invalid credentials");
+    if (!isMatch) {
+      return res.status(401).json({
+        status: "ERROR",
+        code: 401,
+        message: "Invalid credentials.",
+      });
+    }
 
     const token = jwt.sign({ id: user.id }, env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    res.status(200).json({ message: "Login successful", user });
+    return res.status(200).json({
+      status: "SUCCESS",
+      code: 200,
+      message: "Login successful.",
+      result: {
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        },
+        token,
+      },
+    });
   } catch (error) {
-    res.status(401).json({ error: error.message });
+    console.error("Login error:", error.message);
+    return res.status(500).json({
+      status: "ERROR",
+      code: 500,
+      message: "Internal server error.",
+      error: error.message || "An unexpected error occurred.",
+    });
   }
 };
 
 const Register = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
+  try {
     const existingUser = await UserModel.getByEmail(email);
     if (existingUser) throw new Error("Email already exists");
 

@@ -1,5 +1,5 @@
 import knex from "knex";
-import env from "./dotEnv.js";
+import env from "./Env.js";
 
 const dbConfig = {
   client: "mysql2",

@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 
-import env from "./config/dotEnv.js";
-import db from "./config/dbConfig.js";
+import env from "./config/Env.js";
+import db from "./config/DB.js";
 
 import authRoutes from "./routes/authRoutes.js";
 
