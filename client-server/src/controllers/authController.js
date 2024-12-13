@@ -3,11 +3,12 @@ import jwt from "jsonwebtoken";
 
 import env from "../config/Env.js";
 import UserModel from "../models/UserModel.js";
-import { loginValidation } from "../validations/AuthValidation.js";
+import { loginValidation } from "../validations/LoginValidation.js";
 
 const Login = async (req, res) => {
   try {
-    const { error, value } = loginValidation.validate(req.body);
+    const { email, password } = req.body;
+    const { error } = loginValidation.validate({ email, password });
     if (error) {
       return res.status(400).json({
         status: "ERROR",
@@ -15,8 +16,6 @@ const Login = async (req, res) => {
         message: error.details[0].message,
       });
     }
-
-    const { email, password } = value;
 
     const user = await UserModel.findOne({ email });
     if (!user) {

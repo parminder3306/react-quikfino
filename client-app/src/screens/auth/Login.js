@@ -19,6 +19,9 @@ import { useGoToMain } from "../../hooks/Redirect";
 import Session from "../../utils/Session";
 import Toast from "../../utils/Toast";
 
+// Custom validations
+import loginValidation from "../../validations/LoginValidation";
+
 // Custom styles
 import Style from "../../styles/Style";
 
@@ -28,25 +31,10 @@ const Login = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
-
   const handleLogin = async () => {
-    if (!email || !password) {
-      Toast.Snackbar("Please fill in both email and password!");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      Toast.Snackbar("Please enter a valid email address.");
-      return;
-    }
-
-    if (password.length < 6) {
-      Toast.Snackbar("Password must be at least 6 characters.");
-      return;
+    const { error } = loginValidation.validate({ email, password });
+    if (error) {
+      Toast.Snackbar(error.details[0].message);
     }
 
     try {
@@ -56,7 +44,7 @@ const Login = ({ navigation }) => {
         const { user, token } = result;
         Session.set({ token: token });
         useGoToMain(navigation);
-        console.log("Login successful:", user);
+        console.log("Login successful:", token);
       }
     } catch (error) {
       Toast.Snackbar("Login failed. Please try again.");
