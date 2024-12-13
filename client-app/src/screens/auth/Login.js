@@ -20,7 +20,7 @@ import Session from "../../utils/Session";
 import Toast from "../../utils/Toast";
 
 // Custom validations
-import loginValidation from "../../validations/LoginValidation";
+// import loginValidation from "../../validations/LoginValidation";
 
 // Custom styles
 import Style from "../../styles/Style";
@@ -32,10 +32,12 @@ const Login = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    const { error } = loginValidation.validate({ email, password });
-    if (error) {
-      Toast.Snackbar(error.details[0].message);
-    }
+    // const { error } = loginValidation.validate({ email, password });
+    // if (error) {
+    //   console.log(error.details); // Log the error details for debugging
+    //   Toast.Snackbar(error.details[0].message);
+    //   return;
+    // }
 
     try {
       setIsLoading(true);
