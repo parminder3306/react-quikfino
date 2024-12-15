@@ -1,3 +1,4 @@
+// React-Native libraries
 import React, { useState } from "react";
 import {
   View,
@@ -10,6 +11,9 @@ import {
 // Third-party libraries
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 // Custom hooks
 import Api from "../../hooks/Api";
@@ -19,37 +23,48 @@ import { useGoToMain } from "../../hooks/Redirect";
 import Session from "../../utils/Session";
 import Toast from "../../utils/Toast";
 
-// Custom validations
-// import loginValidation from "../../validations/LoginValidation";
-
 // Custom styles
 import Style from "../../styles/Style";
 
+// Validation schema
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters long")
+    .required("Password is required"),
+});
+
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
-    // const { error } = loginValidation.validate({ email, password });
-    // if (error) {
-    //   console.log(error.details); // Log the error details for debugging
-    //   Toast.Snackbar(error.details[0].message);
-    //   return;
-    // }
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
 
+  const showOrHidePassword = () => {
+    setPasswordVisibility((prevVisibility) => !prevVisibility);
+  };
+
+  const submitLogin = async (data) => {
     try {
       setIsLoading(true);
-      const result = await Api.Login(email, password);
+      const result = await Api.Login(data.email, data.password);
+
       if (result) {
-        const { user, token } = result;
-        Session.set({ token: token });
+        const { token } = result;
+        Session.set({ token });
         useGoToMain(navigation);
-        console.log("Login successful:", token);
+        Toast.Snackbar("Login successful!");
       }
     } catch (error) {
-      Toast.Snackbar("Login failed. Please try again.");
+      Toast.Snackbar(error.message || "Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -60,42 +75,72 @@ const Login = ({ navigation }) => {
       <Text style={Style.loginTitle}>Welcome Back</Text>
       <Text style={Style.loginSubtitle}>Please log in to continue</Text>
 
-      <TextInput
-        style={Style.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
+      {/* Email Input */}
+      <Controller
+        name="email"
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={[
+              Style.input,
+              errors.email ? { borderColor: "red", borderWidth: 1 } : {},
+            ]}
+            placeholder="Email"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+        )}
       />
+      {errors.email && (
+        <Text style={Style.errorText}>{errors.email.message}</Text>
+      )}
 
+      {/* Password Input */}
       <View style={Style.passwordContainer}>
-        <TextInput
-          style={Style.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword}
+        <Controller
+          name="password"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[
+                Style.input,
+                errors.password ? { borderColor: "red", borderWidth: 1 } : {},
+              ]}
+              placeholder="Password"
+              secureTextEntry={!isPasswordVisible}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
         />
         <TouchableOpacity
-          onPress={() => setShowPassword(!showPassword)}
+          onPress={showOrHidePassword}
           style={Style.inputRightIcon}
         >
           <FontAwesomeIcon
-            icon={showPassword ? faEyeSlash : faEye}
+            icon={isPasswordVisible ? faEyeSlash : faEye}
             size={22}
             color="#FF6E40"
           />
         </TouchableOpacity>
       </View>
+      {errors.password && (
+        <Text style={Style.errorText}>{errors.password.message}</Text>
+      )}
 
+      {/* Forgot Password */}
       <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
         <Text style={Style.link}>Forgot Password?</Text>
       </TouchableOpacity>
 
+      {/* Submit Button */}
       <TouchableOpacity
         style={Style.buttonPrimary}
-        onPress={handleLogin}
+        onPress={handleSubmit(submitLogin)}
         disabled={isLoading}
       >
         {isLoading ? (
@@ -105,6 +150,7 @@ const Login = ({ navigation }) => {
         )}
       </TouchableOpacity>
 
+      {/* Sign Up Link */}
       <View style={Style.signupContainer}>
         <Text style={Style.noAccountText}>Don't have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
