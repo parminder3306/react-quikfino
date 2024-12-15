@@ -13,28 +13,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
-// Custom hooks
+// Custom Hooks
 import Api from "../../hooks/Api";
-import { useGoToMain } from "../../hooks/Redirect";
+import Redirect from "../../hooks/Redirect";
+import Validation from "../../hooks/Validation";
 
-// Custom utils
+// Custom Utils
 import Session from "../../utils/Session";
 import Toast from "../../utils/Toast";
 
-// Custom styles
+// Custom Styles
 import Style from "../../styles/Style";
-
-// Validation schema
-const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Invalid email format")
-    .required("Email is required"),
-  password: Yup.string()
-    .min(8, "Password must be at least 8 characters long")
-    .required("Password is required"),
-});
 
 const Login = ({ navigation }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
@@ -45,7 +35,7 @@ const Login = ({ navigation }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(Validation.LoginRule()),
   });
 
   const showOrHidePassword = () => {
@@ -56,11 +46,9 @@ const Login = ({ navigation }) => {
     try {
       setIsLoading(true);
       const result = await Api.Login(data.email, data.password);
-
       if (result) {
-        const { token } = result;
-        Session.set({ token });
-        useGoToMain(navigation);
+        Session.set({ token: result.token });
+        Redirect.GoToMain(navigation);
         Toast.Snackbar("Login successful!");
       }
     } catch (error) {
@@ -83,7 +71,7 @@ const Login = ({ navigation }) => {
           <TextInput
             style={[
               Style.input,
-              errors.email ? { borderColor: "red", borderWidth: 1 } : {},
+              errors.email && { borderColor: "red", borderWidth: 1 },
             ]}
             placeholder="Email"
             onBlur={onBlur}
@@ -107,7 +95,7 @@ const Login = ({ navigation }) => {
             <TextInput
               style={[
                 Style.input,
-                errors.password ? { borderColor: "red", borderWidth: 1 } : {},
+                errors.password && { borderColor: "red", borderWidth: 1 },
               ]}
               placeholder="Password"
               secureTextEntry={!isPasswordVisible}

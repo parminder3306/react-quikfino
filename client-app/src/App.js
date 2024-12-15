@@ -1,3 +1,4 @@
+// React-Native libraries
 import React, { useState, useEffect } from "react";
 
 // Custom utils
@@ -8,9 +9,7 @@ import Notification from "./utils/Notification";
 
 // Custom screens
 import Splash from "./screens/Splash";
-
-// Custom navigation
-import Navigation from "./navigation/Navigation";
+import Navigation from "./screens/Navigation";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
