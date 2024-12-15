@@ -99,13 +99,18 @@ const Style = StyleSheet.create({
     alignItems: "center",
   },
   bigButton: {
-    width: 70,
-    height: 70,
+    width: 50,
+    height: 50,
     backgroundColor: "#FF6E40",
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
     elevation: 1,
+  },
+  bigButtonText: {
+    fontSize: 10,
+    top: 5,
+    fontWeight: "bold",
   },
   link: {
     color: "#FF6E40",

@@ -1,13 +1,13 @@
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 // Custom styles
 import Style from "../styles/Style";
 
-const Icon = {
-  SIcon: ({ icon, size, color }) => (
+const FaIcon = {
+  Icon: ({ icon, size, color }) => (
     <FontAwesomeIcon icon={icon} size={size} color={color} />
   ),
 
@@ -17,7 +17,7 @@ const Icon = {
     </TouchableOpacity>
   ),
 
-  BigButtonIcon: ({ icon, size, color, navigateTo }) => {
+  BigButtonIcon: ({ icon, size, color, label, navigateTo }) => {
     const navigation = useNavigation();
 
     return (
@@ -27,11 +27,12 @@ const Icon = {
         style={Style.bigButtonContainer}
       >
         <View style={Style.bigButton}>
-          <FontAwesomeIcon icon={icon} size={size} color={color} />
+          <FontAwesomeIcon icon={icon} size={size} color={"#FFFFFF"} />
         </View>
+        <Text style={[{ color: color }, Style.bigButtonText]}>{label}</Text>
       </TouchableOpacity>
     );
   },
 };
 
-export default Icon;
+export default FaIcon;
