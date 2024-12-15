@@ -3,10 +3,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // Custom screens
-import Login from "../screens/auth/Login";
-import Register from "../screens/auth/Register";
-import ForgetPassword from "../screens/auth/ForgetPassword";
-import Main from "../screens/Main";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
+import ForgetPassword from "./auth/ForgetPassword";
+import Main from "./Main";
 
 const Navigation = ({ isLoggedIn, sessionData }) => {
   const routeName = isLoggedIn ? "Main" : "Login";
