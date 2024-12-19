@@ -62,7 +62,7 @@ const Style = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     paddingLeft: 15,
-    marginBottom: 15,
+    marginBottom: 10,
     fontSize: 16,
     color: "#000",
   },
@@ -79,6 +79,14 @@ const Style = StyleSheet.create({
     padding: 10,
     borderRadius: 100,
   },
+  errorText: {
+    color: "red",
+    textAlign: "left",
+    // fontSize: 12,
+    marginBottom: 10,
+    // marginLeft: 4,
+  },
+
   buttonPrimary: {
     width: "100%",
     height: 50,

@@ -69,10 +69,7 @@ const Login = ({ navigation }) => {
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
-            style={[
-              Style.input,
-              errors.email && { borderColor: "red", borderWidth: 1 },
-            ]}
+            style={Style.input}
             placeholder="Email"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -82,9 +79,11 @@ const Login = ({ navigation }) => {
           />
         )}
       />
-      {errors.email && (
-        <Text style={Style.errorText}>{errors.email.message}</Text>
-      )}
+      <View style={{ alignItems: "flex-start", width: "100%" }}>
+        {errors.email && (
+          <Text style={Style.errorText}>{errors.email.message}</Text>
+        )}
+      </View>
 
       {/* Password Input */}
       <View style={Style.passwordContainer}>
@@ -93,10 +92,7 @@ const Login = ({ navigation }) => {
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              style={[
-                Style.input,
-                errors.password && { borderColor: "red", borderWidth: 1 },
-              ]}
+              style={Style.input}
               placeholder="Password"
               secureTextEntry={!isPasswordVisible}
               onBlur={onBlur}
@@ -116,9 +112,11 @@ const Login = ({ navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      {errors.password && (
-        <Text style={Style.errorText}>{errors.password.message}</Text>
-      )}
+      <View style={{ alignItems: "flex-start", width: "100%" }}>
+        {errors.password && (
+          <Text style={Style.errorText}>{errors.password.message}</Text>
+        )}
+      </View>
 
       {/* Forgot Password */}
       <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
