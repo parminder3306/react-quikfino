@@ -19,16 +19,9 @@ const Login = async (req, res) => {
     }
 
     const user = await UserModel.findOne({ email });
-    if (!user) {
-      return res.status(401).json({
-        status: "ERROR",
-        code: 401,
-        message: "Invalid credentials.",
-      });
-    }
-
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+
+    if (!user && !isMatch) {
       return res.status(401).json({
         status: "ERROR",
         code: 401,
@@ -73,7 +66,7 @@ const SignUp = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { count, result } = await UserModel.findOrCreate(
+    const { count, record } = await UserModel.findOrCreate(
       { email },
       { email, password: hashedPassword }
     );
@@ -87,9 +80,11 @@ const SignUp = async (req, res) => {
 
     return res.status(201).json({
       status: "SUCCESS",
-      code: 201,
+      code: 200,
       message: "You have signed up successfully.",
-      result: { result },
+      result: {
+        user: record,
+      },
     });
   } catch (error) {
     return res.status(500).json({
