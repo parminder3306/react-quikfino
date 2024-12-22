@@ -1,4 +1,3 @@
-// React-Native libraries
 import React, { useState } from "react";
 import {
   View,
@@ -20,14 +19,15 @@ import Redirect from "../../hooks/Redirect";
 import Validation from "../../hooks/Validation";
 
 // Custom Utils
-import Session from "../../utils/Session";
 import Toast from "../../utils/Toast";
 
 // Custom Styles
 import Style from "../../styles/Style";
 
-const Login = ({ navigation }) => {
+const SignUp = ({ navigation }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
+  const [isConfirmPasswordVisible, setConfirmPasswordVisibility] =
+    useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -35,23 +35,26 @@ const Login = ({ navigation }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(Validation.LoginRule()),
+    resolver: yupResolver(Validation.RegisterRule()),
   });
 
   const showOrHidePassword = () => {
     setPasswordVisibility((prevVisibility) => !prevVisibility);
   };
 
-  const submitLogin = async (data) => {
+  const showOrHideConfirmPassword = () => {
+    setConfirmPasswordVisibility((prevVisibility) => !prevVisibility);
+  };
+
+  const submitSignUp = async (data) => {
     try {
       setIsLoading(true);
-      const result = await Api.Login(data.email, data.password);
+      const result = await Api.SignUp(data.name, data.email, data.password);
       if (result) {
-        Session.set({ token: result.token });
-        Redirect.GoToMain(navigation);
+        Redirect.GoToLogin(navigation);
       }
     } catch (error) {
-      Toast.Snackbar(error.message || "Login failed. Please try again.");
+      Toast.Snackbar(error.message || "Sign Up failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -59,8 +62,8 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={Style.container}>
-      <Text style={Style.loginTitle}>Welcome Back</Text>
-      <Text style={Style.loginSubtitle}>Please log in to continue</Text>
+      <Text style={Style.loginTitle}>Welcome</Text>
+      <Text style={Style.loginSubtitle}>Create a QuikFino profile</Text>
 
       {/* Email Input */}
       <View style={Style.inputContainer}>
@@ -123,33 +126,64 @@ const Login = ({ navigation }) => {
         )}
       </View>
 
-      {/* Forgot Password */}
-      <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
-        <Text style={Style.link}>Forgot Password?</Text>
-      </TouchableOpacity>
+      {/* Confirm Password Input */}
+      <View style={Style.inputContainer}>
+        <Text style={Style.label}>Confirm Password</Text>
+        <View style={Style.passwordContainer}>
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={errors.confirmPassword ? Style.inputError : Style.input}
+                placeholder="Confirm Password"
+                secureTextEntry={!isConfirmPasswordVisible}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          <TouchableOpacity
+            onPress={showOrHideConfirmPassword}
+            style={Style.inputRightIcon}
+          >
+            <FontAwesomeIcon
+              icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
+              size={22}
+              color="#FF6E40"
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={Style.errorContainer}>
+        {errors.confirmPassword && (
+          <Text style={Style.errorText}>{errors.confirmPassword.message}</Text>
+        )}
+      </View>
 
       {/* Submit Button */}
       <TouchableOpacity
         style={Style.buttonPrimary}
-        onPress={handleSubmit(submitLogin)}
+        onPress={handleSubmit(submitSignUp)}
         disabled={isLoading}
       >
         {isLoading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <Text style={Style.buttonText}>Log In</Text>
+          <Text style={Style.buttonText}>Sign Up</Text>
         )}
       </TouchableOpacity>
 
-      {/* Sign Up Link */}
-      <View style={Style.signupContainer}>
-        <Text style={Style.noAccountText}>Don't have an account?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-          <Text style={[Style.link, Style.signupLink]}>Sign Up</Text>
+      {/* Login Link */}
+      <View style={Style.loginContainer}>
+        <Text style={Style.alreadyAccountText}>Already have an account?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text style={[Style.link, Style.loginLink]}>Log In</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-export default Login;
+export default SignUp;

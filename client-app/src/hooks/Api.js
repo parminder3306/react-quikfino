@@ -1,7 +1,7 @@
 import axios from "axios";
 import Toast from "../utils/Toast";
 
-const Login_URL = "http://192.168.254.139:86/api/v1/auth/login";
+const Login_URL = "http://192.168.245.139:86/api/v1/auth/login";
 
 const Api = {
   Login: async (email, password) => {

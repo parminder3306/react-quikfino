@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // Custom screens
 import Login from "./auth/Login";
-import Register from "./auth/Register";
+import SignUp from "./auth/SignUp";
 import ForgetPassword from "./auth/ForgetPassword";
 import Main from "./Main";
 
@@ -19,7 +19,7 @@ const Navigation = ({ isLoggedIn, sessionData }) => {
         initialRouteName={routeName}
       >
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
         <Stack.Screen
           name="Main"
