@@ -8,6 +8,7 @@ import { loginValidation } from "../validations/LoginValidation.js";
 const Login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const { error } = loginValidation.validate({ email, password });
     if (error) {
       return res.status(400).json({
@@ -58,22 +59,44 @@ const Login = async (req, res) => {
 };
 
 const SignUp = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    const existingUser = await UserModel.getByEmail(email);
-    if (existingUser) throw new Error("Email already exists");
+    const { email, password } = req.body;
+
+    const { error } = loginValidation.validate({ email, password });
+    if (error) {
+      return res.status(400).json({
+        status: "ERROR",
+        code: 400,
+        message: error.details[0].message,
+      });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await UserModel.create({ email, password: hashedPassword });
+    const existingUser = await UserModel.findOrCreate(
+      { email },
+      { email, password: hashedPassword }
+    );
+    if (existingUser) {
+      return res.status(409).json({
+        status: "ERROR",
+        code: 409,
+        message: "User details already exists.",
+      });
+    }
 
-    res.status(201).json({
-      message: "User created",
-      user: { email: user.email, id: user.id },
+    return res.status(201).json({
+      status: "SUCCESS",
+      code: 201,
+      message: "You have signed up successfully.",
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("SignUp Error:", error.message);
+    return res.status(500).json({
+      status: "ERROR",
+      code: 500,
+      message: error.message,
+    });
   }
 };
 

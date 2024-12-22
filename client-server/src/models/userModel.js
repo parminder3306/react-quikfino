@@ -44,12 +44,12 @@ class UserModel {
 
   // Find or create a record
   static async findOrCreate(condition, data) {
-    let record = await this.findOne(condition);
-    if (!record) {
-      const id = await this.create(data);
-      record = await this.findById(id);
+    const record = await this.findOne(condition);
+    if (record) {
+      return true;
     }
-    return record;
+    await this.create(data);
+    return false;
   }
 
   // Find all records and count them

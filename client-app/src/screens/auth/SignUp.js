@@ -49,7 +49,7 @@ const SignUp = ({ navigation }) => {
   const submitSignUp = async (data) => {
     try {
       setIsLoading(true);
-      const result = await Api.SignUp(data.name, data.email, data.password);
+      const result = await Api.SignUp(data.email, data.password);
       if (result) {
         Redirect.GoToLogin(navigation);
       }
