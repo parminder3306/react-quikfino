@@ -73,11 +73,11 @@ const SignUp = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const existingUser = await UserModel.findOrCreate(
+    const { count, result } = await UserModel.findOrCreate(
       { email },
       { email, password: hashedPassword }
     );
-    if (existingUser) {
+    if (count === 1) {
       return res.status(409).json({
         status: "ERROR",
         code: 409,
@@ -89,9 +89,9 @@ const SignUp = async (req, res) => {
       status: "SUCCESS",
       code: 201,
       message: "You have signed up successfully.",
+      result: { result },
     });
   } catch (error) {
-    console.error("SignUp Error:", error.message);
     return res.status(500).json({
       status: "ERROR",
       code: 500,
