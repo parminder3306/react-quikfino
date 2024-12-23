@@ -3,7 +3,7 @@ import { Login, SignUp } from "../controllers/Authentication.js";
 
 const route = Router();
 
-route.post("/login", Login);
-route.post("/signup", SignUp);
+route.post("auth/login", Login);
+route.post("auth/signup", SignUp);
 
 export default route;
