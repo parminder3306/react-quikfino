@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { Login, SignUp } from "../controllers/Authentication.js";
 
-const route = Router();
+const api = Router();
 
-route.post("auth/login", Login);
-route.post("auth/signup", SignUp);
+api.post("auth/login", Login);
+api.post("auth/signup", SignUp);
 
-export default route;
+export default api;
