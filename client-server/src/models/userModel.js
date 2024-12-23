@@ -1,42 +1,42 @@
-import db from "../config/DB.js";
+import DB from "../config/Database.js";
 
 class UserModel {
   static tableName = "users";
 
   // Find a single record by condition
   static async findOne(condition, columns = ["*"]) {
-    return await db(this.tableName).select(columns).where(condition).first();
+    return await DB(this.tableName).select(columns).where(condition).first();
   }
 
   // Find all records or matching records by condition
   static async findAll(condition = {}, columns = ["*"]) {
-    return await db(this.tableName).select(columns).where(condition);
+    return await DB(this.tableName).select(columns).where(condition);
   }
 
   // Insert a new record
   static async create(data) {
-    const [id] = await db(this.tableName).insert(data).returning("id");
+    const [id] = await DB(this.tableName).insert(data).returning("id");
     return id;
   }
 
   // Update existing records by condition
   static async update(condition, data) {
-    return await db(this.tableName).where(condition).update(data);
+    return await DB(this.tableName).where(condition).update(data);
   }
 
   // Delete records by condition
   static async delete(condition) {
-    return await db(this.tableName).where(condition).del();
+    return await DB(this.tableName).where(condition).del();
   }
 
   // Find by primary key
   static async findById(id, columns = ["*"]) {
-    return await db(this.tableName).select(columns).where({ id }).first();
+    return await DB(this.tableName).select(columns).where({ id }).first();
   }
 
   // Count rows matching a condition
   static async count(condition = {}) {
-    const [{ count }] = await db(this.tableName)
+    const [{ count }] = await DB(this.tableName)
       .where(condition)
       .count("id as count");
     return parseInt(count, 10);

@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import env from "./config/Env.js";
-import db from "./config/DB.js";
+import db from "./config/Database.js";
 
 import authRoutes from "./routes/authRoutes.js";
 
