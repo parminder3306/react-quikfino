@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 import env from "../config/Env.js";
 import errors from "../config/Errors.js";
+import success from "../config/Success.js";
 import UserModel from "../models/UserModel.js";
 import { loginValidation } from "../validations/LoginValidation.js";
 
@@ -26,10 +27,10 @@ const Login = async (req, res) => {
       expiresIn: "1h",
     });
 
-    return res.status(200).json({
-      status: "SUCCESS",
-      code: 200,
-      message: "You have logged in successfully.",
+    return res.status(success.LOGIN_SUCCESS.code).json({
+      status: success.LOGIN_SUCCESS.status,
+      code: success.LOGIN_SUCCESS.code,
+      message: success.LOGIN_SUCCESS.message,
       result: {
         user,
         token,
@@ -61,10 +62,10 @@ const SignUp = async (req, res) => {
       return res.status(errors.CONFLICT.code).json(errors.CONFLICT);
     }
 
-    return res.status(201).json({
-      status: "SUCCESS",
-      code: 200,
-      message: "You have signed up successfully.",
+    return res.status(success.ACCOUNT_CREATED.code).json({
+      status: success.ACCOUNT_CREATED.status,
+      code: success.ACCOUNT_CREATED.code,
+      message: success.ACCOUNT_CREATED.message,
       result: {
         user: record,
       },
