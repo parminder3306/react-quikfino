@@ -4,16 +4,13 @@ import cors from "cors";
 import env from "./config/Env.js";
 import db from "./config/Database.js";
 
-import authRoutes from "./routes/authRoutes.js";
+import apiRoutes from "./routes/Api.js";
 
 const app = express();
 
 // app.use(cors());
 app.use(express.json());
-app.use("/api/v1/auth", authRoutes);
-// app.use("/api/v1/users", userRoutes);
-// app.use("/api/v1/transactions", transactionRoutes);
-// app.use("/api/v1/currency-rates", currencyRoutes);
+app.use("/api/v1/", apiRoutes);
 
 const connectDB = async () => {
   try {
