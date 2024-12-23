@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import env from "../config/Env.js";
+import errors from "../config/Errors.js";
 import UserModel from "../models/UserModel.js";
 import { loginValidation } from "../validations/LoginValidation.js";
 
@@ -11,22 +12,14 @@ const Login = async (req, res) => {
 
     const { error } = loginValidation.validate({ email, password });
     if (error) {
-      return res.status(400).json({
-        status: "ERROR",
-        code: 400,
-        message: error.details[0].message,
-      });
+      return res.status(errors.BAD_REQUEST.code).json(errors.BAD_REQUEST);
     }
 
     const user = await UserModel.findOne({ email });
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!user && !isMatch) {
-      return res.status(401).json({
-        status: "ERROR",
-        code: 401,
-        message: "Invalid credentials.",
-      });
+      return res.status(errors.UNAUTHORIZED.code).json(errors.UNAUTHORIZED);
     }
 
     const token = jwt.sign({ id: user.id }, env.JWT_SECRET, {
@@ -43,11 +36,9 @@ const Login = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({
-      status: "ERROR",
-      code: 500,
-      message: "Internal server error.",
-    });
+    return res
+      .status(errors.INTERNAL_SERVER_ERROR.code)
+      .json(errors.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -57,11 +48,7 @@ const SignUp = async (req, res) => {
 
     const { error } = loginValidation.validate({ email, password });
     if (error) {
-      return res.status(400).json({
-        status: "ERROR",
-        code: 400,
-        message: error.details[0].message,
-      });
+      return res.status(errors.BAD_REQUEST.code).json(errors.BAD_REQUEST);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -71,11 +58,7 @@ const SignUp = async (req, res) => {
       { email, password: hashedPassword }
     );
     if (count === 1) {
-      return res.status(409).json({
-        status: "ERROR",
-        code: 409,
-        message: "User details already exists.",
-      });
+      return res.status(errors.CONFLICT.code).json(errors.CONFLICT);
     }
 
     return res.status(201).json({
@@ -87,11 +70,9 @@ const SignUp = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({
-      status: "ERROR",
-      code: 500,
-      message: error.message,
-    });
+    return res
+      .status(errors.INTERNAL_SERVER_ERROR.code)
+      .json(errors.INTERNAL_SERVER_ERROR);
   }
 };
 
