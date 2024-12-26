@@ -1,17 +1,28 @@
-import { verify } from "jsonwebtoken";
-import env from "../config/dotEnv.js";
+import jwt from "jsonwebtoken";
+import env from "../config/Env.js";
 
-export default (req, res, next) => {
-  const token = req.header("Authorization")?.replace("Bearer ", "");
+const verifyToken = (req, res, next) => {
+  const token = req.header("Authorization");
 
   if (!token) {
-    return res.status(401).json({ error: "Access denied. No token provided." });
+    return res.status(401).json({
+      status: "ERROR",
+      code: 401,
+      message: "Access Denied. No token provided.",
+    });
   }
 
   try {
-    req.user = verify(token, env.JWT_SECRET);
+    const decoded = jwt.verify(token, env.JWT_SECRET);
+    req.user = decoded;
     next();
   } catch (error) {
-    res.status(400).json({ error: "Invalid or expired token." });
+    return res.status(401).json({
+      status: "ERROR",
+      code: 401,
+      message: "Invalid or expired token.",
+    });
   }
 };
+
+export default verifyToken;
