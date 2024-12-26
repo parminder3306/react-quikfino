@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
   host: "mail.quikfino.com",
   port: 587,
-  secure: true,
+  secure: false,
   auth: {
     user: "admin@quikfino.com",
     pass: "Janny@123",
