@@ -1,5 +1,5 @@
-const Currencies = {
-  Name: new Proxy(
+const currencies = {
+  name: new Proxy(
     {
       USD: "United States Dollar",
       EUR: "Euro",
@@ -139,13 +139,13 @@ const Currencies = {
       ZMW: "Zambian Kwacha",
     },
     {
-      get: (target, prop) => {
+      findOne: (target, prop) => {
         const key = prop.toUpperCase();
         return target[key] || `Currency code "${prop}" not found.`;
       },
     }
   ),
-  ZeroDecimals: [
+  zeroDecimals: [
     "BIF",
     "CLP",
     "DJF",
@@ -165,4 +165,4 @@ const Currencies = {
   ],
 };
 
-export default Currencies;
+export default currencies;

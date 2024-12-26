@@ -1,7 +1,7 @@
 import knex from "knex";
 import env from "./Env.js";
 
-const Connections = {
+const config = {
   client: "mysql2",
   connection: {
     host: env.DB_HOST,
@@ -22,6 +22,6 @@ const Connections = {
   },
 };
 
-const DB = knex(Connections);
+const DB = knex(config);
 
 export default DB;

@@ -1,5 +1,5 @@
-const Countries = {
-  Name: new Proxy(
+const countries = {
+  name: new Proxy(
     {
       AF: "Afghanistan",
       AL: "Albania",
@@ -266,7 +266,7 @@ const Countries = {
       ZW: "Zimbabwe",
     },
     {
-      get: (target, prop) => {
+      findOne: (target, prop) => {
         const key = prop.toUpperCase();
         return target[key] || `Currency code "${prop}" not found.`;
       },
@@ -274,4 +274,4 @@ const Countries = {
   ),
 };
 
-export default Countries;
+export default countries;

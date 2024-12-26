@@ -15,7 +15,7 @@ class UserModel {
 
   // Insert a new record
   static async create(data) {
-    const [id] = await DB(this.tableName).insert(data).returning("id");
+    const [id] = await DB(this.tableName).insert(data);
     return id;
   }
 

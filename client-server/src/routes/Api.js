@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { Login, SignUp } from "../controllers/Authentication.js";
+import { login, signUp } from "../controllers/Authentication.js";
 
 const api = Router();
 
-api.post("/auth/login", Login);
-api.post("/auth/signup", SignUp);
+// Authentication
+api.post("/auth/login", login);
+api.post("/auth/signup", signUp);
 
 export default api;

@@ -1,7 +1,7 @@
 import { createTransport } from "nodemailer";
 import env from "./Env.js";
 
-const mailConfig = {
+const config = {
   default: env.MAIL_MAILER || "log",
 
   mailers: {
@@ -67,5 +67,5 @@ const createTransporter = () => {
 
 export default {
   createTransporter,
-  mailConfig,
+  config,
 };

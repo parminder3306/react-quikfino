@@ -1,80 +1,81 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt from "../utils/JWT.js";
+import http from "../utils/Http.js";
+import hash from "../utils/Hash.js";
+import validation from "../utils/Validation.js";
 
-import env from "../config/Env.js";
-import errors from "../config/Errors.js";
-import success from "../config/Success.js";
-import UserModel from "../models/UserModel.js";
-import { loginValidation } from "../validations/LoginValidation.js";
+import query from "../models/Query.js";
 
-const Login = async (req, res) => {
+const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    const { error } = loginValidation.validate({ email, password });
-    if (error) {
-      return res.status(errors.BAD_REQUEST.code).json(errors.BAD_REQUEST);
-    }
-
-    const user = await UserModel.findOne({ email });
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!user && !isMatch) {
-      return res.status(errors.UNAUTHORIZED.code).json(errors.UNAUTHORIZED);
-    }
-
-    const token = jwt.sign({ id: user.id }, env.JWT_SECRET, {
-      expiresIn: "1h",
+    const { value, error } = validation.login.validate({
+      email: req.body.email,
+      password: req.body.password,
     });
 
-    return res.status(success.LOGIN_SUCCESS.code).json({
-      status: success.LOGIN_SUCCESS.status,
-      code: success.LOGIN_SUCCESS.code,
-      message: success.LOGIN_SUCCESS.message,
+    if (error) {
+      return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
+    }
+
+    const userQuery = await query.findOne({
+      email: value.email,
+      password: hash.sha512(value.password),
+    });
+
+    if (!userQuery) {
+      return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
+    }
+
+    return res.status(http.LOGIN_SUCCESS.code).json({
+      status: http.LOGIN_SUCCESS.status,
+      code: http.LOGIN_SUCCESS.code,
+      message: http.LOGIN_SUCCESS.message,
       result: {
-        user,
-        token,
+        user: userQuery,
+        token: jwt.create(userQuery.id),
       },
     });
   } catch (error) {
+    console.log(error);
+
     return res
-      .status(errors.INTERNAL_SERVER_ERROR.code)
-      .json(errors.INTERNAL_SERVER_ERROR);
+      .status(http.INTERNAL_SERVER_ERROR.code)
+      .json(http.INTERNAL_SERVER_ERROR);
   }
 };
 
-const SignUp = async (req, res) => {
+const signUp = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { value, error } = validation.signUp.validate({
+      email: req.body.email,
+      password: req.body.password,
+    });
 
-    const { error } = loginValidation.validate({ email, password });
     if (error) {
-      return res.status(errors.BAD_REQUEST.code).json(errors.BAD_REQUEST);
+      return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const { count, record } = await UserModel.findOrCreate(
-      { email },
-      { email, password: hashedPassword }
+    const { count, record } = await query.findOrCreate(
+      { email: value.email },
+      { email: value.email, password: hash.sha512(value.password) }
     );
+
     if (count === 1) {
-      return res.status(errors.CONFLICT.code).json(errors.CONFLICT);
+      return res.status(http.CONFLICT.code).json(http.CONFLICT);
     }
 
-    return res.status(success.ACCOUNT_CREATED.code).json({
-      status: success.ACCOUNT_CREATED.status,
-      code: success.ACCOUNT_CREATED.code,
-      message: success.ACCOUNT_CREATED.message,
+    return res.status(http.ACCOUNT_CREATED.code).json({
+      status: http.ACCOUNT_CREATED.status,
+      code: http.ACCOUNT_CREATED.code,
+      message: http.ACCOUNT_CREATED.message,
       result: {
         user: record,
       },
     });
   } catch (error) {
     return res
-      .status(errors.INTERNAL_SERVER_ERROR.code)
-      .json(errors.INTERNAL_SERVER_ERROR);
+      .status(http.INTERNAL_SERVER_ERROR.code)
+      .json(http.INTERNAL_SERVER_ERROR);
   }
 };
 
-export { Login, SignUp };
+export { login, signUp };
