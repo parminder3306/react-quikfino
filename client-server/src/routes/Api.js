@@ -20,43 +20,43 @@ api.post("/auth/change-password", changePassword);
 // // -----------------------------------------------
 // // Recipient
 // // -----------------------------------------------
-// api.post("/recipients", verifyToken, addRecipient); // Add Recipient
-// api.get("/recipients", verifyToken, getRecipients); // Get All Recipients
-// api.delete("/recipients/:recipientId", verifyToken, removeRecipient); // Remove Recipient
+// api.post("/recipients", getRecipients);
+// api.post("/recipients/add", addRecipient);
+// api.post("/recipients/delete", removeRecipient);
 
 // // -----------------------------------------------
 // // Money Transfer
 // // -----------------------------------------------
-// api.post("/transfer", verifyToken, transferMoney); // Transfer Money
-// api.get("/transactions", verifyToken, getTransactionHistory); // Get Transaction History
+// api.post("/money/transactions", getTransactionHistory);
+// api.post("/money/transfer/add", transferMoney);
+// api.post("/money/transfer/cancel", getTransactionHistory);
 
 // // -----------------------------------------------
 // // Profile
 // // -----------------------------------------------
-// api.get("/profile", verifyToken, getProfile); // Get Profile
-// api.put("/profile", verifyToken, updateProfile); // Update Profile
+// api.get("/profile", getProfile);
+// api.put("/profile/update", verifyToken, updateProfile);
 
 // // -----------------------------------------------
 // // Subscription
 // // -----------------------------------------------
-// api.get("/subscription", verifyToken, getSubscription); // Get Subscription Plan
-// api.put("/subscription", verifyToken, updateSubscription); // Update Subscription Plan
+// api.get("/subscription", getSubscription);
+// api.put("/subscription/update", updateSubscription);
 
 // // -----------------------------------------------
 // // Help
 // // -----------------------------------------------
-// api.get("/help", getHelp); // Get Help/FAQs
-// api.put("/help", verifyToken, updateHelp); // Update Help Information
+// api.get("/help", getHelp);
 
 // // -----------------------------------------------
 // // Settings
 // // -----------------------------------------------
-// api.get("/settings/countries", getCountryList); // Get Country List
-// api.get("/settings/currencies", getCurrencyList); // Get Currency List
+// api.get("/settings/countries", getCountryList);
+// api.get("/settings/currencies", getCurrencyList);
 
 // // -----------------------------------------------
 // // Payment Section
 // // -----------------------------------------------
-// api.post("/payment/redeem-voucher", verifyToken, redeemVoucher); // Redeem Voucher
+// api.post("/payment/redeem-voucher", redeemVoucher);
 
 export default api;
