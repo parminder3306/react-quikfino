@@ -169,7 +169,7 @@ const changePassword = async (req, res) => {
       return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
     }
 
-    const { count, record } = await query
+    const { record } = await query
       .table("users")
       .findOrUpdate(
         { id: userAuthToken.id },
