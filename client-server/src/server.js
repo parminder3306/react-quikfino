@@ -5,11 +5,21 @@ import env from "./config/Env.js";
 import DB from "./config/Database.js";
 
 import api from "./routes/Api.js";
+import http from "./utils/Http.js";
 
 const app = express();
 
 // app.use(cors());
 app.use(express.json());
+
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError) {
+    return res
+      .status(http.INTERNAL_SERVER_ERROR.code)
+      .json(http.INTERNAL_SERVER_ERROR);
+  }
+});
+
 app.use("/v1", api);
 
 const connectDB = async () => {

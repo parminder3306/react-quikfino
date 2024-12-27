@@ -24,7 +24,7 @@ const signUp = async (req, res) => {
         { email: value.email, password: hash.sha512(value.password) }
       );
 
-    if (count === 1) {
+    if (count > 0) {
       return res.status(http.CONFLICT.code).json(http.CONFLICT);
     }
 
@@ -86,7 +86,7 @@ const login = async (req, res) => {
 const logout = async (req, res) => {
   try {
     const { value, error } = validation.logout.validate({
-      token: req.body.token,
+      authToken: req.body.authToken,
     });
 
     if (error) {
@@ -155,42 +155,38 @@ const forgotPassword = async (req, res) => {
 const changePassword = async (req, res) => {
   try {
     const { value, error } = validation.changePassword.validate({
-      oldPassword: req.body.oldPassword,
       newPassword: req.body.newPassword,
+      authToken: req.body.authToken,
     });
 
     if (error) {
       return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token);
+    const userAuthToken = jwt.verify(value.authToken);
 
-    if (!decoded) {
+    if (!userAuthToken) {
       return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
     }
 
-    const userQuery = await query.table("users").findOne({ id: decoded.id });
-
-    if (!userQuery) {
-      return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
-    }
-
-    const isOldPasswordValid =
-      hash.sha512(value.oldPassword) === userQuery.password;
-    if (!isOldPasswordValid) {
-      return res
-        .status(http.FORBIDDEN.code)
-        .json({ message: "Old password is incorrect." });
-    }
-
-    const hashedNewPassword = hash.sha512(value.newPassword);
-    await query
+    const { count, record } = await query
       .table("users")
-      .update({ id: decoded.id }, { password: hashedNewPassword });
+      .findOrUpdate(
+        { id: userAuthToken.id },
+        { password: hash.sha512(value.newPassword) }
+      );
 
-    return res.status(http.PASSWORD_CHANGED.code).json(http.PASSWORD_CHANGED);
+    return res.status(http.PASSWORD_CHANGED.code).json({
+      status: http.PASSWORD_CHANGED.status,
+      code: http.PASSWORD_CHANGED.code,
+      message: http.PASSWORD_CHANGED.message,
+      result: {
+        user: record,
+      },
+    });
   } catch (error) {
+    console.log(error);
+
     return res
       .status(http.INTERNAL_SERVER_ERROR.code)
       .json(http.INTERNAL_SERVER_ERROR);
