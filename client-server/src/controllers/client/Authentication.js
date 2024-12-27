@@ -1,9 +1,9 @@
-import jwt from "../../utils/JWT.js";
-import http from "../../utils/Http.js";
 import hash from "../../utils/Hash.js";
+import http from "../../utils/Http.js";
+import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
+import query from "../../utils/Query.js";
 import validation from "../../utils/Validation.js";
-import query from "../../models/Query.js";
 
 // Sign Up
 const signUp = async (req, res) => {
@@ -17,10 +17,12 @@ const signUp = async (req, res) => {
       return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const { count, record } = await query.findOrCreate(
-      { email: value.email },
-      { email: value.email, password: hash.sha512(value.password) }
-    );
+    const { count, record } = await query
+      .table("users")
+      .findOrCreate(
+        { email: value.email },
+        { email: value.email, password: hash.sha512(value.password) }
+      );
 
     if (count === 1) {
       return res.status(http.CONFLICT.code).json(http.CONFLICT);
@@ -53,7 +55,7 @@ const login = async (req, res) => {
       return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const userQuery = await query.findOne({
+    const userQuery = await query.table("users").findOne({
       email: value.email,
       password: hash.sha512(value.password),
     });
@@ -116,7 +118,9 @@ const forgotPassword = async (req, res) => {
       return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const userQuery = await query.findOne({ email: value.email });
+    const userQuery = await query
+      .table("users")
+      .findOne({ email: value.email });
 
     if (!userQuery) {
       return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
@@ -166,7 +170,7 @@ const changePassword = async (req, res) => {
       return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
     }
 
-    const userQuery = await query.findOne({ id: decoded.id });
+    const userQuery = await query.table("users").findOne({ id: decoded.id });
 
     if (!userQuery) {
       return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
@@ -181,7 +185,9 @@ const changePassword = async (req, res) => {
     }
 
     const hashedNewPassword = hash.sha512(value.newPassword);
-    await query.update({ id: decoded.id }, { password: hashedNewPassword });
+    await query
+      .table("users")
+      .update({ id: decoded.id }, { password: hashedNewPassword });
 
     return res.status(http.PASSWORD_CHANGED.code).json(http.PASSWORD_CHANGED);
   } catch (error) {
