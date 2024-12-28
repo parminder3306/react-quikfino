@@ -13,7 +13,7 @@ const query = {
 
       rowCount: async (condition) => {
         const [{ count }] = await DB(table)
-          .where(condition)
+          .orWhere(condition)
           .count("id as count");
         return parseInt(count, 10);
       },
@@ -33,12 +33,14 @@ const query = {
 
       findOrCreate: async (condition, data) => {
         const recordCount = await query.table(table).rowCount(condition);
-        
+
         let recordData = null;
 
         if (!recordCount) {
           const id = await query.table(table).create(data);
           recordData = await query.table(table).findOne({ id });
+        } else {
+          recordData = await query.table(table).findOne(condition);
         }
 
         return { count: recordCount, record: recordData };

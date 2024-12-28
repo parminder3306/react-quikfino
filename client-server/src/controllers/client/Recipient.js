@@ -25,19 +25,22 @@ const addRecipient = async (req, res) => {
     });
 
     if (error) {
-      return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
     const jwtQuery = jwt.verify(value.auth_token);
 
     if (!jwtQuery) {
-      return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
+      return res.status(http.UNAUTHORIZED.code).json({
+        ...http.UNAUTHORIZED,
+        details: { no_match: { auth_token: value.auth_token } },
+      });
     }
 
     const find = {
       uid: jwtQuery.id,
-      email: value.email,
-      phone: value.phone,
       account_number: value.account_number,
     };
 
@@ -60,22 +63,29 @@ const addRecipient = async (req, res) => {
       .table("recipients")
       .findOrCreate(find, create);
 
+    const details = {
+      email: recipientQuery.record.email === value.email ? value.email : null,
+      phone: recipientQuery.record.phone === value.phone ? value.phone : null,
+    };
+
     if (recipientQuery.count > 0) {
-      return res
-        .status(http.RECIPIENT_CONFLICT.code)
-        .json(http.RECIPIENT_CONFLICT);
+      return res.status(http.RECIPIENT_CONFLICT.code).json({
+        ...http.RECIPIENT_CONFLICT,
+        details: { match: details },
+      });
     }
 
-    return res.status(http.ACCOUNT_CREATED.code).json({
-      ...http.ACCOUNT_CREATED,
+    return res.status(http.RECIPIENT_CREATED.code).json({
+      ...http.RECIPIENT_CREATED,
       result: {
         recipient: recipientQuery.record,
       },
     });
   } catch (error) {
-    return res
-      .status(http.INTERNAL_SERVER_ERROR.code)
-      .json(http.INTERNAL_SERVER_ERROR);
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
   }
 };
 

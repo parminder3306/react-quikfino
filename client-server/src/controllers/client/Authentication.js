@@ -5,6 +5,7 @@ import mail from "../../utils/Mail.js";
 import query from "../../utils/Query.js";
 import validation from "../../utils/Validation.js";
 
+// SignUp handler
 const signUp = async (req, res) => {
   try {
     const { value, error } = validation.signUp.validate({
@@ -13,11 +14,12 @@ const signUp = async (req, res) => {
     });
 
     if (error) {
-      return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
     const find = { email: value.email };
-
     const create = {
       email: value.email,
       password: hash.sha512(value.password),
@@ -26,7 +28,9 @@ const signUp = async (req, res) => {
     const userQuery = await query.table("users").findOrCreate(find, create);
 
     if (userQuery.count > 0) {
-      return res.status(http.CONFLICT.code).json(http.CONFLICT);
+      return res
+        .status(http.CONFLICT.code)
+        .json({ ...http.CONFLICT, details: { match: { email: value.email } } });
     }
 
     return res.status(http.ACCOUNT_CREATED.code).json({
@@ -36,12 +40,14 @@ const signUp = async (req, res) => {
       },
     });
   } catch (error) {
-    return res
-      .status(http.INTERNAL_SERVER_ERROR.code)
-      .json(http.INTERNAL_SERVER_ERROR);
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
   }
 };
 
+// Login handler
 const login = async (req, res) => {
   try {
     const { value, error } = validation.login.validate({
@@ -50,7 +56,9 @@ const login = async (req, res) => {
     });
 
     if (error) {
-      return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
     const find = {
@@ -61,23 +69,28 @@ const login = async (req, res) => {
     const userQuery = await query.table("users").findOne(find);
 
     if (!userQuery) {
-      return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
+      return res.status(http.UNAUTHORIZED.code).json({
+        ...http.UNAUTHORIZED,
+        details: { no_match: { email: value.email } },
+      });
     }
 
     return res.status(http.LOGIN_SUCCESS.code).json({
       ...http.LOGIN_SUCCESS,
       result: {
         user: userQuery,
-        token: jwt.create(userQuery.id),
+        auth_token: jwt.create(userQuery.id),
       },
     });
   } catch (error) {
-    return res
-      .status(http.INTERNAL_SERVER_ERROR.code)
-      .json(http.INTERNAL_SERVER_ERROR);
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
   }
 };
 
+// Logout handler
 const logout = async (req, res) => {
   try {
     const { value, error } = validation.logout.validate({
@@ -85,23 +98,30 @@ const logout = async (req, res) => {
     });
 
     if (error) {
-      return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
     const jwtQuery = jwt.verify(value.auth_token);
 
     if (!jwtQuery) {
-      return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
+      return res.status(http.UNAUTHORIZED.code).json({
+        ...http.UNAUTHORIZED,
+        details: { no_match: { auth_token: value.auth_token } },
+      });
     }
 
     return res.status(http.LOGOUT_SUCCESS.code).json(http.LOGOUT_SUCCESS);
   } catch (error) {
-    return res
-      .status(http.INTERNAL_SERVER_ERROR.code)
-      .json(http.INTERNAL_SERVER_ERROR);
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
   }
 };
 
+// Forgot password handler
 const forgotPassword = async (req, res) => {
   try {
     const { value, error } = validation.forgetPassword.validate({
@@ -109,18 +129,23 @@ const forgotPassword = async (req, res) => {
     });
 
     if (error) {
-      return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
     const find = { email: value.email };
-
     const userQuery = await query.table("users").findOne(find);
 
     if (!userQuery) {
-      return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
+      return res.status(http.UNAUTHORIZED.code).json({
+        ...http.UNAUTHORIZED,
+        details: { no_match: { email: value.email } },
+      });
     }
 
-    const resetToken = "123456";
+    // Generate a reset token (in real scenarios, this should be secure, e.g., using crypto)
+    const resetToken = Math.floor(100000 + Math.random() * 900000).toString(); // Example OTP
     const resetLink = `https://yourapp.com/reset-password?token=${resetToken}`;
 
     const options = {
@@ -139,12 +164,14 @@ const forgotPassword = async (req, res) => {
 
     return res.status(http.OTP_SENT.code).json(http.OTP_SENT);
   } catch (error) {
-    return res
-      .status(http.INTERNAL_SERVER_ERROR.code)
-      .json(http.INTERNAL_SERVER_ERROR);
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
   }
 };
 
+// Change password handler
 const changePassword = async (req, res) => {
   try {
     const { value, error } = validation.changePassword.validate({
@@ -153,17 +180,21 @@ const changePassword = async (req, res) => {
     });
 
     if (error) {
-      return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
     const jwtQuery = jwt.verify(value.auth_token);
 
     if (!jwtQuery) {
-      return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
+      return res.status(http.UNAUTHORIZED.code).json({
+        ...http.UNAUTHORIZED,
+        details: { no_match: { auth_token: value.auth_token } },
+      });
     }
 
     const find = { id: jwtQuery.id };
-
     const update = { password: hash.sha512(value.newPassword) };
 
     const userQuery = await query.table("users").findOrUpdate(find, update);
@@ -175,11 +206,10 @@ const changePassword = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
-
-    return res
-      .status(http.INTERNAL_SERVER_ERROR.code)
-      .json(http.INTERNAL_SERVER_ERROR);
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
   }
 };
 

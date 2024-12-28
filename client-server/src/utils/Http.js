@@ -164,6 +164,11 @@ const http = {
     code: 201,
     message: "Account created successfully.",
   },
+  RECIPIENT_CREATED: {
+    status: "SUCCESS",
+    code: 201,
+    message: "Recipient created successfully.",
+  },
   LOGIN_SUCCESS: {
     status: "SUCCESS",
     code: 200,
