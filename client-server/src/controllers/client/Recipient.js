@@ -5,7 +5,7 @@ import mail from "../../utils/Mail.js";
 import query from "../../utils/Query.js";
 import validation from "../../utils/Validation.js";
 
-const recipients = async (req, res) => {};
+const getRecipients = async (req, res) => {};
 
 const addRecipient = async (req, res) => {
   try {
@@ -89,6 +89,49 @@ const addRecipient = async (req, res) => {
   }
 };
 
-const deleteRecipient = async (req, res) => {};
+const deleteRecipient = async (req, res) => {
+  try {
+    const { value, error } = validation.deleteRecipient.validate({
+      id: req.body.id,
+      auth_token: req.body.auth_token,
+    });
 
-export { recipients, addRecipient, deleteRecipient };
+    if (error) {
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+    }
+
+    const jwtQuery = jwt.verify(value.auth_token);
+
+    if (!jwtQuery) {
+      return res.status(http.UNAUTHORIZED.code).json({
+        ...http.UNAUTHORIZED,
+        details: { no_match: { auth_token: value.auth_token } },
+      });
+    }
+
+    const find = {
+      id: value.id,
+      uid: jwtQuery.id,
+    };
+
+    const recipientQuery = await query.table("recipients").findOrDelete(find);
+
+    if (recipientQuery.count < 1) {
+      return res.status(http.RECIPIENT_NOT_FOUND.code).json({
+        ...http.RECIPIENT_NOT_FOUND,
+        details: { no_match: { id: value.id } },
+      });
+    }
+
+    return res.status(http.RECIPIENT_DELETED.code).json(http.RECIPIENT_DELETED);
+  } catch (error) {
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
+  }
+};
+
+export { getRecipients, addRecipient, deleteRecipient };

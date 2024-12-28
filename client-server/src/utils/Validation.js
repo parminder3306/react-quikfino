@@ -24,8 +24,8 @@ const validation = {
     auth_token: Joi.string().required(),
   }),
 
-  recipient: Joi.object({
-    name: Joi.string().min(3).required(),
+  addRecipient: Joi.object({
+    name: Joi.string().required(),
     email: Joi.string().email().optional(),
     phone: Joi.string().required(),
     address: Joi.string().required(),
@@ -36,6 +36,11 @@ const validation = {
     document_type: Joi.string().optional(),
     document_number: Joi.string().optional(),
     reason: Joi.string().required(),
+    auth_token: Joi.string().required(),
+  }),
+
+  deleteRecipient: Joi.object({
+    id: Joi.string().required(),
     auth_token: Joi.string().required(),
   }),
 };

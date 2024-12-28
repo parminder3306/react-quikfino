@@ -58,6 +58,16 @@ const query = {
 
         return { count: recordCount, record: recordData };
       },
+
+      findOrDelete: async (condition, data) => {
+        const recordCount = await query.table(table).rowCount(condition);
+
+        if (recordCount) {
+          await query.table(table).delete(condition);
+        }
+
+        return { count: recordCount };
+      },
     };
   },
 };

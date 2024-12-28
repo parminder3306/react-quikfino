@@ -7,7 +7,7 @@ import {
   changePassword,
 } from "../controllers/client/Authentication.js";
 import {
-  recipients,
+  getRecipients,
   addRecipient,
   deleteRecipient,
 } from "../controllers/client/Recipient.js";
@@ -25,7 +25,7 @@ api.post("/auth/change-password", changePassword);
 // // -----------------------------------------------
 // // Recipient
 // // -----------------------------------------------
-api.post("/recipients", recipients);
+api.post("/recipients", getRecipients);
 api.post("/recipients/add", addRecipient);
 api.post("/recipients/delete", deleteRecipient);
 

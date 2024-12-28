@@ -164,10 +164,20 @@ const http = {
     code: 201,
     message: "Account created successfully.",
   },
+  RECIPIENT_NOT_FOUND: {
+    status: "ERROR",
+    code: 404,
+    message: "Recipient not found.",
+  },
   RECIPIENT_CREATED: {
     status: "SUCCESS",
     code: 201,
     message: "Recipient created successfully.",
+  },
+  RECIPIENT_DELETED: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Recipient deleted successfully.",
   },
   LOGIN_SUCCESS: {
     status: "SUCCESS",
