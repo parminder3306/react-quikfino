@@ -24,6 +24,10 @@ const validation = {
     auth_token: Joi.string().required(),
   }),
 
+  getRecipient: Joi.object({
+    auth_token: Joi.string().required(),
+  }),
+
   addRecipient: Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().optional(),

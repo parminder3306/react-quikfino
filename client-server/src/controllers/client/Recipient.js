@@ -5,11 +5,57 @@ import mail from "../../utils/Mail.js";
 import query from "../../utils/Query.js";
 import validation from "../../utils/Validation.js";
 
-const getRecipients = async (req, res) => {};
+const getRecipients = async (req, res) => {
+  try {
+    const { value, error } = validation.getRecipient.validate({
+      auth_token: req.body.auth_token,
+    });
+
+    if (error) {
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+    }
+
+    const jwtQuery = jwt.verify(value.auth_token);
+
+    if (!jwtQuery) {
+      return res.status(http.UNAUTHORIZED.code).json({
+        ...http.UNAUTHORIZED,
+        details: { no_match: { auth_token: value.auth_token } },
+      });
+    }
+
+    const find = {
+      uid: jwtQuery.id,
+    };
+
+    const recipientQuery = await query.table("recipients").findBy(find);
+
+    if (!recipientQuery) {
+      return res.status(http.RECIPIENT_NOT_FOUND.code).json({
+        ...http.RECIPIENT_NOT_FOUND,
+        details: { no_match: { id: value.id } },
+      });
+    }
+
+    return res.status(http.RECIPIENT_CREATED.code).json({
+      ...http.RECIPIENT_CREATED,
+      result: {
+        recipient: recipientQuery,
+      },
+    });
+  } catch (error) {
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
+  }
+};
 
 const addRecipient = async (req, res) => {
   try {
-    const { value, error } = validation.recipient.validate({
+    const { value, error } = validation.addRecipient.validate({
       name: req.body.name,
       email: req.body.email,
       phone: req.body.phone,

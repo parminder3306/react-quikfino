@@ -7,8 +7,8 @@ const query = {
         return await DB(table).select(columns).where(condition).first();
       },
 
-      findAll: async (columns = ["*"]) => {
-        return await DB(table).select(columns);
+      findBy: async (condition, columns = ["*"]) => {
+        return await DB(table).select(columns).where(condition);
       },
 
       rowCount: async (condition) => {
