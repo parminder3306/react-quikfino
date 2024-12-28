@@ -6,6 +6,11 @@ import {
   forgotPassword,
   changePassword,
 } from "../controllers/client/Authentication.js";
+import {
+  recipients,
+  addRecipient,
+  deleteRecipient,
+} from "../controllers/client/Recipient.js";
 
 const api = Router();
 
@@ -20,9 +25,9 @@ api.post("/auth/change-password", changePassword);
 // // -----------------------------------------------
 // // Recipient
 // // -----------------------------------------------
-// api.post("/recipients", getRecipients);
-// api.post("/recipients/add", addRecipient);
-// api.post("/recipients/delete", removeRecipient);
+api.post("/recipients", recipients);
+api.post("/recipients/add", addRecipient);
+api.post("/recipients/delete", deleteRecipient);
 
 // // -----------------------------------------------
 // // Money Transfer

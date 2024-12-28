@@ -34,6 +34,11 @@ const http = {
     code: 409,
     message: "User already exists. Try logging in.",
   },
+  RECIPIENT_CONFLICT: {
+    status: "ERROR",
+    code: 409,
+    message: "Recipient already exists.",
+  },
   METHOD_NOT_ALLOWED: {
     status: "ERROR",
     code: 405,

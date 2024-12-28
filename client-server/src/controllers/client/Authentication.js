@@ -5,7 +5,6 @@ import mail from "../../utils/Mail.js";
 import query from "../../utils/Query.js";
 import validation from "../../utils/Validation.js";
 
-// Sign Up
 const signUp = async (req, res) => {
   try {
     const { value, error } = validation.signUp.validate({
@@ -17,23 +16,23 @@ const signUp = async (req, res) => {
       return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const { count, record } = await query
-      .table("users")
-      .findOrCreate(
-        { email: value.email },
-        { email: value.email, password: hash.sha512(value.password) }
-      );
+    const find = { email: value.email };
 
-    if (count > 0) {
+    const create = {
+      email: value.email,
+      password: hash.sha512(value.password),
+    };
+
+    const userQuery = await query.table("users").findOrCreate(find, create);
+
+    if (userQuery.count > 0) {
       return res.status(http.CONFLICT.code).json(http.CONFLICT);
     }
 
     return res.status(http.ACCOUNT_CREATED.code).json({
-      status: http.ACCOUNT_CREATED.status,
-      code: http.ACCOUNT_CREATED.code,
-      message: http.ACCOUNT_CREATED.message,
+      ...http.ACCOUNT_CREATED,
       result: {
-        user: record,
+        user: userQuery.record,
       },
     });
   } catch (error) {
@@ -43,7 +42,6 @@ const signUp = async (req, res) => {
   }
 };
 
-// Login
 const login = async (req, res) => {
   try {
     const { value, error } = validation.login.validate({
@@ -55,45 +53,42 @@ const login = async (req, res) => {
       return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const userQuery = await query.table("users").findOne({
+    const find = {
       email: value.email,
       password: hash.sha512(value.password),
-    });
+    };
+
+    const userQuery = await query.table("users").findOne(find);
 
     if (!userQuery) {
       return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
     }
 
     return res.status(http.LOGIN_SUCCESS.code).json({
-      status: http.LOGIN_SUCCESS.status,
-      code: http.LOGIN_SUCCESS.code,
-      message: http.LOGIN_SUCCESS.message,
+      ...http.LOGIN_SUCCESS,
       result: {
         user: userQuery,
         token: jwt.create(userQuery.id),
       },
     });
   } catch (error) {
-    console.log(error);
-
     return res
       .status(http.INTERNAL_SERVER_ERROR.code)
       .json(http.INTERNAL_SERVER_ERROR);
   }
 };
 
-// Logout
 const logout = async (req, res) => {
   try {
     const { value, error } = validation.logout.validate({
-      authToken: req.body.authToken,
+      auth_token: req.body.auth_token,
     });
 
     if (error) {
       return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const jwtQuery = jwt.verify(value.token);
+    const jwtQuery = jwt.verify(value.auth_token);
 
     if (!jwtQuery) {
       return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
@@ -107,7 +102,6 @@ const logout = async (req, res) => {
   }
 };
 
-// Forgot Password
 const forgotPassword = async (req, res) => {
   try {
     const { value, error } = validation.forgetPassword.validate({
@@ -118,9 +112,9 @@ const forgotPassword = async (req, res) => {
       return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const userQuery = await query
-      .table("users")
-      .findOne({ email: value.email });
+    const find = { email: value.email };
+
+    const userQuery = await query.table("users").findOne(find);
 
     if (!userQuery) {
       return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
@@ -151,37 +145,33 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-// Change Password
 const changePassword = async (req, res) => {
   try {
     const { value, error } = validation.changePassword.validate({
       newPassword: req.body.newPassword,
-      authToken: req.body.authToken,
+      auth_token: req.body.auth_token,
     });
 
     if (error) {
       return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
     }
 
-    const userAuthToken = jwt.verify(value.authToken);
+    const jwtQuery = jwt.verify(value.auth_token);
 
-    if (!userAuthToken) {
+    if (!jwtQuery) {
       return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
     }
 
-    const { record } = await query
-      .table("users")
-      .findOrUpdate(
-        { id: userAuthToken.id },
-        { password: hash.sha512(value.newPassword) }
-      );
+    const find = { id: jwtQuery.id };
+
+    const update = { password: hash.sha512(value.newPassword) };
+
+    const userQuery = await query.table("users").findOrUpdate(find, update);
 
     return res.status(http.PASSWORD_CHANGED.code).json({
-      status: http.PASSWORD_CHANGED.status,
-      code: http.PASSWORD_CHANGED.code,
-      message: http.PASSWORD_CHANGED.message,
+      ...http.PASSWORD_CHANGED,
       result: {
-        user: record,
+        user: userQuery.record,
       },
     });
   } catch (error) {

@@ -33,7 +33,7 @@ const query = {
 
       findOrCreate: async (condition, data) => {
         const recordCount = await query.table(table).rowCount(condition);
-
+        
         let recordData = null;
 
         if (!recordCount) {

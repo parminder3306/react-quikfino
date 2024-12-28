@@ -1,8 +1,84 @@
-// Add Recipient
-export const addRecipient = async (req, res) => {};
+import hash from "../../utils/Hash.js";
+import http from "../../utils/Http.js";
+import jwt from "../../utils/JWT.js";
+import mail from "../../utils/Mail.js";
+import query from "../../utils/Query.js";
+import validation from "../../utils/Validation.js";
 
-// Get Recipients
-export const getRecipients = async (req, res) => {};
+const recipients = async (req, res) => {};
 
-// Remove Recipient
-export const removeRecipient = async (req, res) => {};
+const addRecipient = async (req, res) => {
+  try {
+    const { value, error } = validation.recipient.validate({
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      address: req.body.address,
+      country: req.body.country,
+      bank_name: req.body.bank_name,
+      account_number: req.body.account_number,
+      ifsc_code: req.body.ifsc_code,
+      document_type: req.body.document_type,
+      document_number: req.body.document_number,
+      reason: req.body.reason,
+      auth_token: req.body.auth_token,
+    });
+
+    if (error) {
+      return res.status(http.BAD_REQUEST.code).json(http.BAD_REQUEST);
+    }
+
+    const jwtQuery = jwt.verify(value.auth_token);
+
+    if (!jwtQuery) {
+      return res.status(http.UNAUTHORIZED.code).json(http.UNAUTHORIZED);
+    }
+
+    const find = {
+      uid: jwtQuery.id,
+      email: value.email,
+      phone: value.phone,
+      account_number: value.account_number,
+    };
+
+    const create = {
+      uid: jwtQuery.id,
+      name: value.name,
+      email: value.email,
+      phone: value.phone,
+      address: value.address,
+      country: value.country,
+      bank_name: value.bank_name,
+      account_number: value.account_number,
+      ifsc_code: value.ifsc_code,
+      document_type: value.document_type,
+      document_number: value.document_number,
+      reason: value.reason,
+    };
+
+    const recipientQuery = await query
+      .table("recipients")
+      .findOrCreate(find, create);
+
+    if (recipientQuery.count > 0) {
+      return res
+        .status(http.RECIPIENT_CONFLICT.code)
+        .json(http.RECIPIENT_CONFLICT);
+    }
+
+    return res.status(http.ACCOUNT_CREATED.code).json({
+      ...http.ACCOUNT_CREATED,
+      result: {
+        recipient: recipientQuery.record,
+      },
+    });
+  } catch (error) {
+    return res
+      .status(http.INTERNAL_SERVER_ERROR.code)
+      .json(http.INTERNAL_SERVER_ERROR);
+  }
+};
+
+const deleteRecipient = async (req, res) => {};
+
+export { recipients, addRecipient, deleteRecipient };
