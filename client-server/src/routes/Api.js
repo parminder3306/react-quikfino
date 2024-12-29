@@ -4,6 +4,7 @@ import {
   login,
   logout,
   forgotPassword,
+  resetPassword,
   changePassword,
 } from "../controllers/client/Authentication.js";
 import {
@@ -22,6 +23,7 @@ api.post("/auth/signup", signUp);
 api.post("/auth/login", login);
 api.post("/auth/logout", logout);
 api.post("/auth/forgot-password", forgotPassword);
+api.post("/auth/reset-password", resetPassword);
 api.post("/auth/change-password", changePassword);
 // // -----------------------------------------------
 // // Recipient
@@ -41,8 +43,8 @@ api.post("/recipients/delete", deleteRecipient);
 // // -----------------------------------------------
 // // Profile
 // // -----------------------------------------------
-// api.get("/profile", getProfile);
-// api.put("/profile/update", verifyToken, updateProfile);
+api.get("/profile", getProfile);
+api.put("/profile/update", updateProfile);
 
 // // -----------------------------------------------
 // // Subscription

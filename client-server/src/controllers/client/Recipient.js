@@ -192,8 +192,8 @@ const updateRecipient = async (req, res) => {
       .findOrUpdate(find, update);
 
     if (!recipientQuery.count) {
-      return res.status(http.RECIPIENT_NOT_FOUND.code).json({
-        ...http.RECIPIENT_NOT_FOUND,
+      return res.status(http.NOT_FOUND.code).json({
+        ...http.NOT_FOUND,
         details: { no_match: { id: value.id } },
       });
     }
