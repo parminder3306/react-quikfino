@@ -14,7 +14,7 @@ import {
   updateRecipient,
 } from "../controllers/client/Recipient.js";
 import { getProfile, updateProfile } from "../controllers/client/Profile.js";
-import { getWallet, updateWallet } from "../controllers/client/Wallet.js";
+import { getWallet, updateWallet } from "../controllers/client/Money.js";
 
 const api = Router();
 
