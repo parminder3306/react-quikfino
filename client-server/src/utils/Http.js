@@ -64,7 +64,7 @@ const http = {
   ACCOUNT_FOUND: {
     status: "SUCCESS",
     code: 200,
-    message: "Recipient fetched successfully.",
+    message: "Account fetched successfully.",
   },
   ACCOUNT_NOT_FOUND: {
     status: "ERROR",

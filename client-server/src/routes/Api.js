@@ -26,6 +26,13 @@ api.post("/auth/logout", logout);
 api.post("/auth/forgot-password", forgotPassword);
 api.post("/auth/reset-password", resetPassword);
 api.post("/auth/change-password", changePassword);
+
+// // -----------------------------------------------
+// // Profile
+// // -----------------------------------------------
+api.post("/profile", getProfile);
+api.post("/profile/update", updateProfile);
+
 // // -----------------------------------------------
 // // Recipient
 // // -----------------------------------------------
@@ -40,19 +47,11 @@ api.post("/recipients/delete", deleteRecipient);
 // api.post("/money/transactions", getTransactionHistory);
 // api.post("/money/transfer/add", transferMoney);
 // api.post("/money/transfer/cancel", getTransactionHistory);
-
-// // -----------------------------------------------
-// // Profile
-// // -----------------------------------------------
-api.get("/profile", getProfile);
-api.put("/profile/update", updateProfile);
-
 // // -----------------------------------------------
 // // Subscription
 // // -----------------------------------------------
 // api.get("/subscription", getSubscription);
 // api.put("/subscription/update", updateSubscription);
-
 // // -----------------------------------------------
 // // Help
 // // -----------------------------------------------

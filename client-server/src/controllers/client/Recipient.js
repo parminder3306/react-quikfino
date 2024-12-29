@@ -35,7 +35,7 @@ const getRecipients = async (req, res) => {
     if (!recipientQuery) {
       return res.status(http.RECIPIENT_NOT_FOUND.code).json({
         ...http.RECIPIENT_NOT_FOUND,
-        details: { no_match: { id: value.id } },
+        details: { no_match: { user_id: jwtQuery.user_id } },
       });
     }
 

@@ -1,6 +1,13 @@
+import hash from "../../utils/Hash.js";
+import http from "../../utils/Http.js";
+import jwt from "../../utils/JWT.js";
+import mail from "../../utils/Mail.js";
+import query from "../../utils/Query.js";
+import validation from "../../utils/Validation.js";
+
 const getProfile = async (req, res) => {
   try {
-    const { value, error } = validation.logout.validate({
+    const { value, error } = validation.getProfile.validate({
       auth_token: req.body.auth_token,
     });
 
@@ -20,7 +27,7 @@ const getProfile = async (req, res) => {
     }
 
     const find = {
-        user_id: jwtQuery.user_id,
+      id: jwtQuery.user_id,
     };
 
     const userQuery = await query.table("users").findOne(find);
@@ -28,15 +35,14 @@ const getProfile = async (req, res) => {
     if (!userQuery) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
-        details: { no_match: { email: value.email } },
+        details: { no_match: { user_id: jwtQuery.user_id } },
       });
     }
 
-    return res.status(http.LOGIN_SUCCESS.code).json({
-      ...http.LOGIN_SUCCESS,
+    return res.status(http.ACCOUNT_FOUND.code).json({
+      ...http.ACCOUNT_FOUND,
       result: {
         user: userQuery,
-        auth_token: jwt.create(userQuery.id),
       },
     });
   } catch (error) {
