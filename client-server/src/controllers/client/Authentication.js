@@ -189,7 +189,7 @@ const changePassword = async (req, res) => {
       });
     }
 
-    const find = { id: jwtQuery.id };
+    const find = { id: jwtQuery.user_id };
     const update = { password: hash.sha512(value.newPassword) };
 
     const userQuery = await query.table("users").findOrUpdate(find, update);

@@ -27,7 +27,7 @@ const getRecipients = async (req, res) => {
     }
 
     const find = {
-      uid: jwtQuery.id,
+      user_id: jwtQuery.user_id,
     };
 
     const recipientQuery = await query.table("recipients").findBy(find);
@@ -86,12 +86,12 @@ const addRecipient = async (req, res) => {
     }
 
     const find = {
-      uid: jwtQuery.id,
+      user_id: jwtQuery.user_id,
       account_number: value.account_number,
     };
 
     const create = {
-      uid: jwtQuery.id,
+      user_id: jwtQuery.user_id,
       name: value.name,
       email: value.email,
       phone: value.phone,
@@ -170,7 +170,7 @@ const updateRecipient = async (req, res) => {
 
     const find = {
       id: value.id,
-      uid: jwtQuery.id,
+      user_id: jwtQuery.user_id,
     };
 
     const update = {
@@ -236,7 +236,7 @@ const deleteRecipient = async (req, res) => {
 
     const find = {
       id: value.id,
-      uid: jwtQuery.id,
+      user_id: jwtQuery.user_id,
     };
 
     const recipientQuery = await query.table("recipients").findOrDelete(find);

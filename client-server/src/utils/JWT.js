@@ -3,7 +3,7 @@ import env from "../config/Env.js";
 
 const jwt = {
   create: (userId) => {
-    return jsonwebtoken.sign({ id: userId }, env.JWT_SECRET, {
+    return jsonwebtoken.sign({ user_id: userId }, env.JWT_SECRET, {
       expiresIn: "1h",
     });
   },
