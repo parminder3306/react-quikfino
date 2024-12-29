@@ -13,6 +13,7 @@ import {
   deleteRecipient,
   updateRecipient,
 } from "../controllers/client/Recipient.js";
+import { getProfile, updateProfile } from "../controllers/client/Profile.js";
 
 const api = Router();
 

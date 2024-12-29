@@ -167,6 +167,47 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {
+  try {
+    const { value, error } = validation.changePassword.validate({
+      newPassword: req.body.newPassword,
+      auth_token: req.body.auth_token,
+    });
+
+    if (error) {
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+    }
+
+    const jwtQuery = jwt.verify(value.auth_token);
+
+    if (!jwtQuery) {
+      return res.status(http.UNAUTHORIZED.code).json({
+        ...http.UNAUTHORIZED,
+        details: { no_match: { auth_token: value.auth_token } },
+      });
+    }
+
+    const find = { id: jwtQuery.user_id };
+    const update = { password: hash.sha512(value.newPassword) };
+
+    const userQuery = await query.table("users").findOrUpdate(find, update);
+
+    return res.status(http.PASSWORD_CHANGED.code).json({
+      ...http.PASSWORD_CHANGED,
+      result: {
+        user: userQuery.record,
+      },
+    });
+  } catch (error) {
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
+  }
+};
+
 const changePassword = async (req, res) => {
   try {
     const { value, error } = validation.changePassword.validate({
@@ -208,4 +249,4 @@ const changePassword = async (req, res) => {
   }
 };
 
-export { signUp, login, logout, forgotPassword, changePassword };
+export { signUp, login, logout, forgotPassword, resetPassword, changePassword };
