@@ -14,6 +14,7 @@ import {
   updateRecipient,
 } from "../controllers/client/Recipient.js";
 import { getProfile, updateProfile } from "../controllers/client/Profile.js";
+import { getWallet, updateWallet } from "../controllers/client/Wallet.js";
 
 const api = Router();
 
@@ -32,6 +33,12 @@ api.post("/auth/change-password", changePassword);
 // // -----------------------------------------------
 api.post("/profile", getProfile);
 api.post("/profile/update", updateProfile);
+
+// // -----------------------------------------------
+// // Wallet
+// // -----------------------------------------------
+api.post("/wallet", getWallet);
+api.post("/wallet/update", updateWallet);
 
 // // -----------------------------------------------
 // // Recipient

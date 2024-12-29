@@ -81,6 +81,11 @@ const http = {
     code: 423,
     message: "Account locked. Contact support.",
   },
+  WALLET_FOUND: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Wallet fetched successfully.",
+  },
   // LOGIN/LOGOUT RESPONSE CODES
   LOGIN_SUCCESS: {
     status: "SUCCESS",

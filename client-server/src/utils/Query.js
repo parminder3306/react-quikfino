@@ -168,8 +168,28 @@ const query = {
       },
 
       // Perform SQL joins between tables
-      joinWith: async (joinTable, joinCondition, columns = ["*"]) => {
-        return await DB(table).select(columns).join(joinTable, joinCondition);
+      andWithJoin: async (
+        joinTable,
+        joinCondition,
+        condition,
+        columns = ["*"]
+      ) => {
+        return await DB(table)
+          .select(columns)
+          .leftJoin(joinTable, joinCondition)
+          .where(condition);
+      },
+
+      orWithJoin: async (
+        joinTable,
+        joinCondition,
+        condition,
+        columns = ["*"]
+      ) => {
+        return await DB(table)
+          .select(columns)
+          .leftJoin(joinTable, joinCondition)
+          .orWhere(condition);
       },
 
       // Execute raw SQL queries
