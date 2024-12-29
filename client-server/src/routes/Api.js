@@ -10,6 +10,7 @@ import {
   getRecipients,
   addRecipient,
   deleteRecipient,
+  updateRecipient,
 } from "../controllers/client/Recipient.js";
 
 const api = Router();
@@ -27,6 +28,7 @@ api.post("/auth/change-password", changePassword);
 // // -----------------------------------------------
 api.post("/recipients", getRecipients);
 api.post("/recipients/add", addRecipient);
+api.post("/recipients/update", updateRecipient);
 api.post("/recipients/delete", deleteRecipient);
 
 // // -----------------------------------------------

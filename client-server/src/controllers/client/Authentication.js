@@ -5,7 +5,6 @@ import mail from "../../utils/Mail.js";
 import query from "../../utils/Query.js";
 import validation from "../../utils/Validation.js";
 
-// SignUp handler
 const signUp = async (req, res) => {
   try {
     const { value, error } = validation.signUp.validate({
@@ -47,7 +46,6 @@ const signUp = async (req, res) => {
   }
 };
 
-// Login handler
 const login = async (req, res) => {
   try {
     const { value, error } = validation.login.validate({
@@ -90,7 +88,6 @@ const login = async (req, res) => {
   }
 };
 
-// Logout handler
 const logout = async (req, res) => {
   try {
     const { value, error } = validation.logout.validate({
@@ -121,7 +118,6 @@ const logout = async (req, res) => {
   }
 };
 
-// Forgot password handler
 const forgotPassword = async (req, res) => {
   try {
     const { value, error } = validation.forgetPassword.validate({
@@ -171,7 +167,6 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-// Change password handler
 const changePassword = async (req, res) => {
   try {
     const { value, error } = validation.changePassword.validate({

@@ -43,6 +43,22 @@ const validation = {
     auth_token: Joi.string().required(),
   }),
 
+  updateRecipient: Joi.object({
+    id: Joi.string().required(),
+    name: Joi.string().required(),
+    email: Joi.string().email().optional(),
+    phone: Joi.string().required(),
+    address: Joi.string().required(),
+    country: Joi.string().required(),
+    bank_name: Joi.string().required(),
+    account_number: Joi.string().required(),
+    ifsc_code: Joi.string().required(),
+    document_type: Joi.string().optional(),
+    document_number: Joi.string().optional(),
+    reason: Joi.string().required(),
+    auth_token: Joi.string().required(),
+  }),
+
   deleteRecipient: Joi.object({
     id: Joi.string().required(),
     auth_token: Joi.string().required(),

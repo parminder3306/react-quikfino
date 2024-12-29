@@ -39,8 +39,8 @@ const getRecipients = async (req, res) => {
       });
     }
 
-    return res.status(http.RECIPIENT_CREATED.code).json({
-      ...http.RECIPIENT_CREATED,
+    return res.status(http.RECIPIENT_FOUND.code).json({
+      ...http.RECIPIENT_FOUND,
       result: {
         recipient: recipientQuery,
       },
@@ -135,6 +135,83 @@ const addRecipient = async (req, res) => {
   }
 };
 
+const updateRecipient = async (req, res) => {
+  try {
+    const { value, error } = validation.updateRecipient.validate({
+      id: req.body.id,
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      address: req.body.address,
+      country: req.body.country,
+      bank_name: req.body.bank_name,
+      account_number: req.body.account_number,
+      ifsc_code: req.body.ifsc_code,
+      document_type: req.body.document_type,
+      document_number: req.body.document_number,
+      reason: req.body.reason,
+      auth_token: req.body.auth_token,
+    });
+
+    if (error) {
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+    }
+
+    const jwtQuery = jwt.verify(value.auth_token);
+
+    if (!jwtQuery) {
+      return res.status(http.UNAUTHORIZED.code).json({
+        ...http.UNAUTHORIZED,
+        details: { no_match: { auth_token: value.auth_token } },
+      });
+    }
+
+    const find = {
+      id: value.id,
+      uid: jwtQuery.id,
+    };
+
+    const update = {
+      name: value.name,
+      email: value.email,
+      phone: value.phone,
+      address: value.address,
+      country: value.country,
+      bank_name: value.bank_name,
+      account_number: value.account_number,
+      ifsc_code: value.ifsc_code,
+      document_type: value.document_type,
+      document_number: value.document_number,
+      reason: value.reason,
+    };
+
+    const recipientQuery = await query
+      .table("recipients")
+      .findOrUpdate(find, update);
+
+    if (!recipientQuery.count) {
+      return res.status(http.RECIPIENT_NOT_FOUND.code).json({
+        ...http.RECIPIENT_NOT_FOUND,
+        details: { no_match: { id: value.id } },
+      });
+    }
+
+    return res.status(http.RECIPIENT_UPDATED.code).json({
+      ...http.RECIPIENT_UPDATED,
+      result: {
+        user: recipientQuery.record,
+      },
+    });
+  } catch (error) {
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
+  }
+};
+
 const deleteRecipient = async (req, res) => {
   try {
     const { value, error } = validation.deleteRecipient.validate({
@@ -180,4 +257,4 @@ const deleteRecipient = async (req, res) => {
   }
 };
 
-export { getRecipients, addRecipient, deleteRecipient };
+export { getRecipients, addRecipient, updateRecipient, deleteRecipient };

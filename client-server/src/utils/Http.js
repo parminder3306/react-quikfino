@@ -164,21 +164,35 @@ const http = {
     code: 201,
     message: "Account created successfully.",
   },
-  RECIPIENT_NOT_FOUND: {
-    status: "ERROR",
-    code: 404,
-    message: "Recipient not found.",
-  },
+
+  // START RECIPIENT
   RECIPIENT_CREATED: {
     status: "SUCCESS",
     code: 201,
     message: "Recipient created successfully.",
+  },
+  RECIPIENT_UPDATED: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Recipient updated successfully.",
   },
   RECIPIENT_DELETED: {
     status: "SUCCESS",
     code: 200,
     message: "Recipient deleted successfully.",
   },
+  RECIPIENT_FOUND: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Recipient fetched successfully.",
+  },
+  RECIPIENT_NOT_FOUND: {
+    status: "ERROR",
+    code: 404,
+    message: "Recipient not found.",
+  },
+  // END RECIPIENT
+
   LOGIN_SUCCESS: {
     status: "SUCCESS",
     code: 200,
