@@ -1,171 +1,140 @@
 const http = {
-  SERVICE_UNAVAILABLE: {
-    status: "ERROR",
-    code: 503,
-    message: "Service Unavailable. Please try again later.",
-  },
+  // ERROR RESPONSE CODES
   BAD_REQUEST: {
     status: "ERROR",
     code: 400,
-    message: "Bad Request. Missing or invalid parameters.",
+    message: "Bad request. Missing or invalid parameters.",
   },
   UNAUTHORIZED: {
     status: "ERROR",
     code: 401,
-    message: "Unauthorized. Please log in.",
+    message: "Unauthorized access. Please log in.",
   },
   FORBIDDEN: {
     status: "ERROR",
     code: 403,
-    message: "Forbidden. You don't have permission.",
+    message: "Forbidden access. You do not have permission.",
   },
   NOT_FOUND: {
     status: "ERROR",
     code: 404,
-    message: "Not Found. Resource not found.",
-  },
-  INTERNAL_SERVER_ERROR: {
-    status: "ERROR",
-    code: 500,
-    message: "Internal Server Error. Please try again later.",
-  },
-  CONFLICT: {
-    status: "ERROR",
-    code: 409,
-    message: "User already exists. Try logging in.",
-  },
-  RECIPIENT_CONFLICT: {
-    status: "ERROR",
-    code: 409,
-    message: "Recipient already exists.",
+    message: "Resource not found.",
   },
   METHOD_NOT_ALLOWED: {
     status: "ERROR",
     code: 405,
-    message: "Method Not Allowed.",
+    message: "Method not allowed.",
   },
-  REQUEST_TIMEOUT: {
+  INTERNAL_SERVER_ERROR: {
     status: "ERROR",
-    code: 408,
-    message: "Request Timeout. Please try again.",
+    code: 500,
+    message: "Internal server error. Please try again later.",
+  },
+  SERVICE_UNAVAILABLE: {
+    status: "ERROR",
+    code: 503,
+    message: "Service unavailable. Please try again later.",
   },
   TOO_MANY_REQUESTS: {
     status: "ERROR",
     code: 429,
-    message: "Too Many Requests. Try again later.",
+    message: "Too many requests. Please try again later.",
   },
-  INVALID_AMOUNT: {
+  NETWORK_ERROR: {
     status: "ERROR",
-    code: 422,
-    message: "Invalid Amount.",
+    code: 503,
+    message: "Network error. Please try again later.",
   },
-  INSUFFICIENT_BALANCE: {
-    status: "ERROR",
-    code: 422,
-    message: "Insufficient Balance.",
+  // ACCOUNT RELATED RESPONSES
+  ACCOUNT_CREATED: {
+    status: "SUCCESS",
+    code: 201,
+    message: "Account created successfully.",
   },
-  EXCEEDS_TRANSFER_LIMIT: {
-    status: "ERROR",
-    code: 422,
-    message: "Transfer Limit Exceeded.",
+  ACCOUNT_UPDATED: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Account updated successfully.",
   },
-  INVALID_CURRENCY: {
-    status: "ERROR",
-    code: 422,
-    message: "Invalid Currency.",
+  ACCOUNT_DELETED: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Account deleted successfully.",
   },
-  INVALID_ACCOUNT_DETAILS: {
-    status: "ERROR",
-    code: 422,
-    message: "Invalid Account Details.",
+  ACCOUNT_FOUND: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Recipient fetched successfully.",
   },
-  TRANSFER_FAILED: {
+  ACCOUNT_NOT_FOUND: {
     status: "ERROR",
-    code: 500,
-    message: "Transfer Failed. Try again.",
+    code: 404,
+    message: "Account not found.",
+  },
+  ACCOUNT_INACTIVE: {
+    status: "ERROR",
+    code: 423,
+    message: "Account is inactive. Please verify your account.",
   },
   ACCOUNT_LOCKED: {
     status: "ERROR",
     code: 423,
-    message: "Account Locked. Contact support.",
+    message: "Account locked. Contact support.",
   },
-  PRECONDITION_REQUIRED: {
-    status: "ERROR",
-    code: 428,
-    message: "Precondition Required. Verify identity.",
+  // LOGIN/LOGOUT RESPONSE CODES
+  LOGIN_SUCCESS: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Login successful.",
   },
-  PAYMENT_GATEWAY_ERROR: {
-    status: "ERROR",
-    code: 502,
-    message: "Payment Gateway Error. Try again later.",
+  LOGOUT_SUCCESS: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Logged out successfully.",
   },
-  SERVICE_NOT_AVAILABLE_IN_REGION: {
-    status: "ERROR",
-    code: 503,
-    message: "Service Not Available in Your Region.",
+  // PASSWORD/VERIFICATION RESPONSE CODES
+  PASSWORD_CHANGED: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Password changed successfully.",
   },
-  TRANSACTION_LIMIT_REACHED: {
-    status: "ERROR",
-    code: 429,
-    message: "Transaction Limit Reached.",
-  },
-  EXPIRED_SESSION: {
-    status: "ERROR",
-    code: 440,
-    message: "Session Expired. Log in again.",
-  },
-  VERIFICATION_REQUIRED: {
-    status: "ERROR",
-    code: 401,
-    message: "Verification Required.",
+  VERIFICATION_SUCCESS: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Verification successful.",
   },
   INVALID_OTP: {
     status: "ERROR",
     code: 422,
     message: "Invalid OTP.",
   },
-  UNAVAILABLE_CURRENCY_PAIR: {
-    status: "ERROR",
-    code: 404,
-    message: "Currency Pair Unavailable.",
-  },
-  ACCOUNT_NOT_FOUND: {
-    status: "ERROR",
-    code: 404,
-    message: "Account Not Found.",
-  },
-  EXPIRED_TRANSFER: {
-    status: "ERROR",
-    code: 410,
-    message: "Transfer Expired.",
-  },
-  INSUFFICIENT_FUNDS_IN_DESTINATION_ACCOUNT: {
-    status: "ERROR",
-    code: 422,
-    message: "Insufficient Funds in Destination Account.",
-  },
-  NETWORK_ERROR: {
-    status: "ERROR",
-    code: 503,
-    message: "Network Error. Try again later.",
-  },
-  DUPLICATE_TRANSACTION: {
-    status: "ERROR",
-    code: 409,
-    message: "Duplicate Transaction.",
-  },
-  CURRENCY_MISMATCH: {
-    status: "ERROR",
-    code: 422,
-    message: "Currency Mismatch.",
-  },
-  ACCOUNT_CREATED: {
+  // TRANSACTIONS RESPONSE CODES
+  TRANSACTION_SUCCESS: {
     status: "SUCCESS",
-    code: 201,
-    message: "Account created successfully.",
+    code: 200,
+    message: "Transaction completed successfully.",
   },
-
-  // START RECIPIENT
+  FUNDS_TRANSFERRED: {
+    status: "SUCCESS",
+    code: 200,
+    message: "Funds transferred successfully.",
+  },
+  TRANSFER_FAILED: {
+    status: "ERROR",
+    code: 500,
+    message: "Transfer failed. Please try again.",
+  },
+  INSUFFICIENT_FUNDS: {
+    status: "ERROR",
+    code: 422,
+    message: "Insufficient funds.",
+  },
+  EXCEEDS_TRANSFER_LIMIT: {
+    status: "ERROR",
+    code: 422,
+    message: "Transfer limit exceeded.",
+  },
+  // RECIPIENT RESPONSE CODES
   RECIPIENT_CREATED: {
     status: "SUCCESS",
     code: 201,
@@ -186,57 +155,21 @@ const http = {
     code: 200,
     message: "Recipient fetched successfully.",
   },
+  RECIPIENT_CONFLICT: {
+    status: "ERROR",
+    code: 409,
+    message: "Recipient already exists.",
+  },
   RECIPIENT_NOT_FOUND: {
     status: "ERROR",
     code: 404,
     message: "Recipient not found.",
   },
-  // END RECIPIENT
-
-  LOGIN_SUCCESS: {
-    status: "SUCCESS",
-    code: 200,
-    message: "Login successful.",
-  },
-  TRANSACTION_SUCCESS: {
-    status: "SUCCESS",
-    code: 200,
-    message: "Transaction completed successfully.",
-  },
-  FUNDS_TRANSFERRED: {
-    status: "SUCCESS",
-    code: 200,
-    message: "Funds transferred successfully.",
-  },
-  ACCOUNT_UPDATED: {
-    status: "SUCCESS",
-    code: 200,
-    message: "Account details updated successfully.",
-  },
-  PASSWORD_CHANGED: {
-    status: "SUCCESS",
-    code: 200,
-    message: "Password changed successfully.",
-  },
-  OTP_SENT: {
-    status: "SUCCESS",
-    code: 200,
-    message: "OTP sent successfully.",
-  },
-  VERIFICATION_SUCCESS: {
-    status: "SUCCESS",
-    code: 200,
-    message: "Verification successful.",
-  },
-  LOGOUT_SUCCESS: {
-    status: "SUCCESS",
-    code: 200,
-    message: "Logged out successfully.",
-  },
-  PROFILE_UPDATED: {
-    status: "SUCCESS",
-    code: 200,
-    message: "Profile updated successfully.",
+  // OTHER SPECIFIC RESPONSE CODES
+  EXPIRED_SESSION: {
+    status: "ERROR",
+    code: 440,
+    message: "Session expired. Please log in again.",
   },
   PAYMENT_SUCCESS: {
     status: "SUCCESS",
@@ -248,10 +181,37 @@ const http = {
     code: 200,
     message: "Currency exchange completed successfully.",
   },
-  BALANCE_UPDATED: {
+  PROFILE_UPDATED: {
     status: "SUCCESS",
     code: 200,
-    message: "Balance updated successfully.",
+    message: "Profile updated successfully.",
+  },
+  INVALID_CURRENCY: {
+    status: "ERROR",
+    code: 422,
+    message: "Invalid currency.",
+  },
+  INVALID_ACCOUNT_DETAILS: {
+    status: "ERROR",
+    code: 422,
+    message: "Invalid account details.",
+  },
+
+  // PRECONDITION REQUIRED & OTHER ERRORS
+  PRECONDITION_REQUIRED: {
+    status: "ERROR",
+    code: 428,
+    message: "Precondition required. Please verify your identity.",
+  },
+  PAYMENT_GATEWAY_ERROR: {
+    status: "ERROR",
+    code: 502,
+    message: "Payment gateway error. Please try again later.",
+  },
+  SERVICE_NOT_AVAILABLE_IN_REGION: {
+    status: "ERROR",
+    code: 503,
+    message: "Service not available in your region.",
   },
 };
 
