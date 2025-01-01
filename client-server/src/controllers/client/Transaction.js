@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/Query.js";
+import query from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 // Get Transaction History (Example function)
@@ -28,7 +28,7 @@ const getTransactionHistory = async (req, res) => {
     }
 
     const find = { user_id: jwtQuery.user_id };
-    const transactionHistory = await query.table("transactions").find(find);
+    const transactionHistory = await db.table("transactions").find(find);
 
     if (!transactionHistory) {
       return res.status(http.NOT_FOUND.code).json({

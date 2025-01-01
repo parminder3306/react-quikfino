@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/Query.js";
+import query from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 const recipients = async (req, res) => {
@@ -30,7 +30,7 @@ const recipients = async (req, res) => {
       user_id: jwtQuery.user_id,
     };
 
-    const recipientQuery = await query.table("recipients").findBy(find);
+    const recipientQuery = await db.table("recipients").findBy(find);
 
     if (!recipientQuery) {
       return res.status(http.RECIPIENT_NOT_FOUND.code).json({
@@ -239,7 +239,7 @@ const deleteRecipient = async (req, res) => {
       user_id: jwtQuery.user_id,
     };
 
-    const recipientQuery = await query.table("recipients").findOrDelete(find);
+    const recipientQuery = await db.table("recipients").findOrDelete(find);
 
     if (recipientQuery.count < 1) {
       return res.status(http.RECIPIENT_NOT_FOUND.code).json({

@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/Query.js";
+import query from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 const profile = async (req, res) => {
@@ -30,7 +30,7 @@ const profile = async (req, res) => {
       id: jwtQuery.user_id,
     };
 
-    const userQuery = await query.table("users").findOne(find);
+    const userQuery = await db.table("users").findOne(find);
 
     if (!userQuery) {
       return res.status(http.UNAUTHORIZED.code).json({
@@ -95,7 +95,7 @@ const editProfile = async (req, res) => {
       two_factor_enabled: value.two_factor_enabled,
     };
 
-    const userQuery = await query.table("users").findOrUpdate(find, update);
+    const userQuery = await db.table("users").findOrUpdate(find, update);
 
     return res.status(http.ACCOUNT_UPDATED.code).json({
       ...http.ACCOUNT_UPDATED,

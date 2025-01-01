@@ -2,7 +2,8 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/Query.js";
+
+import db from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 const signUp = async (req, res) => {
@@ -24,7 +25,7 @@ const signUp = async (req, res) => {
       password: hash.sha512(value.password),
     };
 
-    const userQuery = await query.table("users").findOrCreate(find, create);
+    const userQuery = await db.table("users").findOrCreate(find, create);
 
     if (userQuery.count > 0) {
       return res
@@ -64,7 +65,7 @@ const login = async (req, res) => {
       password: hash.sha512(value.password),
     };
 
-    const userQuery = await query.table("users").findOne(find);
+    const userQuery = await db.table("users").findOne(find);
 
     if (!userQuery) {
       return res.status(http.UNAUTHORIZED.code).json({
@@ -131,7 +132,7 @@ const forgotPassword = async (req, res) => {
     }
 
     const find = { email: value.email };
-    const userQuery = await query.table("users").findOne(find);
+    const userQuery = await db.table("users").findOne(find);
 
     if (!userQuery) {
       return res.status(http.UNAUTHORIZED.code).json({
@@ -192,7 +193,7 @@ const resetPassword = async (req, res) => {
     const find = { id: jwtQuery.user_id };
     const update = { password: hash.sha512(value.newPassword) };
 
-    const userQuery = await query.table("users").findOrUpdate(find, update);
+    const userQuery = await db.table("users").findOrUpdate(find, update);
 
     return res.status(http.PASSWORD_CHANGED.code).json({
       ...http.PASSWORD_CHANGED,
@@ -233,7 +234,7 @@ const changePassword = async (req, res) => {
     const find = { id: jwtQuery.user_id };
     const update = { password: hash.sha512(value.newPassword) };
 
-    const userQuery = await query.table("users").findOrUpdate(find, update);
+    const userQuery = await db.table("users").findOrUpdate(find, update);
 
     return res.status(http.PASSWORD_CHANGED.code).json({
       ...http.PASSWORD_CHANGED,

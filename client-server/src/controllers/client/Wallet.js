@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/Query.js";
+import query from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 const wallet = async (req, res) => {
@@ -27,7 +27,7 @@ const wallet = async (req, res) => {
     }
 
     const find = { user_id: jwtQuery.user_id };
-    const walletQuery = await query.table("wallets").findOne(find);
+    const walletQuery = await db.table("wallets").findOne(find);
 
     if (!walletQuery) {
       return res.status(http.UNAUTHORIZED.code).json({
@@ -74,7 +74,7 @@ const addWallet = async (req, res) => {
 
     const find = { user_id: jwtQuery.user_id };
 
-    const walletQuery = await query.table("wallets").findOne(find);
+    const walletQuery = await db.table("wallets").findOne(find);
 
     if (!walletQuery) {
       return res.status(http.NOT_FOUND.code).json({
@@ -90,7 +90,7 @@ const addWallet = async (req, res) => {
       balance: Number(walletBalance + addAmount),
     };
 
-    const { record } = await query.table("wallets").findOrUpdate(find, update);
+    const { record } = await db.table("wallets").findOrUpdate(find, update);
 
     return res.status(http.WALLET_UPDATED.code).json({
       ...http.WALLET_UPDATED,
@@ -127,7 +127,7 @@ const payWallet = async (req, res) => {
     }
 
     const find = { user_id: jwtQuery.user_id };
-    const walletQuery = await query.table("wallets").findOne(find);
+    const walletQuery = await db.table("wallets").findOne(find);
 
     if (!walletQuery || walletQuery.balance < value.amount) {
       return res.status(http.UNAUTHORIZED.code).json({
@@ -140,7 +140,7 @@ const payWallet = async (req, res) => {
       balance: walletQuery.balance - value.amount, // Deducting the amount from balance
     };
 
-    await query.table("wallets").findOrUpdate(find, update);
+    await db.table("wallets").findOrUpdate(find, update);
 
     return res.status(http.SUCCESS.code).json({
       status: "SUCCESS",

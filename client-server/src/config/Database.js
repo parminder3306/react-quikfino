@@ -22,6 +22,6 @@ const config = {
   },
 };
 
-const DB = knex(config);
+const database = knex(config);
 
-export default DB;
+export default database;

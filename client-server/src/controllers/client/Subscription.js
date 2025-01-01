@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/Query.js";
+import query from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 // Get Subscription - Retrieves the subscription details for the authenticated user
@@ -28,7 +28,7 @@ const getSubscription = async (req, res) => {
     }
 
     const find = { user_id: jwtQuery.user_id };
-    const subscriptionQuery = await query.table("subscriptions").findOne(find);
+    const subscriptionQuery = await db.table("subscriptions").findOne(find);
 
     if (!subscriptionQuery) {
       return res.status(http.NOT_FOUND.code).json({
@@ -76,7 +76,7 @@ const updateSubscription = async (req, res) => {
     }
 
     const find = { user_id: jwtQuery.user_id };
-    const subscriptionQuery = await query.table("subscriptions").findOne(find);
+    const subscriptionQuery = await db.table("subscriptions").findOne(find);
 
     if (!subscriptionQuery) {
       return res.status(http.NOT_FOUND.code).json({
@@ -90,7 +90,7 @@ const updateSubscription = async (req, res) => {
       updated_at: new Date(),
     };
 
-    await query.table("subscriptions").findOrUpdate(find, update);
+    await db.table("subscriptions").findOrUpdate(find, update);
 
     return res.status(http.SUCCESS.code).json({
       status: "SUCCESS",
@@ -110,7 +110,7 @@ const updateSubscription = async (req, res) => {
 // Get Subscription Plans - Retrieves all available subscription plans
 const getSubscriptionPlans = async (req, res) => {
   try {
-    const plans = await query.table("subscription_plans").find();
+    const plans = await db.table("subscription_plans").find();
 
     if (!plans || plans.length === 0) {
       return res.status(http.NOT_FOUND.code).json({
@@ -159,7 +159,7 @@ const processPayment = async (req, res) => {
     }
 
     const find = { user_id: jwtQuery.user_id };
-    const subscriptionQuery = await query.table("subscriptions").findOne(find);
+    const subscriptionQuery = await db.table("subscriptions").findOne(find);
 
     if (!subscriptionQuery) {
       return res.status(http.NOT_FOUND.code).json({
@@ -179,7 +179,7 @@ const processPayment = async (req, res) => {
         payment_status: "Paid",
       };
 
-      await query.table("subscriptions").findOrUpdate(find, update);
+      await db.table("subscriptions").findOrUpdate(find, update);
 
       return res.status(http.SUCCESS.code).json({
         status: "SUCCESS",

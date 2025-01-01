@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/Query.js";
+import query from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 // Transfer Money from one wallet to another
@@ -30,7 +30,7 @@ const transferMoney = async (req, res) => {
     }
 
     const senderFind = { user_id: jwtQuery.user_id };
-    const senderWallet = await query.table("wallets").findOne(senderFind);
+    const senderWallet = await db.table("wallets").findOne(senderFind);
 
     if (!senderWallet || senderWallet.balance < value.amount) {
       return res.status(http.UNAUTHORIZED.code).json({
@@ -40,7 +40,7 @@ const transferMoney = async (req, res) => {
     }
 
     const recipientFind = { user_id: value.recipient_user_id };
-    const recipientWallet = await query.table("wallets").findOne(recipientFind);
+    const recipientWallet = await db.table("wallets").findOne(recipientFind);
 
     if (!recipientWallet) {
       return res.status(http.NOT_FOUND.code).json({
@@ -53,8 +53,8 @@ const transferMoney = async (req, res) => {
     const senderUpdate = { balance: senderWallet.balance - value.amount };
     const recipientUpdate = { balance: recipientWallet.balance + value.amount };
 
-    await query.table("wallets").findOrUpdate(senderFind, senderUpdate);
-    await query.table("wallets").findOrUpdate(recipientFind, recipientUpdate);
+    await db.table("wallets").findOrUpdate(senderFind, senderUpdate);
+    await db.table("wallets").findOrUpdate(recipientFind, recipientUpdate);
 
     return res.status(http.SUCCESS.code).json({
       status: "SUCCESS",
