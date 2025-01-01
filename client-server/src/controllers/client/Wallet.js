@@ -73,6 +73,7 @@ const addWallet = async (req, res) => {
     }
 
     const find = { user_id: jwtQuery.user_id };
+
     const walletQuery = await query.table("wallets").findOne(find);
 
     if (!walletQuery) {
@@ -82,18 +83,18 @@ const addWallet = async (req, res) => {
       });
     }
 
+    const walletBalance = walletQuery.balance;
+    const addAmount = value.amount;
+
     const update = {
-      balance: walletQuery.balance + value.amount,
+      balance: Number(walletBalance + addAmount),
     };
 
-    console.log(update);
+    const { record } = await query.table("wallets").findOrUpdate(find, update);
 
-    // await query.table("wallets").findOrUpdate(find, update);
-
-    return res.status(http.SUCCESS.code).json({
-      status: "SUCCESS",
-      message: "Money added successfully.",
-      result: { wallet: { balance: update.balance } },
+    return res.status(http.WALLET_UPDATED.code).json({
+      ...http.WALLET_UPDATED,
+      result: { wallet: record },
     });
   } catch (error) {
     return res.status(http.INTERNAL_SERVER_ERROR.code).json({

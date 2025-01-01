@@ -81,11 +81,24 @@ const http = {
     status: "ERROR",
     message: "Account locked. Contact support.",
   },
+
+  // Wallet RESPONSE CODES
+  WALLET_UPDATED: {
+    code: 200,
+    status: "SUCCESS",
+    message: "Wallet updated successfully.",
+  },
   WALLET_FOUND: {
     code: 200,
     status: "SUCCESS",
     message: "Wallet fetched successfully.",
   },
+  WALLET_NOT_FOUND: {
+    code: 404,
+    status: "ERROR",
+    message: "Wallet not found.",
+  },
+
   // LOGIN/LOGOUT RESPONSE CODES
   LOGIN_SUCCESS: {
     code: 200,
