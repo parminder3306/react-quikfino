@@ -5,7 +5,7 @@ import mail from "../../utils/Mail.js";
 import query from "../../utils/Query.js";
 import validation from "../../utils/Validation.js";
 
-const getRecipients = async (req, res) => {
+const recipients = async (req, res) => {
   try {
     const { value, error } = validation.getRecipient.validate({
       auth_token: req.body.auth_token,
@@ -257,4 +257,4 @@ const deleteRecipient = async (req, res) => {
   }
 };
 
-export { getRecipients, addRecipient, updateRecipient, deleteRecipient };
+export { recipients, addRecipient, updateRecipient, deleteRecipient };

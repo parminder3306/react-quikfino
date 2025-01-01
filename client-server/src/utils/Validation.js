@@ -40,7 +40,7 @@ const validation = {
     auth_token: Joi.string().required(),
   }),
 
-  getWallet: Joi.object({
+  wallet: Joi.object({
     auth_token: Joi.string().required(),
   }),
 

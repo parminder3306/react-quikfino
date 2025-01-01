@@ -8,13 +8,19 @@ import {
   changePassword,
 } from "../controllers/client/Authentication.js";
 import {
-  getRecipients,
+  recipients,
   addRecipient,
   deleteRecipient,
   updateRecipient,
 } from "../controllers/client/Recipient.js";
 import { getProfile, updateProfile } from "../controllers/client/Profile.js";
-import { getWallet, updateWallet } from "../controllers/client/Money.js";
+import {
+  wallet,
+  addMoney,
+  withdrawMoney,
+  transferMoney,
+  getTransactionHistory,
+} from "../controllers/client/Money.js";
 
 const api = Router();
 
@@ -37,13 +43,13 @@ api.post("/profile/update", updateProfile);
 // // -----------------------------------------------
 // // Wallet
 // // -----------------------------------------------
-api.post("/wallet", getWallet);
+api.post("/wallet", wallet);
 api.post("/wallet/update", updateWallet);
 
 // // -----------------------------------------------
 // // Recipient
 // // -----------------------------------------------
-api.post("/recipients", getRecipients);
+api.post("/recipients", recipients);
 api.post("/recipients/add", addRecipient);
 api.post("/recipients/update", updateRecipient);
 api.post("/recipients/delete", deleteRecipient);

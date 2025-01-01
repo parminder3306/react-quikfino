@@ -5,9 +5,9 @@ import mail from "../../utils/Mail.js";
 import query from "../../utils/Query.js";
 import validation from "../../utils/Validation.js";
 
-const getWallet = async (req, res) => {
+const wallet = async (req, res) => {
   try {
-    const { value, error } = validation.getWallet.validate({
+    const { value, error } = validation.wallet.validate({
       auth_token: req.body.auth_token,
     });
 
@@ -270,7 +270,7 @@ const getTransactionHistory = async (req, res) => {
 
 // Exporting all functions
 export {
-  getWallet,
+  wallet,
   addMoney,
   withdrawMoney,
   transferMoney,
