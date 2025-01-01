@@ -1,221 +1,221 @@
 const http = {
   // ERROR RESPONSE CODES
   BAD_REQUEST: {
-    status: "ERROR",
     code: 400,
+    status: "ERROR",
     message: "Bad request. Missing or invalid parameters.",
   },
   UNAUTHORIZED: {
-    status: "ERROR",
     code: 401,
+    status: "ERROR",
     message: "Unauthorized access. Please log in.",
   },
   FORBIDDEN: {
-    status: "ERROR",
     code: 403,
+    status: "ERROR",
     message: "Forbidden access. You do not have permission.",
   },
   NOT_FOUND: {
-    status: "ERROR",
     code: 404,
+    status: "ERROR",
     message: "Resource not found.",
   },
   METHOD_NOT_ALLOWED: {
-    status: "ERROR",
     code: 405,
+    status: "ERROR",
     message: "Method not allowed.",
   },
   INTERNAL_SERVER_ERROR: {
-    status: "ERROR",
     code: 500,
+    status: "ERROR",
     message: "Internal server error. Please try again later.",
   },
   SERVICE_UNAVAILABLE: {
-    status: "ERROR",
     code: 503,
+    status: "ERROR",
     message: "Service unavailable. Please try again later.",
   },
   TOO_MANY_REQUESTS: {
-    status: "ERROR",
     code: 429,
+    status: "ERROR",
     message: "Too many requests. Please try again later.",
   },
   NETWORK_ERROR: {
-    status: "ERROR",
     code: 503,
+    status: "ERROR",
     message: "Network error. Please try again later.",
   },
   // ACCOUNT RELATED RESPONSES
   ACCOUNT_CREATED: {
-    status: "SUCCESS",
     code: 201,
+    status: "SUCCESS",
     message: "Account created successfully.",
   },
   ACCOUNT_UPDATED: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Account updated successfully.",
   },
   ACCOUNT_DELETED: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Account deleted successfully.",
   },
   ACCOUNT_FOUND: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Account fetched successfully.",
   },
   ACCOUNT_NOT_FOUND: {
-    status: "ERROR",
     code: 404,
+    status: "ERROR",
     message: "Account not found.",
   },
   ACCOUNT_INACTIVE: {
-    status: "ERROR",
     code: 423,
+    status: "ERROR",
     message: "Account is inactive. Please verify your account.",
   },
   ACCOUNT_LOCKED: {
-    status: "ERROR",
     code: 423,
+    status: "ERROR",
     message: "Account locked. Contact support.",
   },
   WALLET_FOUND: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Wallet fetched successfully.",
   },
   // LOGIN/LOGOUT RESPONSE CODES
   LOGIN_SUCCESS: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Login successful.",
   },
   LOGOUT_SUCCESS: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Logged out successfully.",
   },
   // PASSWORD/VERIFICATION RESPONSE CODES
   PASSWORD_CHANGED: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Password changed successfully.",
   },
   VERIFICATION_SUCCESS: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Verification successful.",
   },
   INVALID_OTP: {
-    status: "ERROR",
     code: 422,
+    status: "ERROR",
     message: "Invalid OTP.",
   },
   // TRANSACTIONS RESPONSE CODES
   TRANSACTION_SUCCESS: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Transaction completed successfully.",
   },
   FUNDS_TRANSFERRED: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Funds transferred successfully.",
   },
   TRANSFER_FAILED: {
-    status: "ERROR",
     code: 500,
+    status: "ERROR",
     message: "Transfer failed. Please try again.",
   },
   INSUFFICIENT_FUNDS: {
-    status: "ERROR",
     code: 422,
+    status: "ERROR",
     message: "Insufficient funds.",
   },
   EXCEEDS_TRANSFER_LIMIT: {
-    status: "ERROR",
     code: 422,
+    status: "ERROR",
     message: "Transfer limit exceeded.",
   },
   // RECIPIENT RESPONSE CODES
   RECIPIENT_CREATED: {
-    status: "SUCCESS",
     code: 201,
+    status: "SUCCESS",
     message: "Recipient created successfully.",
   },
   RECIPIENT_UPDATED: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Recipient updated successfully.",
   },
   RECIPIENT_DELETED: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Recipient deleted successfully.",
   },
   RECIPIENT_FOUND: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Recipient fetched successfully.",
   },
   RECIPIENT_CONFLICT: {
-    status: "ERROR",
     code: 409,
+    status: "ERROR",
     message: "Recipient already exists.",
   },
   RECIPIENT_NOT_FOUND: {
-    status: "ERROR",
     code: 404,
+    status: "ERROR",
     message: "Recipient not found.",
   },
   // OTHER SPECIFIC RESPONSE CODES
   EXPIRED_SESSION: {
-    status: "ERROR",
     code: 440,
+    status: "ERROR",
     message: "Session expired. Please log in again.",
   },
   PAYMENT_SUCCESS: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Payment processed successfully.",
   },
   CURRENCY_EXCHANGE_SUCCESS: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Currency exchange completed successfully.",
   },
   PROFILE_UPDATED: {
-    status: "SUCCESS",
     code: 200,
+    status: "SUCCESS",
     message: "Profile updated successfully.",
   },
   INVALID_CURRENCY: {
-    status: "ERROR",
     code: 422,
+    status: "ERROR",
     message: "Invalid currency.",
   },
   INVALID_ACCOUNT_DETAILS: {
-    status: "ERROR",
     code: 422,
+    status: "ERROR",
     message: "Invalid account details.",
   },
 
   // PRECONDITION REQUIRED & OTHER ERRORS
   PRECONDITION_REQUIRED: {
-    status: "ERROR",
     code: 428,
+    status: "ERROR",
     message: "Precondition required. Please verify your identity.",
   },
   PAYMENT_GATEWAY_ERROR: {
-    status: "ERROR",
     code: 502,
+    status: "ERROR",
     message: "Payment gateway error. Please try again later.",
   },
   SERVICE_NOT_AVAILABLE_IN_REGION: {
-    status: "ERROR",
     code: 503,
+    status: "ERROR",
     message: "Service not available in your region.",
   },
 };

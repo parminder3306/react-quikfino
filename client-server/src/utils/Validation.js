@@ -44,19 +44,12 @@ const validation = {
     auth_token: Joi.string().required(),
   }),
 
-  updateWallet: Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().required(),
-    country: Joi.string().required(),
-    language: Joi.string().required(),
-    currency: Joi.string().required(),
-    profile_image: Joi.string().required(),
-    two_factor_enabled: Joi.string().required(),
+  addWallet: Joi.object({
+    amount: Joi.number().required(),
     auth_token: Joi.string().required(),
   }),
 
-  getRecipient: Joi.object({
+  recipient: Joi.object({
     auth_token: Joi.string().required(),
   }),
 

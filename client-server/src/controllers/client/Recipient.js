@@ -7,7 +7,7 @@ import validation from "../../utils/Validation.js";
 
 const recipients = async (req, res) => {
   try {
-    const { value, error } = validation.getRecipient.validate({
+    const { value, error } = validation.recipient.validate({
       auth_token: req.body.auth_token,
     });
 

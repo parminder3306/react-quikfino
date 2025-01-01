@@ -50,12 +50,11 @@ const wallet = async (req, res) => {
   }
 };
 
-// Add Money to Wallet
 const addWallet = async (req, res) => {
   try {
-    const { value, error } = validation.addMoney.validate({
-      auth_token: req.body.auth_token,
+    const { value, error } = validation.addWallet.validate({
       amount: req.body.amount,
+      auth_token: req.body.auth_token,
     });
 
     if (error) {
@@ -84,10 +83,12 @@ const addWallet = async (req, res) => {
     }
 
     const update = {
-      balance: walletQuery.balance + value.amount, // Adding the amount to the existing balance
+      balance: walletQuery.balance + value.amount,
     };
 
-    await query.table("wallets").findOrUpdate(find, update);
+    console.log(update);
+
+    // await query.table("wallets").findOrUpdate(find, update);
 
     return res.status(http.SUCCESS.code).json({
       status: "SUCCESS",
@@ -102,7 +103,6 @@ const addWallet = async (req, res) => {
   }
 };
 
-// Withdraw Money from Wallet
 const payWallet = async (req, res) => {
   try {
     const { value, error } = validation.withdrawMoney.validate({
@@ -154,5 +154,4 @@ const payWallet = async (req, res) => {
   }
 };
 
-// Exporting all functions
 export { wallet, addWallet, payWallet };
