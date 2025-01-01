@@ -5,9 +5,9 @@ import mail from "../../utils/Mail.js";
 import query from "../../utils/Query.js";
 import validation from "../../utils/Validation.js";
 
-const getProfile = async (req, res) => {
+const profile = async (req, res) => {
   try {
-    const { value, error } = validation.getProfile.validate({
+    const { value, error } = validation.profile.validate({
       auth_token: req.body.auth_token,
     });
 
@@ -53,9 +53,9 @@ const getProfile = async (req, res) => {
   }
 };
 
-const updateProfile = async (req, res) => {
+const editProfile = async (req, res) => {
   try {
-    const { value, error } = validation.updateProfile.validate({
+    const { value, error } = validation.editProfile.validate({
       name: req.body.name,
       email: req.body.email,
       phone: req.body.phone,
@@ -111,4 +111,4 @@ const updateProfile = async (req, res) => {
   }
 };
 
-export { getProfile, updateProfile };
+export { profile, editProfile };

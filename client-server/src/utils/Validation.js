@@ -24,11 +24,11 @@ const validation = {
     auth_token: Joi.string().required(),
   }),
 
-  getProfile: Joi.object({
+  profile: Joi.object({
     auth_token: Joi.string().required(),
   }),
 
-  updateProfile: Joi.object({
+  editProfile: Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
@@ -75,7 +75,7 @@ const validation = {
     auth_token: Joi.string().required(),
   }),
 
-  updateRecipient: Joi.object({
+  editRecipient: Joi.object({
     id: Joi.string().required(),
     name: Joi.string().required(),
     email: Joi.string().email().optional(),

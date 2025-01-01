@@ -135,9 +135,9 @@ const addRecipient = async (req, res) => {
   }
 };
 
-const updateRecipient = async (req, res) => {
+const editRecipient = async (req, res) => {
   try {
-    const { value, error } = validation.updateRecipient.validate({
+    const { value, error } = validation.editRecipient.validate({
       id: req.body.id,
       name: req.body.name,
       email: req.body.email,
@@ -257,4 +257,4 @@ const deleteRecipient = async (req, res) => {
   }
 };
 
-export { recipients, addRecipient, updateRecipient, deleteRecipient };
+export { recipients, addRecipient, editRecipient, deleteRecipient };

@@ -11,16 +11,10 @@ import {
   recipients,
   addRecipient,
   deleteRecipient,
-  updateRecipient,
+  editRecipient,
 } from "../controllers/client/Recipient.js";
-import { getProfile, updateProfile } from "../controllers/client/Profile.js";
-import {
-  wallet,
-  addMoney,
-  withdrawMoney,
-  transferMoney,
-  getTransactionHistory,
-} from "../controllers/client/Money.js";
+import { profile, editProfile } from "../controllers/client/Profile.js";
+import { wallet, addWallet, payWallet } from "../controllers/client/Wallet.js";
 
 const api = Router();
 
@@ -37,21 +31,22 @@ api.post("/auth/change-password", changePassword);
 // // -----------------------------------------------
 // // Profile
 // // -----------------------------------------------
-api.post("/profile", getProfile);
-api.post("/profile/update", updateProfile);
+api.post("/profile", profile);
+api.post("/profile/edit", editProfile);
 
 // // -----------------------------------------------
 // // Wallet
 // // -----------------------------------------------
 api.post("/wallet", wallet);
-api.post("/wallet/update", updateWallet);
+api.post("/wallet/add", addWallet);
+api.post("/wallet/pay", payWallet);
 
 // // -----------------------------------------------
 // // Recipient
 // // -----------------------------------------------
 api.post("/recipients", recipients);
 api.post("/recipients/add", addRecipient);
-api.post("/recipients/update", updateRecipient);
+api.post("/recipients/edit", editRecipient);
 api.post("/recipients/delete", deleteRecipient);
 
 // // -----------------------------------------------
