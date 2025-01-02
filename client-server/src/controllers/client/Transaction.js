@@ -54,16 +54,15 @@ const transactions = async (req, res) => {
 const addTransaction = async (req, res) => {
   try {
     const { value, error } = validation.addTransaction.validate({
-      user_id: req.body.user_id,
-      sender_id: req.body.sender_id,
-      receiver_id: req.body.receiver_id,
-      amount: req.body.amount,
-      currency: req.body.currency,
-      exchange_rate: req.body.exchange_rate,
-      converted_amount: req.body.converted_amount,
-      transaction_type: req.body.transaction_type,
-      status: req.body.status,
-      user_token: req.body.user_token,
+      user_id: req.user_id,
+      recipient_id: req.recipient_id,
+      amount: req.amount,
+      currency: req.currency,
+      exchange_rate: req.exchange_rate,
+      converted_amount: req.converted_amount,
+      transaction_type: req.transaction_type,
+      status: req.status,
+      user_token: req.user_token,
     });
 
     if (error) {
@@ -83,8 +82,7 @@ const addTransaction = async (req, res) => {
 
     const createTransaction = {
       user_id: value.user_id,
-      sender_id: value.sender_id,
-      receiver_id: value.receiver_id,
+      recipient_id: value.recipient_id,
       amount: value.amount,
       currency: value.currency,
       exchange_rate: value.exchange_rate,

@@ -104,8 +104,7 @@ const validation = {
 
   addTransaction: Joi.object({
     user_id: Joi.number().required(),
-    sender_id: Joi.number().required(),
-    receiver_id: Joi.number().required(),
+    recipient_id: Joi.number().required(),
     amount: Joi.number().required(),
     currency: Joi.string().required(),
     exchange_rate: Joi.number().optional(),

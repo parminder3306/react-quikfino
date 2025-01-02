@@ -81,7 +81,7 @@ const recipientFind = async (req, res) => {
       ...http.RECIPIENT_FOUND,
       result: {
         recipient: recipient,
-        user_token: jwt.create(recipient.id),
+        recipient_token: jwt.create(recipient.id),
       },
     });
   } catch (error) {

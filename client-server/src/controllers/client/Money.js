@@ -207,26 +207,24 @@ const transferToFriend = async (req, res) => {
       .table("wallets")
       .findOrUpdate(recipientWalletUpdate, recipientFind);
 
-    addTransaction({
+    await addTransaction({
       user_id: userToken.user_id,
-      sender_id: userToken.user_id,
-      receiver_id: recipientToken.user_id,
+      recipient_id: recipientToken.user_id,
       amount: value.amount,
       currency: "GBP",
       transaction_type: "transfer",
       status: "completed",
-      user_token: userToken,
+      user_token: value.user_token,
     });
 
-    addTransaction({
+    await addTransaction({
       user_id: recipientToken.user_id,
-      sender_id: userToken.user_id,
-      receiver_id: recipientToken.user_id,
+      recipient_id: userToken.user_id,
       amount: value.amount,
       currency: "GBP",
       transaction_type: "deposit",
       status: "completed",
-      user_token: recipientToken,
+      user_token: value.recipient_token,
     });
 
     return res.status(http.FUNDS_TRANSFERRED.code).json({
