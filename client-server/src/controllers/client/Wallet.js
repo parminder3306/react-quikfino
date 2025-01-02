@@ -140,7 +140,7 @@ const payWallet = async (req, res) => {
     if (userWallet.balance < value.amount) {
       return res.status(http.INSUFFICIENT_FUNDS.code).json({
         ...http.INSUFFICIENT_FUNDS,
-        result: { wallet: { balance: userWallet.balance } },
+        result: { insufficient_balance: { balance: userWallet.balance } },
       });
     }
 

@@ -15,6 +15,10 @@ import {
 } from "../controllers/client/Recipient.js";
 import { profile, editProfile } from "../controllers/client/Profile.js";
 import { wallet, addWallet, payWallet } from "../controllers/client/Wallet.js";
+import {
+  transactions,
+  addTransaction,
+} from "../controllers/client/Transaction.js";
 
 const api = Router();
 
@@ -45,16 +49,15 @@ api.post("/wallet/pay", payWallet);
 // // Recipient
 // // -----------------------------------------------
 api.post("/recipients", recipients);
-api.post("/recipients/add", addRecipient);
-api.post("/recipients/edit", editRecipient);
-api.post("/recipients/delete", deleteRecipient);
+api.post("/recipient/add", addRecipient);
+api.post("/recipient/edit", editRecipient);
+api.post("/recipient/delete", deleteRecipient);
 
-// // -----------------------------------------------
-// // Money Transfer
-// // -----------------------------------------------
-// api.post("/money/transactions", getTransactionHistory);
-// api.post("/money/transfer/add", transferMoney);
-// api.post("/money/transfer/cancel", getTransactionHistory);
+// -----------------------------------------------
+// Transaction
+// -----------------------------------------------
+api.post("/transactions", transactions);
+api.post("/transaction/add", addTransaction);
 // // -----------------------------------------------
 // // Subscription
 // // -----------------------------------------------

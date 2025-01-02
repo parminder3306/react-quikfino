@@ -76,6 +76,11 @@ const db = {
         return { count: recordCount, record: recordData };
       },
 
+      createOrRecord: async (data) => {
+        const id = await db.table(table).create(data);
+        return await db.table(table).findOne({ id });
+      },
+
       // Find a record based on a condition, or update it if it exists
       findOrUpdate: async (data, condition) => {
         const recordCount = await db.table(table).andWithCount(condition);

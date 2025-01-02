@@ -132,10 +132,20 @@ const http = {
     message: "Invalid OTP.",
   },
   // TRANSACTIONS RESPONSE CODES
-  TRANSACTION_SUCCESS: {
+  TRANSACTION_CREATED: {
+    code: 201,
+    status: "SUCCESS",
+    message: "Transaction created successfully.",
+  },
+  TRANSACTION_FOUND: {
     code: 200,
     status: "SUCCESS",
-    message: "Transaction completed successfully.",
+    message: "Transaction fetched successfully.",
+  },
+  TRANSACTION_NOT_FOUND: {
+    code: 404,
+    status: "ERROR",
+    message: "Transaction not found.",
   },
   FUNDS_TRANSFERRED: {
     code: 200,

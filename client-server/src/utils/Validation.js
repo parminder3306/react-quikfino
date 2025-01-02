@@ -31,12 +31,11 @@ const validation = {
   editProfile: Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
-    phone: Joi.string().required(),
+    phone: Joi.number().required(),
     country: Joi.string().required(),
     language: Joi.string().required(),
-    currency: Joi.string().required(),
     profile_image: Joi.string().required(),
-    two_factor_enabled: Joi.string().required(),
+    two_factor_enabled: Joi.number().required(),
     auth_token: Joi.string().required(),
   }),
 
@@ -61,11 +60,11 @@ const validation = {
   addRecipient: Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().optional(),
-    phone: Joi.string().required(),
+    phone: Joi.number().required(),
     address: Joi.string().required(),
     country: Joi.string().required(),
     bank_name: Joi.string().required(),
-    account_number: Joi.string().required(),
+    account_number: Joi.number().required(),
     ifsc_code: Joi.string().required(),
     document_type: Joi.string().optional(),
     document_number: Joi.string().optional(),
@@ -74,14 +73,14 @@ const validation = {
   }),
 
   editRecipient: Joi.object({
-    id: Joi.string().required(),
+    id: Joi.number().required(),
     name: Joi.string().required(),
     email: Joi.string().email().optional(),
-    phone: Joi.string().required(),
+    phone: Joi.number().required(),
     address: Joi.string().required(),
     country: Joi.string().required(),
     bank_name: Joi.string().required(),
-    account_number: Joi.string().required(),
+    account_number: Joi.number().required(),
     ifsc_code: Joi.string().required(),
     document_type: Joi.string().optional(),
     document_number: Joi.string().optional(),
@@ -90,7 +89,24 @@ const validation = {
   }),
 
   deleteRecipient: Joi.object({
-    id: Joi.string().required(),
+    id: Joi.number().required(),
+    auth_token: Joi.string().required(),
+  }),
+
+  transaction: Joi.object({
+    auth_token: Joi.string().required(),
+  }),
+
+  addTransaction: Joi.object({
+    user_id: Joi.number().required(),
+    sender_id: Joi.number().required(),
+    receiver_id: Joi.number().required(),
+    amount: Joi.number().required(),
+    currency: Joi.string().required(),
+    exchange_rate: Joi.number().required(),
+    converted_amount: Joi.number().required(),
+    transaction_type: Joi.string().required(),
+    status: Joi.string().required(),
     auth_token: Joi.string().required(),
   }),
 };
