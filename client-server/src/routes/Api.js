@@ -9,16 +9,23 @@ import {
 } from "../controllers/client/Authentication.js";
 import {
   recipients,
+  recipientFind,
   addRecipient,
   deleteRecipient,
   editRecipient,
 } from "../controllers/client/Recipient.js";
 import { profile, editProfile } from "../controllers/client/Profile.js";
-import { wallet, addWallet, payWallet } from "../controllers/client/Wallet.js";
+import { wallet, addWallet } from "../controllers/client/Wallet.js";
 import {
   transactions,
   addTransaction,
 } from "../controllers/client/Transaction.js";
+import {
+  transferToBank,
+  transferToGlobal,
+  transferToFriend,
+  cancelTransfer,
+} from "../controllers/client/Money.js";
 
 const api = Router();
 
@@ -43,21 +50,27 @@ api.post("/profile/edit", editProfile);
 // // -----------------------------------------------
 api.post("/wallet", wallet);
 api.post("/wallet/add", addWallet);
-api.post("/wallet/pay", payWallet);
 
 // // -----------------------------------------------
 // // Recipient
 // // -----------------------------------------------
 api.post("/recipients", recipients);
+api.post("/recipient/find", recipientFind);
 api.post("/recipient/add", addRecipient);
 api.post("/recipient/edit", editRecipient);
 api.post("/recipient/delete", deleteRecipient);
-
 // -----------------------------------------------
 // Transaction
 // -----------------------------------------------
 api.post("/transactions", transactions);
 api.post("/transaction/add", addTransaction);
+// -----------------------------------------------
+// MoneyTransfer
+// -----------------------------------------------
+api.post("/transfer/to/bank", transferToBank);
+api.post("/transfer/to/global", transferToGlobal);
+api.post("/transfer/to/friend", transferToFriend);
+api.post("/transfer/cancel", cancelTransfer);
 // // -----------------------------------------------
 // // Subscription
 // // -----------------------------------------------

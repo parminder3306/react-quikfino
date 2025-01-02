@@ -12,7 +12,7 @@ const validation = {
   }),
 
   logout: Joi.object({
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   forgetPassword: Joi.object({
@@ -21,11 +21,11 @@ const validation = {
 
   changePassword: Joi.object({
     newPassword: Joi.string().min(6).required(),
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   profile: Joi.object({
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   editProfile: Joi.object({
@@ -36,25 +36,30 @@ const validation = {
     language: Joi.string().required(),
     profile_image: Joi.string().required(),
     two_factor_enabled: Joi.number().required(),
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   wallet: Joi.object({
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   addWallet: Joi.object({
     amount: Joi.number().required(),
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   payWallet: Joi.object({
     amount: Joi.number().required(),
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   recipient: Joi.object({
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
+  }),
+
+  recipientFind: Joi.object({
+    email: Joi.string().email().required(),
+    user_token: Joi.string().required(),
   }),
 
   addRecipient: Joi.object({
@@ -69,7 +74,7 @@ const validation = {
     document_type: Joi.string().optional(),
     document_number: Joi.string().optional(),
     reason: Joi.string().required(),
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   editRecipient: Joi.object({
@@ -85,16 +90,16 @@ const validation = {
     document_type: Joi.string().optional(),
     document_number: Joi.string().optional(),
     reason: Joi.string().required(),
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   deleteRecipient: Joi.object({
     id: Joi.number().required(),
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   transaction: Joi.object({
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 
   addTransaction: Joi.object({
@@ -103,11 +108,17 @@ const validation = {
     receiver_id: Joi.number().required(),
     amount: Joi.number().required(),
     currency: Joi.string().required(),
-    exchange_rate: Joi.number().required(),
-    converted_amount: Joi.number().required(),
+    exchange_rate: Joi.number().optional(),
+    converted_amount: Joi.number().optional(),
     transaction_type: Joi.string().required(),
     status: Joi.string().required(),
-    auth_token: Joi.string().required(),
+    user_token: Joi.string().required(),
+  }),
+
+  transferToFriend: Joi.object({
+    amount: Joi.number().required(),
+    recipient_token: Joi.string().required(),
+    user_token: Joi.string().required(),
   }),
 };
 

@@ -8,7 +8,7 @@ import validation from "../../utils/Validation.js";
 const transactions = async (req, res) => {
   try {
     const { value, error } = validation.transaction.validate({
-      auth_token: req.body.auth_token,
+      user_token: req.body.user_token,
     });
 
     if (error) {
@@ -17,23 +17,23 @@ const transactions = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtToken = jwt.verify(value.auth_token);
+    const userToken = jwt.verify(value.user_token);
 
-    if (!jwtToken) {
+    if (!userToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
-        details: { no_match: { auth_token: value.auth_token } },
+        details: { no_match: { user_token: value.user_token } },
       });
     }
 
-    const condition = { user_id: jwtToken.user_id };
+    const condition = { user_id: userToken.user_id };
 
     const userTransaction = await db.table("transactions").findOne(condition);
 
     if (!userTransaction) {
       return res.status(http.TRANSACTION_NOT_FOUND.code).json({
         ...http.TRANSACTION_NOT_FOUND,
-        details: { no_match: { user_id: jwtToken.user_id } },
+        details: { no_match: { user_id: userToken.user_id } },
       });
     }
 
@@ -63,7 +63,7 @@ const addTransaction = async (req, res) => {
       converted_amount: req.body.converted_amount,
       transaction_type: req.body.transaction_type,
       status: req.body.status,
-      auth_token: req.body.auth_token,
+      user_token: req.body.user_token,
     });
 
     if (error) {
@@ -72,12 +72,12 @@ const addTransaction = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtToken = jwt.verify(value.auth_token);
+    const userToken = jwt.verify(value.user_token);
 
-    if (!jwtToken) {
+    if (!userToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
-        details: { no_match: { auth_token: value.auth_token } },
+        details: { no_match: { user_token: value.user_token } },
       });
     }
 

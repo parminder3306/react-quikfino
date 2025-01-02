@@ -8,7 +8,7 @@ import validation from "../../utils/Validation.js";
 const recipients = async (req, res) => {
   try {
     const { value, error } = validation.recipient.validate({
-      auth_token: req.body.auth_token,
+      user_token: req.body.user_token,
     });
 
     if (error) {
@@ -17,17 +17,17 @@ const recipients = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtToken = jwt.verify(value.auth_token);
+    const userToken = jwt.verify(value.user_token);
 
-    if (!jwtToken) {
+    if (!userToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
-        details: { no_match: { auth_token: value.auth_token } },
+        details: { no_match: { user_token: value.user_token } },
       });
     }
 
     const find = {
-      user_id: jwtToken.user_id,
+      user_id: userToken.user_id,
     };
 
     const recipientQuery = await db.table("recipients").findBy(find);
@@ -35,7 +35,7 @@ const recipients = async (req, res) => {
     if (!recipientQuery) {
       return res.status(http.RECIPIENT_NOT_FOUND.code).json({
         ...http.RECIPIENT_NOT_FOUND,
-        details: { no_match: { user_id: jwtToken.user_id } },
+        details: { no_match: { user_id: userToken.user_id } },
       });
     }
 
@@ -43,6 +43,45 @@ const recipients = async (req, res) => {
       ...http.RECIPIENT_FOUND,
       result: {
         recipient: recipientQuery,
+      },
+    });
+  } catch (error) {
+    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
+      ...http.INTERNAL_SERVER_ERROR,
+      details: { error: error.message },
+    });
+  }
+};
+
+const recipientFind = async (req, res) => {
+  try {
+    const { value, error } = validation.recipientFind.validate({
+      email: req.body.email,
+      user_token: req.body.user_token,
+    });
+
+    if (error) {
+      return res
+        .status(http.BAD_REQUEST.code)
+        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+    }
+
+    const recipientFind = { email: value.email };
+
+    const recipient = await db.table("users").findOne(recipientFind);
+
+    if (!recipient || jwt.verify(value.user_token).user_id === recipient.id) {
+      return res.status(http.RECIPIENT_NOT_FOUND.code).json({
+        ...http.RECIPIENT_NOT_FOUND,
+        details: { no_match: { email: value.email } },
+      });
+    }
+
+    return res.status(http.RECIPIENT_FOUND.code).json({
+      ...http.RECIPIENT_FOUND,
+      result: {
+        recipient: recipient,
+        user_token: jwt.create(recipient.id),
       },
     });
   } catch (error) {
@@ -67,7 +106,7 @@ const addRecipient = async (req, res) => {
       document_type: req.body.document_type,
       document_number: req.body.document_number,
       reason: req.body.reason,
-      auth_token: req.body.auth_token,
+      user_token: req.body.user_token,
     });
 
     if (error) {
@@ -76,22 +115,22 @@ const addRecipient = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtToken = jwt.verify(value.auth_token);
+    const userToken = jwt.verify(value.user_token);
 
-    if (!jwtToken) {
+    if (!userToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
-        details: { no_match: { auth_token: value.auth_token } },
+        details: { no_match: { user_token: value.user_token } },
       });
     }
 
     const find = {
-      user_id: jwtToken.user_id,
+      user_id: userToken.user_id,
       account_number: value.account_number,
     };
 
     const create = {
-      user_id: jwtToken.user_id,
+      user_id: userToken.user_id,
       name: value.name,
       email: value.email,
       phone: value.phone,
@@ -150,7 +189,7 @@ const editRecipient = async (req, res) => {
       document_type: req.body.document_type,
       document_number: req.body.document_number,
       reason: req.body.reason,
-      auth_token: req.body.auth_token,
+      user_token: req.body.user_token,
     });
 
     if (error) {
@@ -159,18 +198,18 @@ const editRecipient = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtToken = jwt.verify(value.auth_token);
+    const userToken = jwt.verify(value.user_token);
 
-    if (!jwtToken) {
+    if (!userToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
-        details: { no_match: { auth_token: value.auth_token } },
+        details: { no_match: { user_token: value.user_token } },
       });
     }
 
     const find = {
       id: value.id,
-      user_id: jwtToken.user_id,
+      user_id: userToken.user_id,
     };
 
     const update = {
@@ -216,7 +255,7 @@ const deleteRecipient = async (req, res) => {
   try {
     const { value, error } = validation.deleteRecipient.validate({
       id: req.body.id,
-      auth_token: req.body.auth_token,
+      user_token: req.body.user_token,
     });
 
     if (error) {
@@ -225,18 +264,18 @@ const deleteRecipient = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtToken = jwt.verify(value.auth_token);
+    const userToken = jwt.verify(value.user_token);
 
-    if (!jwtToken) {
+    if (!userToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
-        details: { no_match: { auth_token: value.auth_token } },
+        details: { no_match: { user_token: value.user_token } },
       });
     }
 
     const find = {
       id: value.id,
-      user_id: jwtToken.user_id,
+      user_id: userToken.user_id,
     };
 
     const recipientQuery = await db.table("recipients").findOrDelete(find);
@@ -257,4 +296,10 @@ const deleteRecipient = async (req, res) => {
   }
 };
 
-export { recipients, addRecipient, editRecipient, deleteRecipient };
+export {
+  recipients,
+  recipientFind,
+  addRecipient,
+  editRecipient,
+  deleteRecipient,
+};
