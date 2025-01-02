@@ -83,10 +83,15 @@ const http = {
   },
 
   // Wallet RESPONSE CODES
-  WALLET_UPDATED: {
+  WALLET_MONEY_ADDED: {
     code: 200,
     status: "SUCCESS",
-    message: "Wallet updated successfully.",
+    message: "Wallet balance added successfully.",
+  },
+  WALLET_MONEY_DEBIT: {
+    code: 200,
+    status: "SUCCESS",
+    message: "Wallet balance debited successfully.",
   },
   WALLET_FOUND: {
     code: 200,

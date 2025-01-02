@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/DBHelper.js";
+import db from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 const profile = async (req, res) => {
@@ -17,9 +17,9 @@ const profile = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
@@ -27,7 +27,7 @@ const profile = async (req, res) => {
     }
 
     const find = {
-      id: jwtQuery.user_id,
+      id: jwtToken.user_id,
     };
 
     const userQuery = await db.table("users").findOne(find);
@@ -35,7 +35,7 @@ const profile = async (req, res) => {
     if (!userQuery) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
-        details: { no_match: { user_id: jwtQuery.user_id } },
+        details: { no_match: { user_id: jwtToken.user_id } },
       });
     }
 
@@ -73,16 +73,16 @@ const editProfile = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
       });
     }
 
-    const find = { id: jwtQuery.user_id };
+    const find = { id: jwtToken.user_id };
 
     const update = {
       name: value.name,

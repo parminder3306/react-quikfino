@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/DBHelper.js";
+import db from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 // Get Subscription - Retrieves the subscription details for the authenticated user
@@ -18,22 +18,22 @@ const getSubscription = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
       });
     }
 
-    const find = { user_id: jwtQuery.user_id };
+    const find = { user_id: jwtToken.user_id };
     const subscriptionQuery = await db.table("subscriptions").findOne(find);
 
     if (!subscriptionQuery) {
       return res.status(http.NOT_FOUND.code).json({
         ...http.NOT_FOUND,
-        details: { no_subscription: { user_id: jwtQuery.user_id } },
+        details: { no_subscription: { user_id: jwtToken.user_id } },
       });
     }
 
@@ -66,22 +66,22 @@ const updateSubscription = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
       });
     }
 
-    const find = { user_id: jwtQuery.user_id };
+    const find = { user_id: jwtToken.user_id };
     const subscriptionQuery = await db.table("subscriptions").findOne(find);
 
     if (!subscriptionQuery) {
       return res.status(http.NOT_FOUND.code).json({
         ...http.NOT_FOUND,
-        details: { no_subscription: { user_id: jwtQuery.user_id } },
+        details: { no_subscription: { user_id: jwtToken.user_id } },
       });
     }
 
@@ -149,22 +149,22 @@ const processPayment = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
       });
     }
 
-    const find = { user_id: jwtQuery.user_id };
+    const find = { user_id: jwtToken.user_id };
     const subscriptionQuery = await db.table("subscriptions").findOne(find);
 
     if (!subscriptionQuery) {
       return res.status(http.NOT_FOUND.code).json({
         ...http.NOT_FOUND,
-        details: { no_subscription: { user_id: jwtQuery.user_id } },
+        details: { no_subscription: { user_id: jwtToken.user_id } },
       });
     }
 

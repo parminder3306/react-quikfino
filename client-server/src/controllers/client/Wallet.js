@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/DBHelper.js";
+import db from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 const wallet = async (req, res) => {
@@ -17,29 +17,30 @@ const wallet = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
       });
     }
 
-    const find = { user_id: jwtQuery.user_id };
-    const walletQuery = await db.table("wallets").findOne(find);
+    const condition = { user_id: jwtToken.user_id };
 
-    if (!walletQuery) {
+    const userWallet = await db.table("wallets").findOne(condition);
+
+    if (!userWallet) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
-        details: { no_match: { user_id: jwtQuery.user_id } },
+        details: { no_match: { user_id: jwtToken.user_id } },
       });
     }
 
     return res.status(http.WALLET_FOUND.code).json({
       ...http.WALLET_FOUND,
       result: {
-        wallet: walletQuery,
+        wallet: userWallet,
       },
     });
   } catch (error) {
@@ -63,37 +64,36 @@ const addWallet = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
       });
     }
 
-    const find = { user_id: jwtQuery.user_id };
+    const condition = { user_id: jwtToken.user_id };
 
-    const walletQuery = await db.table("wallets").findOne(find);
+    const userWallet = await db.table("wallets").findOne(condition);
 
-    if (!walletQuery) {
+    if (!userWallet) {
       return res.status(http.NOT_FOUND.code).json({
         ...http.NOT_FOUND,
-        details: { no_match: { user_id: jwtQuery.user_id } },
+        details: { no_match: { user_id: jwtToken.user_id } },
       });
     }
 
-    const walletBalance = walletQuery.balance;
-    const addAmount = value.amount;
-
-    const update = {
-      balance: Number(walletBalance + addAmount),
+    const walletUpdate = {
+      balance: Number(userWallet.balance + value.amount),
     };
 
-    const { record } = await db.table("wallets").findOrUpdate(find, update);
+    const { record } = await db
+      .table("wallets")
+      .findOrUpdate(walletUpdate, condition);
 
-    return res.status(http.WALLET_UPDATED.code).json({
-      ...http.WALLET_UPDATED,
+    return res.status(http.WALLET_MONEY_ADDED.code).json({
+      ...http.WALLET_MONEY_ADDED,
       result: { wallet: record },
     });
   } catch (error) {
@@ -106,9 +106,9 @@ const addWallet = async (req, res) => {
 
 const payWallet = async (req, res) => {
   try {
-    const { value, error } = validation.withdrawMoney.validate({
-      auth_token: req.body.auth_token,
+    const { value, error } = validation.addWallet.validate({
       amount: req.body.amount,
+      auth_token: req.body.auth_token,
     });
 
     if (error) {
@@ -117,35 +117,44 @@ const payWallet = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
       });
     }
 
-    const find = { user_id: jwtQuery.user_id };
-    const walletQuery = await db.table("wallets").findOne(find);
+    const condition = { user_id: jwtToken.user_id };
 
-    if (!walletQuery || walletQuery.balance < value.amount) {
-      return res.status(http.UNAUTHORIZED.code).json({
-        ...http.UNAUTHORIZED,
-        details: { insufficient_balance: walletQuery.balance },
+    const userWallet = await db.table("wallets").findOne(condition);
+
+    if (!userWallet) {
+      return res.status(http.NOT_FOUND.code).json({
+        ...http.NOT_FOUND,
+        details: { no_match: { user_id: jwtToken.user_id } },
       });
     }
 
-    const update = {
-      balance: walletQuery.balance - value.amount, // Deducting the amount from balance
+    if (userWallet.balance < value.amount) {
+      return res.status(http.INSUFFICIENT_FUNDS.code).json({
+        ...http.INSUFFICIENT_FUNDS,
+        result: { wallet: { balance: userWallet.balance } },
+      });
+    }
+
+    const walletUpdate = {
+      balance: Number(userWallet.balance - value.amount),
     };
 
-    await db.table("wallets").findOrUpdate(find, update);
+    const { record } = await db
+      .table("wallets")
+      .findOrUpdate(walletUpdate, condition);
 
-    return res.status(http.SUCCESS.code).json({
-      status: "SUCCESS",
-      message: "Money withdrawn successfully.",
-      result: { wallet: { balance: update.balance } },
+    return res.status(http.WALLET_MONEY_DEBIT.code).json({
+      ...http.WALLET_MONEY_DEBIT,
+      result: { wallet: record },
     });
   } catch (error) {
     return res.status(http.INTERNAL_SERVER_ERROR.code).json({

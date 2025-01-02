@@ -61,7 +61,7 @@ const db = {
       },
 
       // Find a record based on a condition, or create it if it doesn't exist
-      findOrCreate: async (condition, data) => {
+      findOrCreate: async (data, condition) => {
         const recordCount = await db.table(table).orWithCount(condition);
 
         let recordData = null;
@@ -77,7 +77,7 @@ const db = {
       },
 
       // Find a record based on a condition, or update it if it exists
-      findOrUpdate: async (condition, data) => {
+      findOrUpdate: async (data, condition) => {
         const recordCount = await db.table(table).andWithCount(condition);
 
         let recordData = null;
@@ -91,7 +91,7 @@ const db = {
       },
 
       // Find a record based on a condition, or delete it if it exists
-      findOrDelete: async (condition, data) => {
+      findOrDelete: async (condition) => {
         const recordCount = await db.table(table).andWithCount(condition);
 
         if (recordCount) {

@@ -49,6 +49,11 @@ const validation = {
     auth_token: Joi.string().required(),
   }),
 
+  payWallet: Joi.object({
+    amount: Joi.number().required(),
+    auth_token: Joi.string().required(),
+  }),
+
   recipient: Joi.object({
     auth_token: Joi.string().required(),
   }),

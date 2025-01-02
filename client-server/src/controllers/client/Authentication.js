@@ -19,15 +19,16 @@ const signUp = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const find = { email: value.email };
-    const create = {
+    const createUser = {
       email: value.email,
       password: hash.sha512(value.password),
     };
 
-    const userQuery = await db.table("users").findOrCreate(find, create);
+    const condition = { email: value.email };
 
-    if (userQuery.count > 0) {
+    const user = await db.table("users").findOrCreate(createUser, condition);
+
+    if (user.count > 0) {
       return res
         .status(http.CONFLICT.code)
         .json({ ...http.CONFLICT, details: { match: { email: value.email } } });
@@ -36,7 +37,7 @@ const signUp = async (req, res) => {
     return res.status(http.ACCOUNT_CREATED.code).json({
       ...http.ACCOUNT_CREATED,
       result: {
-        user: userQuery.record,
+        user: user.record,
       },
     });
   } catch (error) {
@@ -60,14 +61,14 @@ const login = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const find = {
+    const condition = {
       email: value.email,
       password: hash.sha512(value.password),
     };
 
-    const userQuery = await db.table("users").findOne(find);
+    const user = await db.table("users").findOne(condition);
 
-    if (!userQuery) {
+    if (!user) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { email: value.email } },
@@ -77,8 +78,8 @@ const login = async (req, res) => {
     return res.status(http.LOGIN_SUCCESS.code).json({
       ...http.LOGIN_SUCCESS,
       result: {
-        user: userQuery,
-        auth_token: jwt.create(userQuery.id),
+        user: user,
+        auth_token: jwt.create(user.id),
       },
     });
   } catch (error) {
@@ -101,9 +102,9 @@ const logout = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
@@ -131,10 +132,11 @@ const forgotPassword = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const find = { email: value.email };
-    const userQuery = await db.table("users").findOne(find);
+    const condition = { email: value.email };
 
-    if (!userQuery) {
+    const user = await db.table("users").findOne(condition);
+
+    if (!user) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { email: value.email } },
@@ -153,9 +155,9 @@ const forgotPassword = async (req, res) => {
       html: `<p>You have requested a password reset. Use the following OTP: <strong>${resetToken}</strong>.</p><p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
     };
 
-    const mailQuery = await mail.send(options);
+    const mailSend = await mail.send(options);
 
-    if (!mailQuery) {
+    if (!mailSend) {
       return res.status(http.NETWORK_ERROR.code).json(http.NETWORK_ERROR);
     }
 
@@ -181,24 +183,25 @@ const resetPassword = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
       });
     }
 
-    const find = { id: jwtQuery.user_id };
-    const update = { password: hash.sha512(value.newPassword) };
+    const condition = { id: jwtToken.user_id };
 
-    const userQuery = await db.table("users").findOrUpdate(find, update);
+    const userUpdate = { password: hash.sha512(value.newPassword) };
+
+    const user = await db.table("users").findOrUpdate(userUpdate, condition);
 
     return res.status(http.PASSWORD_CHANGED.code).json({
       ...http.PASSWORD_CHANGED,
       result: {
-        user: userQuery.record,
+        user: user.record,
       },
     });
   } catch (error) {
@@ -222,24 +225,25 @@ const changePassword = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
       });
     }
 
-    const find = { id: jwtQuery.user_id };
-    const update = { password: hash.sha512(value.newPassword) };
+    const condition = { id: jwtToken.user_id };
 
-    const userQuery = await db.table("users").findOrUpdate(find, update);
+    const userUpdate = { password: hash.sha512(value.newPassword) };
+
+    const user = await db.table("users").findOrUpdate(userUpdate, condition);
 
     return res.status(http.PASSWORD_CHANGED.code).json({
       ...http.PASSWORD_CHANGED,
       result: {
-        user: userQuery.record,
+        user: user.record,
       },
     });
   } catch (error) {

@@ -2,7 +2,7 @@ import hash from "../../utils/Hash.js";
 import http from "../../utils/Http.js";
 import jwt from "../../utils/JWT.js";
 import mail from "../../utils/Mail.js";
-import query from "../../utils/DBHelper.js";
+import db from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
 
 const recipients = async (req, res) => {
@@ -17,9 +17,9 @@ const recipients = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
@@ -27,7 +27,7 @@ const recipients = async (req, res) => {
     }
 
     const find = {
-      user_id: jwtQuery.user_id,
+      user_id: jwtToken.user_id,
     };
 
     const recipientQuery = await db.table("recipients").findBy(find);
@@ -35,7 +35,7 @@ const recipients = async (req, res) => {
     if (!recipientQuery) {
       return res.status(http.RECIPIENT_NOT_FOUND.code).json({
         ...http.RECIPIENT_NOT_FOUND,
-        details: { no_match: { user_id: jwtQuery.user_id } },
+        details: { no_match: { user_id: jwtToken.user_id } },
       });
     }
 
@@ -76,9 +76,9 @@ const addRecipient = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
@@ -86,12 +86,12 @@ const addRecipient = async (req, res) => {
     }
 
     const find = {
-      user_id: jwtQuery.user_id,
+      user_id: jwtToken.user_id,
       account_number: value.account_number,
     };
 
     const create = {
-      user_id: jwtQuery.user_id,
+      user_id: jwtToken.user_id,
       name: value.name,
       email: value.email,
       phone: value.phone,
@@ -159,9 +159,9 @@ const editRecipient = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
@@ -170,7 +170,7 @@ const editRecipient = async (req, res) => {
 
     const find = {
       id: value.id,
-      user_id: jwtQuery.user_id,
+      user_id: jwtToken.user_id,
     };
 
     const update = {
@@ -225,9 +225,9 @@ const deleteRecipient = async (req, res) => {
         .json({ ...http.BAD_REQUEST, details: { error: error.message } });
     }
 
-    const jwtQuery = jwt.verify(value.auth_token);
+    const jwtToken = jwt.verify(value.auth_token);
 
-    if (!jwtQuery) {
+    if (!jwtToken) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { auth_token: value.auth_token } },
@@ -236,7 +236,7 @@ const deleteRecipient = async (req, res) => {
 
     const find = {
       id: value.id,
-      user_id: jwtQuery.user_id,
+      user_id: jwtToken.user_id,
     };
 
     const recipientQuery = await db.table("recipients").findOrDelete(find);
