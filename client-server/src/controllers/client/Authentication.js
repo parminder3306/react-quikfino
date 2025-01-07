@@ -5,6 +5,7 @@ import mail from "../../utils/Mail.js";
 
 import db from "../../utils/DBHelper.js";
 import validation from "../../utils/Validation.js";
+import sendResponse from "../../utils/SendResponse.js";
 
 const signUp = async (req, res) => {
   try {
@@ -14,36 +15,32 @@ const signUp = async (req, res) => {
     });
 
     if (error) {
-      return res
-        .status(http.BAD_REQUEST.code)
-        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+      return sendResponse.error(res, http.BAD_REQUEST, {
+        error: error.message,
+      });
     }
+
+    const userFind = { email: value.email };
 
     const createUser = {
       email: value.email,
       password: hash.sha512(value.password),
     };
 
-    const condition = { email: value.email };
-
-    const user = await db.table("users").findOrCreate(createUser, condition);
+    const user = await db.table("users").findOrCreate(userFind, createUser);
 
     if (user.count > 0) {
-      return res
-        .status(http.CONFLICT.code)
-        .json({ ...http.CONFLICT, details: { match: { email: value.email } } });
+      return sendResponse.error(res, http.CONFLICT, {
+        match: { email: value.email },
+      });
     }
 
-    return res.status(http.ACCOUNT_CREATED.code).json({
-      ...http.ACCOUNT_CREATED,
-      result: {
-        user: user.record,
-      },
+    return sendResponse.success(res, http.ACCOUNT_CREATED, {
+      user: { ...user.record },
     });
   } catch (error) {
-    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
-      ...http.INTERNAL_SERVER_ERROR,
-      details: { error: error.message },
+    return sendResponse.error(res, http.INTERNAL_SERVER_ERROR, {
+      error: error.message,
     });
   }
 };
@@ -56,9 +53,9 @@ const login = async (req, res) => {
     });
 
     if (error) {
-      return res
-        .status(http.BAD_REQUEST.code)
-        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+      return sendResponse.error(res, http.BAD_REQUEST, {
+        error: error.message,
+      });
     }
 
     const userFind = {
@@ -69,23 +66,18 @@ const login = async (req, res) => {
     const user = await db.table("users").findOne(userFind);
 
     if (!user) {
-      return res.status(http.UNAUTHORIZED.code).json({
-        ...http.UNAUTHORIZED,
-        details: { no_match: { email: value.email } },
+      return sendResponse.error(res, http.UNAUTHORIZED, {
+        no_match: { email: value.email },
       });
     }
 
-    return res.status(http.LOGIN_SUCCESS.code).json({
-      ...http.LOGIN_SUCCESS,
-      result: {
-        user: user,
-        user_token: jwt.create(user.id),
-      },
+    return sendResponse.success(res, http.LOGIN_SUCCESS, {
+      user: { ...user },
+      user_token: jwt.create(user.id),
     });
   } catch (error) {
-    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
-      ...http.INTERNAL_SERVER_ERROR,
-      details: { error: error.message },
+    return sendResponse.error(res, http.INTERNAL_SERVER_ERROR, {
+      error: error.message,
     });
   }
 };
@@ -97,25 +89,22 @@ const logout = async (req, res) => {
     });
 
     if (error) {
-      return res
-        .status(http.BAD_REQUEST.code)
-        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+      return sendResponse.error(res, http.BAD_REQUEST, {
+        error: error.message,
+      });
     }
 
     const userToken = jwt.verify(value.user_token);
 
     if (!userToken) {
-      return res.status(http.UNAUTHORIZED.code).json({
-        ...http.UNAUTHORIZED,
-        details: { no_match: { user_token: value.user_token } },
+      return sendResponse.error(res, http.UNAUTHORIZED, {
+        no_match: { user_token: value.user_token },
       });
     }
-
-    return res.status(http.LOGOUT_SUCCESS.code).json(http.LOGOUT_SUCCESS);
+    return sendResponse.success(res, http.LOGOUT_SUCCESS);
   } catch (error) {
-    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
-      ...http.INTERNAL_SERVER_ERROR,
-      details: { error: error.message },
+    return sendResponse.error(res, http.INTERNAL_SERVER_ERROR, {
+      error: error.message,
     });
   }
 };
@@ -127,19 +116,18 @@ const forgotPassword = async (req, res) => {
     });
 
     if (error) {
-      return res
-        .status(http.BAD_REQUEST.code)
-        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+      return sendResponse.error(res, http.BAD_REQUEST, {
+        error: error.message,
+      });
     }
 
-    const condition = { email: value.email };
+    const userFind = { email: value.email };
 
-    const user = await db.table("users").findOne(condition);
+    const user = await db.table("users").findOne(userFind);
 
     if (!user) {
-      return res.status(http.UNAUTHORIZED.code).json({
-        ...http.UNAUTHORIZED,
-        details: { no_match: { email: value.email } },
+      return sendResponse.error(res, http.UNAUTHORIZED, {
+        no_match: { email: value.email },
       });
     }
 
@@ -158,14 +146,13 @@ const forgotPassword = async (req, res) => {
     const mailSend = await mail.send(options);
 
     if (!mailSend) {
-      return res.status(http.NETWORK_ERROR.code).json(http.NETWORK_ERROR);
+      return sendResponse.error(res, http.NETWORK_ERROR);
     }
 
-    return res.status(http.OTP_SENT.code).json(http.OTP_SENT);
+    return sendResponse.error(res, http.OTP_SENT);
   } catch (error) {
-    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
-      ...http.INTERNAL_SERVER_ERROR,
-      details: { error: error.message },
+    return sendResponse.error(res, http.INTERNAL_SERVER_ERROR, {
+      error: error.message,
     });
   }
 };
@@ -178,36 +165,31 @@ const resetPassword = async (req, res) => {
     });
 
     if (error) {
-      return res
-        .status(http.BAD_REQUEST.code)
-        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+      return sendResponse.error(res, http.BAD_REQUEST, {
+        error: error.message,
+      });
     }
 
     const userToken = jwt.verify(value.user_token);
 
     if (!userToken) {
-      return res.status(http.UNAUTHORIZED.code).json({
-        ...http.UNAUTHORIZED,
-        details: { no_match: { user_token: value.user_token } },
+      return sendResponse.error(res, http.UNAUTHORIZED, {
+        no_match: { user_token: value.user_token },
       });
     }
 
-    const condition = { id: userToken.user_id };
+    const userFind = { id: userToken.user_id };
 
     const userUpdate = { password: hash.sha512(value.newPassword) };
 
-    const user = await db.table("users").findOrUpdate(userUpdate, condition);
+    const user = await db.table("users").findOrUpdate(userFind, userUpdate);
 
-    return res.status(http.PASSWORD_CHANGED.code).json({
-      ...http.PASSWORD_CHANGED,
-      result: {
-        user: user.record,
-      },
+    return sendResponse.success(res, http.PASSWORD_CHANGED, {
+      user: { ...user.record },
     });
   } catch (error) {
-    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
-      ...http.INTERNAL_SERVER_ERROR,
-      details: { error: error.message },
+    return sendResponse.error(res, http.INTERNAL_SERVER_ERROR, {
+      error: error.message,
     });
   }
 };
@@ -220,36 +202,31 @@ const changePassword = async (req, res) => {
     });
 
     if (error) {
-      return res
-        .status(http.BAD_REQUEST.code)
-        .json({ ...http.BAD_REQUEST, details: { error: error.message } });
+      return sendResponse.error(res, http.BAD_REQUEST, {
+        error: error.message,
+      });
     }
 
     const userToken = jwt.verify(value.user_token);
 
     if (!userToken) {
-      return res.status(http.UNAUTHORIZED.code).json({
-        ...http.UNAUTHORIZED,
-        details: { no_match: { user_token: value.user_token } },
+      return sendResponse.error(res, http.UNAUTHORIZED, {
+        no_match: { user_token: value.user_token },
       });
     }
 
-    const condition = { id: userToken.user_id };
+    const userFind = { id: userToken.user_id };
 
     const userUpdate = { password: hash.sha512(value.newPassword) };
 
-    const user = await db.table("users").findOrUpdate(userUpdate, condition);
+    const user = await db.table("users").findOrUpdate(userFind, userUpdate);
 
-    return res.status(http.PASSWORD_CHANGED.code).json({
-      ...http.PASSWORD_CHANGED,
-      result: {
-        user: user.record,
-      },
+    return sendResponse.success(res, http.PASSWORD_CHANGED, {
+      user: { ...user.record },
     });
   } catch (error) {
-    return res.status(http.INTERNAL_SERVER_ERROR.code).json({
-      ...http.INTERNAL_SERVER_ERROR,
-      details: { error: error.message },
+    return sendResponse.error(res, http.INTERNAL_SERVER_ERROR, {
+      error: error.message,
     });
   }
 };

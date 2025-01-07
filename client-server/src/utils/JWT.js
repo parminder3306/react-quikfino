@@ -4,7 +4,7 @@ import env from "../config/Env.js";
 const jwt = {
   create: (userId) => {
     return jsonwebtoken.sign({ user_id: userId }, env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1d",
     });
   },
 

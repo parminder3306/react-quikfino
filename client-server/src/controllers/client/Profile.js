@@ -26,13 +26,11 @@ const profile = async (req, res) => {
       });
     }
 
-    const find = {
-      id: userToken.user_id,
-    };
+    const userFind = { id: userToken.user_id };
 
-    const userQuery = await db.table("users").findOne(find);
+    const user = await db.table("users").findOne(userFind);
 
-    if (!userQuery) {
+    if (!user) {
       return res.status(http.UNAUTHORIZED.code).json({
         ...http.UNAUTHORIZED,
         details: { no_match: { user_id: userToken.user_id } },
@@ -42,7 +40,7 @@ const profile = async (req, res) => {
     return res.status(http.ACCOUNT_FOUND.code).json({
       ...http.ACCOUNT_FOUND,
       result: {
-        user: userQuery,
+        user: user,
       },
     });
   } catch (error) {
@@ -61,7 +59,6 @@ const editProfile = async (req, res) => {
       phone: req.body.phone,
       country: req.body.country,
       language: req.body.language,
-      currency: req.body.currency,
       profile_image: req.body.profile_image,
       two_factor_enabled: req.body.two_factor_enabled,
       user_token: req.body.user_token,
@@ -82,25 +79,24 @@ const editProfile = async (req, res) => {
       });
     }
 
-    const find = { id: userToken.user_id };
+    const userFind = { id: userToken.user_id };
 
-    const update = {
+    const userUpdate = {
       name: value.name,
       email: value.email,
       phone: value.phone,
       country: value.country,
       language: value.language,
-      currency: value.currency,
       profile_image: value.profile_image,
       two_factor_enabled: value.two_factor_enabled,
     };
 
-    const userQuery = await db.table("users").findOrUpdate(find, update);
+    const user = await db.table("users").findOrUpdate(userFind, userUpdate);
 
     return res.status(http.ACCOUNT_UPDATED.code).json({
       ...http.ACCOUNT_UPDATED,
       result: {
-        user: userQuery.record,
+        user: user.record,
       },
     });
   } catch (error) {

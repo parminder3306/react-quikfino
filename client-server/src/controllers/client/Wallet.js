@@ -26,9 +26,9 @@ const wallet = async (req, res) => {
       });
     }
 
-    const condition = { user_id: userToken.user_id };
+    const userWalletFind = { user_id: userToken.user_id };
 
-    const userWallet = await db.table("wallets").findOne(condition);
+    const userWallet = await db.table("wallets").findOne(userWalletFind);
 
     if (!userWallet) {
       return res.status(http.UNAUTHORIZED.code).json({
@@ -40,7 +40,7 @@ const wallet = async (req, res) => {
     return res.status(http.WALLET_FOUND.code).json({
       ...http.WALLET_FOUND,
       result: {
-        wallet: userWallet,
+        wallet: { ...userWallet },
       },
     });
   } catch (error) {
@@ -73,9 +73,9 @@ const addWallet = async (req, res) => {
       });
     }
 
-    const condition = { user_id: userToken.user_id };
+    const userWalletFind = { user_id: userToken.user_id };
 
-    const userWallet = await db.table("wallets").findOne(condition);
+    const userWallet = await db.table("wallets").findOne(userWalletFind);
 
     if (!userWallet) {
       return res.status(http.NOT_FOUND.code).json({
@@ -90,11 +90,11 @@ const addWallet = async (req, res) => {
 
     const { record } = await db
       .table("wallets")
-      .findOrUpdate(walletUpdate, condition);
+      .findOrUpdate(userWalletFind, walletUpdate);
 
     return res.status(http.WALLET_MONEY_ADDED.code).json({
       ...http.WALLET_MONEY_ADDED,
-      result: { wallet: record },
+      result: { wallet: { ...record } },
     });
   } catch (error) {
     return res.status(http.INTERNAL_SERVER_ERROR.code).json({

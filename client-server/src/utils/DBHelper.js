@@ -30,19 +30,19 @@ const db = {
       },
 
       // Insert a new record into the table
-      create: async (object) => {
-        const [id] = await database(table).insert(object);
+      create: async (data) => {
+        const [id] = await database(table).insert(data);
         return id;
       },
 
       // Bulk insert multiple records into the table
-      bulkCreate: async (objects) => {
-        return await database(table).insert(objects);
+      bulkCreate: async (data) => {
+        return await database(table).insert(data);
       },
 
       // Update records based on a condition
-      update: async (condition, object) => {
-        return await database(table).where(condition).update(object);
+      update: async (condition, data) => {
+        return await database(table).where(condition).update(data);
       },
 
       // Bulk update records based on a condition
@@ -61,7 +61,7 @@ const db = {
       },
 
       // Find a record based on a condition, or create it if it doesn't exist
-      findOrCreate: async (data, condition) => {
+      findOrCreate: async (condition, data) => {
         const recordCount = await db.table(table).orWithCount(condition);
 
         let recordData = null;
@@ -82,7 +82,7 @@ const db = {
       },
 
       // Find a record based on a condition, or update it if it exists
-      findOrUpdate: async (data, condition) => {
+      findOrUpdate: async (condition, data) => {
         const recordCount = await db.table(table).andWithCount(condition);
 
         let recordData = null;
