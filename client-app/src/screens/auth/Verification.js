@@ -1,5 +1,5 @@
 import React, { useState } from "react";
 
-const ForgetPassword = ({ navigation }) => {};
+const verification = ({ navigation }) => {};
 
-export default ForgetPassword;
+export default verification;

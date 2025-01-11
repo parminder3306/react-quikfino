@@ -3,9 +3,9 @@ import { MMKV } from "react-native-mmkv";
 // Initialize MMKV
 const storage = new MMKV();
 
-const sessionName = "userSession";
+const sessionName = "jwtToken";
 
-const Session = {
+const session = {
   get: () => {
     try {
       const session = storage.getString(sessionName);
@@ -33,4 +33,4 @@ const Session = {
   },
 };
 
-export default Session;
+export default session;

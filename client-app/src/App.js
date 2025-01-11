@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from "react";
 
 // Custom utils
-import AppBar from "./utils/AppBar";
-import Session from "./utils/Session";
-import Permission from "./utils/Permission";
-import Notification from "./utils/Notification";
+import appBar from "./utils/AppBar";
+import session from "./utils/Session";
+import permission from "./utils/Permission";
+import notification from "./utils/Notification";
 
 // Custom screens
-import Splash from "./screens/Splash";
-import Navigation from "./screens/Navigation";
+import splash from "./screens/Splash";
+import navigation from "./screens/Navigation";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,14 +19,14 @@ const App = () => {
     const initApp = async () => {
       try {
         const session = await Session.get();
-        AppBar.hide();
-        Permission.notification();
-        Notification.token();
-        Notification.onMessage();
+        appBar.hide();
+        permission.notification();
+        notification.token();
+        notification.onMessage();
         setIsLoggedIn(!!session);
 
         setTimeout(() => {
-          AppBar.show();
+          appBar.show();
           setIsLoading(false);
         }, 3000);
       } catch (error) {
@@ -38,10 +38,10 @@ const App = () => {
   }, []);
 
   if (isLoading) {
-    return <Splash />;
+    return <splash />;
   }
 
-  return <Navigation isLoggedIn={isLoggedIn} />;
+  return <navigation isLoggedIn={isLoggedIn} />;
 };
 
 export default App;

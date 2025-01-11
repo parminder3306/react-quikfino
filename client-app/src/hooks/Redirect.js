@@ -1,16 +1,16 @@
 // Custom utils
-import Session from "../utils/Session";
+import session from "../utils/Session";
 
-const Redirect = {
-  GoToMain: (navigation) => {
+const redirect = {
+  goToMain: (navigation) => {
     navigation.reset({
       index: 0,
       routes: [{ name: "Main" }],
     });
   },
 
-  GoToLogin: async (navigation) => {
-    Session.clear();
+  goToLogin: async (navigation) => {
+    session.clear();
     navigation.reset({
       index: 0,
       routes: [{ name: "Login" }],
@@ -18,4 +18,4 @@ const Redirect = {
   },
 };
 
-export default Redirect;
+export default redirect;

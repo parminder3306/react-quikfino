@@ -2,7 +2,7 @@ import React from "react";
 import { View, Animated } from "react-native";
 
 // Custom utils
-import FadeAnimation from "../utils/FadeAnimation";
+import fadeAnimation from "../utils/FadeAnimation";
 
 // Custom style
 import useSplashStyle from "../styles/Style";
@@ -10,15 +10,15 @@ import useSplashStyle from "../styles/Style";
 // Custom image
 import splashLogo from "../../assets/icons/logo.png";
 
-const Splash = () => {
+const splash = () => {
   return (
     <View style={useSplashStyle.container}>
       <Animated.Image
         source={splashLogo}
-        style={[useSplashStyle.sPlashLogo, { opacity: FadeAnimation(1, 2000) }]}
+        style={[useSplashStyle.sPlashLogo, { opacity: fadeAnimation(1, 2000) }]}
       />
     </View>
   );
 };
 
-export default Splash;
+export default splash;

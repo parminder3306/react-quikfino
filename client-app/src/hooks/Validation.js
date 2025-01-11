@@ -1,7 +1,7 @@
-import * as Yup from "yup";
+import Yup from "yup";
 
-const Validation = {
-  LoginRule: () => {
+const validation = {
+  login: () => {
     return Yup.object().shape({
       email: Yup.string()
         .email("Invalid email format")
@@ -12,13 +12,12 @@ const Validation = {
     });
   },
 
-  RegisterRule: () => {
+  signUp: () => {
     return Yup.object().shape({
       email: Yup.string()
         .email("Invalid email format")
         .required("Email is required"),
-      password: Yup
-        .string()
+      password: Yup.string()
         .min(6, "Password must be at least 6 characters")
         .required("Password is required"),
       confirmPassword: Yup.string()
@@ -28,4 +27,4 @@ const Validation = {
   },
 };
 
-export default Validation;
+export default validation;

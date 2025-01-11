@@ -1,6 +1,6 @@
 import { StatusBar } from "react-native";
 
-const AppBar = {
+const appBar = {
   show: () => {
     StatusBar.setHidden(false, "slide");
     StatusBar.setBackgroundColor("#FFFFFF");
@@ -14,4 +14,4 @@ const AppBar = {
   },
 };
 
-export default AppBar;
+export default appBar;

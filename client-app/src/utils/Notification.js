@@ -1,7 +1,7 @@
 import messaging from "@react-native-firebase/messaging";
 import notifee, { AndroidImportance } from "@notifee/react-native";
 
-const Notification = {
+const notification = {
   token: async () => {
     try {
       const authStatus = await messaging().requestPermission();
@@ -42,4 +42,4 @@ const Notification = {
   },
 };
 
-export default Notification;
+export default notification;

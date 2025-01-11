@@ -1,7 +1,7 @@
 import Snackbar from "react-native-snackbar";
 
-const Toast = {
-  Snackbar: (message) => {
+const toast = {
+  snackBar: (message) => {
     Snackbar.show({
       text: message,
       duration: Snackbar.LENGTH_LONG,
@@ -9,4 +9,4 @@ const Toast = {
   },
 };
 
-export default Toast;
+export default toast;

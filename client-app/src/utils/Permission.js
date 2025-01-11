@@ -1,7 +1,7 @@
 import { PermissionsAndroid, Platform, Alert, Linking } from "react-native";
 import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
 
-const Permission = {
+const permission = {
   askAgain: (message) => {
     Alert.alert(
       "Permission Denied",
@@ -13,7 +13,7 @@ const Permission = {
         },
         {
           text: "Settings",
-          onPress: () => Permission.appSettings(),
+          onPress: () => permission.appSettings(),
         },
       ],
       { cancelable: false }
@@ -179,4 +179,4 @@ const Permission = {
   storage: async () => {},
 };
 
-export default Permission;
+export default permission;
