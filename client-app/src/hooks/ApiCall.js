@@ -1,14 +1,14 @@
 import axios from "axios";
-import endpoint from "../configs/Endpoint";
+import ApiUrl from "../configs/ApiUrl";
 import toast from "../utils/Toast";
 
-const api = {
+const apiCall = {
   login: async (email, password) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     try {
       const parms = { email, password };
-      const response = await axios.post(endpoint.LOGIN_URL, parms);
+      const response = await axios.post(ApiUrl.LOGIN_URL, parms);
       const { status, code, message, result } = response.data;
 
       if (status === "SUCCESS" && code === 200) {
@@ -32,7 +32,7 @@ const api = {
 
     try {
       const parms = { email, password };
-      const response = await axios.post(endpoint.SIGNUP_URL, parms);
+      const response = await axios.post(ApiUrl.SIGNUP_URL, parms);
       const { status, code, message, result } = response.data;
 
       if (status === "SUCCESS" && code === 201) {
@@ -52,4 +52,4 @@ const api = {
   },
 };
 
-export default api;
+export default apiCall;

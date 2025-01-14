@@ -12,46 +12,46 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 // Custom screens
-import home from "./main/Home";
-import recipients from "./main/Recipients";
-import send from "./main/Send";
-import rewards from "./main/Rewards";
-import profile from "./main/Profile";
+import Home from "./main/Home";
+import Recipients from "./main/Recipients";
+import Send from "./main/Send";
+import Rewards from "./main/Rewards";
+import Profile from "./main/Profile";
 
 // Custom hooks
-import faIcon from "../hooks/FaIcon";
+import FaIcon from "../hooks/FaIcon";
 
 // Custom styles
-import style from "../styles/Style";
+import Style from "../styles/Style";
 
 // Static assets
 import headerLogo from "../../assets/icons/header-logo.png";
 
-const main = ({ navigation }) => {
+const Main = ({ navigation }) => {
   const Tab = createBottomTabNavigator();
   const iconMap = {
-    home: faHouse,
-    recipients: faAddressBook,
-    send: faMoneyBillTransfer,
-    rewards: faGift,
-    profile: faUser,
+    Home: faHouse,
+    Recipients: faAddressBook,
+    Send: faMoneyBillTransfer,
+    Rewards: faGift,
+    Profile: faUser,
   };
 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => (
-          <faIcon.icon icon={iconMap[route.name]} color={color} />
+          <FaIcon.icon icon={iconMap[route.name]} color={color} />
         ),
-        tabBarStyle: style.tabBar,
+        tabBarStyle: Style.tabBar,
         tabBarActiveTintColor: "#FF6E40",
         tabBarInactiveTintColor: "#AAAAAA",
-        headerStyle: style.header,
+        headerStyle: Style.header,
       })}
     >
       <Tab.Screen
-        name="home"
-        component={home}
+        name="Home"
+        component={Home}
         options={{
           headerTitle: () => (
             <Image
@@ -64,11 +64,11 @@ const main = ({ navigation }) => {
         initialParams={{ sessionData: { email: "Parminder Singh" } }}
       />
       <Tab.Screen
-        name="send"
-        component={send}
+        name="Send"
+        component={Send}
         options={{
           tabBarButton: ({ accessibilityState }) => (
-            <faIcon.iconBigButton
+            <FaIcon.iconBigButton
               icon={faMoneyBillTransfer}
               size={24}
               color={accessibilityState?.selected ? "#FF6E40" : "#AAAAAA"}
@@ -78,9 +78,9 @@ const main = ({ navigation }) => {
           ),
         }}
       />
-      <Tab.Screen name="profile" component={profile} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };
 
-export default main;
+export default Main;

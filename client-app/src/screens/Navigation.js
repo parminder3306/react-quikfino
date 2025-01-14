@@ -3,12 +3,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // Custom screens
-import login from "./auth/Login";
-import signUp from "./auth/SignUp";
-import forgetPassword from "./auth/ForgetPassword";
-import main from "./Main";
+import Login from "./auth/Login";
+import SignUp from "./auth/SignUp";
+import ForgetPassword from "./auth/ForgetPassword";
+import Main from "./Main";
 
-const navigation = ({ isLoggedIn, sessionData }) => {
+const Navigation = ({ isLoggedIn, sessionData }) => {
   const routeName = isLoggedIn ? "Main" : "Login";
   const Stack = createNativeStackNavigator();
 
@@ -18,13 +18,13 @@ const navigation = ({ isLoggedIn, sessionData }) => {
         screenOptions={{ headerShown: false }}
         initialRouteName={routeName}
       >
-        <Stack.Screen name="login" component={login} />
-        <Stack.Screen name="signUp" component={signUp} />
-        <Stack.Screen name="forgetPassword" component={forgetPassword} />
-        <Stack.Screen name="main" component={main} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+        <Stack.Screen name="Main" component={Main} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
-export default navigation;
+export default Navigation;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
 
-const verification = ({ navigation }) => {};
+const Verification = ({ navigation }) => {};
 
-export default verification;
+export default Verification;

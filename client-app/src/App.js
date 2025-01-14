@@ -8,8 +8,8 @@ import permission from "./utils/Permission";
 import notification from "./utils/Notification";
 
 // Custom screens
-import splash from "./screens/Splash";
-import navigation from "./screens/Navigation";
+import Splash from "./screens/Splash.js";
+import Navigation from "./screens/Navigation";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,12 +18,12 @@ const App = () => {
   useEffect(() => {
     const initApp = async () => {
       try {
-        const session = await Session.get();
+        const sessionGet = await session.get();
         appBar.hide();
         permission.notification();
         notification.token();
         notification.onMessage();
-        setIsLoggedIn(!!session);
+        setIsLoggedIn(!!sessionGet);
 
         setTimeout(() => {
           appBar.show();
@@ -38,10 +38,10 @@ const App = () => {
   }, []);
 
   if (isLoading) {
-    return <splash />;
+    return <Splash />;
   }
 
-  return <navigation isLoggedIn={isLoggedIn} />;
+  return <Navigation isLoggedIn={isLoggedIn} />;
 };
 
 export default App;

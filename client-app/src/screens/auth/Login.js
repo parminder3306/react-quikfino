@@ -15,18 +15,18 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Custom Hooks
-import api from "../../hooks/Api";
-import redirect from "../../hooks/Redirect";
-import validation from "../../hooks/Validation";
+import ApiCall from "../../hooks/ApiCall";
+import Redirect from "../../hooks/Redirect";
+import Validation from "../../hooks/Validation";
 
 // Custom Utils
-import session from "../../utils/Session";
-import toast from "../../utils/Toast";
+import Session from "../../utils/Session";
+import Toast from "../../utils/Toast";
 
 // Custom Styles
-import style from "../../styles/Style";
+import Style from "../../styles/Style";
 
-const login = ({ navigation }) => {
+const Login = ({ navigation }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,7 +35,7 @@ const login = ({ navigation }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validation.login()),
+    resolver: yupResolver(Validation.login()),
   });
 
   const showOrHidePassword = () => {
@@ -45,13 +45,13 @@ const login = ({ navigation }) => {
   const submitLogin = async (data) => {
     try {
       setIsLoading(true);
-      const result = await api.login(data.email, data.password);
+      const result = await ApiCall.login(data.email, data.password);
       if (result) {
-        session.set({ token: result.token });
-        redirect.goToMain(navigation);
+        Session.set({ token: result.token });
+        Redirect.goToMain(navigation);
       }
     } catch (error) {
-      toast.snackBar(error.message || "Login failed. Please try again.");
+      Toast.snackBar(error.message || "Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -63,14 +63,14 @@ const login = ({ navigation }) => {
       <Text style={Style.loginSubtitle}>Please log in to continue</Text>
 
       {/* Email Input */}
-      <View style={style.inputContainer}>
-        <Text style={style.label}>Email Address</Text>
+      <View style={Style.inputContainer}>
+        <Text style={Style.label}>Email Address</Text>
         <Controller
           name="email"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              style={errors.email ? style.inputError : style.input}
+              style={errors.email ? Style.inputError : Style.input}
               placeholder="Email"
               onBlur={onBlur}
               onChangeText={onChange}
@@ -81,22 +81,22 @@ const login = ({ navigation }) => {
           )}
         />
       </View>
-      <View style={style.errorContainer}>
+      <View style={Style.errorContainer}>
         {errors.email && (
-          <Text style={style.errorText}>{errors.email.message}</Text>
+          <Text style={Style.errorText}>{errors.email.message}</Text>
         )}
       </View>
 
       {/* Password Input */}
-      <View style={style.inputContainer}>
-        <Text style={style.label}>Password</Text>
-        <View style={style.passwordContainer}>
+      <View style={Style.inputContainer}>
+        <Text style={Style.label}>Password</Text>
+        <View style={Style.passwordContainer}>
           <Controller
             name="password"
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                style={errors.password ? style.inputError : style.input}
+                style={errors.password ? Style.inputError : Style.input}
                 placeholder="Password"
                 secureTextEntry={!isPasswordVisible}
                 onBlur={onBlur}
@@ -107,7 +107,7 @@ const login = ({ navigation }) => {
           />
           <TouchableOpacity
             onPress={showOrHidePassword}
-            style={style.inputRightIcon}
+            style={Style.inputRightIcon}
           >
             <FontAwesomeIcon
               icon={isPasswordVisible ? faEyeSlash : faEye}
@@ -117,39 +117,39 @@ const login = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={style.errorContainer}>
+      <View style={Style.errorContainer}>
         {errors.password && (
-          <Text style={style.errorText}>{errors.password.message}</Text>
+          <Text style={Style.errorText}>{errors.password.message}</Text>
         )}
       </View>
 
       {/* Forgot Password */}
       <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
-        <Text style={style.link}>Forgot Password?</Text>
+        <Text style={Style.link}>Forgot Password?</Text>
       </TouchableOpacity>
 
       {/* Submit Button */}
       <TouchableOpacity
-        style={style.buttonPrimary}
+        style={Style.buttonPrimary}
         onPress={handleSubmit(submitLogin)}
         disabled={isLoading}
       >
         {isLoading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <Text style={style.buttonText}>Log In</Text>
+          <Text style={Style.buttonText}>Log In</Text>
         )}
       </TouchableOpacity>
 
       {/* Sign Up Link */}
-      <View style={style.signupContainer}>
-        <Text style={style.noAccountText}>Don't have an account?</Text>
+      <View style={Style.signupContainer}>
+        <Text style={Style.noAccountText}>Don't have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-          <Text style={[style.link, style.signupLink]}>Sign Up</Text>
+          <Text style={[Style.link, Style.signupLink]}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-export default login;
+export default Login;

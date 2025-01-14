@@ -10,7 +10,7 @@ import useSplashStyle from "../styles/Style";
 // Custom image
 import splashLogo from "../../assets/icons/logo.png";
 
-const splash = () => {
+const Splash = () => {
   return (
     <View style={useSplashStyle.container}>
       <Animated.Image
@@ -21,4 +21,4 @@ const splash = () => {
   );
 };
 
-export default splash;
+export default Splash;

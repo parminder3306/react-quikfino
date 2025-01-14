@@ -14,17 +14,17 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Custom Hooks
-import api from "../../hooks/Api";
-import redirect from "../../hooks/Redirect";
-import validation from "../../hooks/Validation";
+import ApiCall from "../../hooks/ApiCall";
+import Redirect from "../../hooks/Redirect";
+import Validation from "../../hooks/Validation";
 
 // Custom Utils
-import toast from "../../utils/Toast";
+import Toast from "../../utils/Toast";
 
 // Custom Styles
-import style from "../../styles/Style";
+import Style from "../../styles/Style";
 
-const signUp = ({ navigation }) => {
+const SignUp = ({ navigation }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [isConfirmPasswordVisible, setConfirmPasswordVisibility] =
     useState(false);
@@ -35,7 +35,7 @@ const signUp = ({ navigation }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validation.signUp()),
+    resolver: yupResolver(Validation.signUp()),
   });
 
   const showOrHidePassword = () => {
@@ -49,31 +49,31 @@ const signUp = ({ navigation }) => {
   const submitSignUp = async (data) => {
     try {
       setIsLoading(true);
-      const result = await api.signUp(data.email, data.password);
+      const result = await ApiCall.signUp(data.email, data.password);
       if (result) {
-        redirect.goToLogin(navigation);
+        Redirect.goToLogin(navigation);
       }
     } catch (error) {
-      toast.snackBar(error.message || "Sign Up failed. Please try again.");
+      Toast.snackBar(error.message || "Sign Up failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <View style={style.container}>
-      <Text style={style.loginTitle}>Welcome</Text>
-      <Text style={style.loginSubtitle}>Create a QuikFino profile</Text>
+    <View style={Style.container}>
+      <Text style={Style.loginTitle}>Welcome</Text>
+      <Text style={Style.loginSubtitle}>Create a QuikFino profile</Text>
 
       {/* Email Input */}
-      <View style={style.inputContainer}>
-        <Text style={style.label}>Email Address</Text>
+      <View style={Style.inputContainer}>
+        <Text style={Style.label}>Email Address</Text>
         <Controller
           name="email"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              style={errors.email ? style.inputError : style.input}
+              style={errors.email ? Style.inputError : Style.input}
               placeholder="Email"
               onBlur={onBlur}
               onChangeText={onChange}
@@ -84,22 +84,22 @@ const signUp = ({ navigation }) => {
           )}
         />
       </View>
-      <View style={style.errorContainer}>
+      <View style={Style.errorContainer}>
         {errors.email && (
-          <Text style={style.errorText}>{errors.email.message}</Text>
+          <Text style={Style.errorText}>{errors.email.message}</Text>
         )}
       </View>
 
       {/* Password Input */}
-      <View style={style.inputContainer}>
-        <Text style={style.label}>Password</Text>
-        <View style={style.passwordContainer}>
+      <View style={Style.inputContainer}>
+        <Text style={Style.label}>Password</Text>
+        <View style={Style.passwordContainer}>
           <Controller
             name="password"
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                style={errors.password ? style.inputError : style.input}
+                style={errors.password ? Style.inputError : Style.input}
                 placeholder="Password"
                 secureTextEntry={!isPasswordVisible}
                 onBlur={onBlur}
@@ -110,7 +110,7 @@ const signUp = ({ navigation }) => {
           />
           <TouchableOpacity
             onPress={showOrHidePassword}
-            style={style.inputRightIcon}
+            style={Style.inputRightIcon}
           >
             <FontAwesomeIcon
               icon={isPasswordVisible ? faEyeSlash : faEye}
@@ -120,22 +120,22 @@ const signUp = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={style.errorContainer}>
+      <View style={Style.errorContainer}>
         {errors.password && (
-          <Text style={style.errorText}>{errors.password.message}</Text>
+          <Text style={Style.errorText}>{errors.password.message}</Text>
         )}
       </View>
 
       {/* Confirm Password Input */}
-      <View style={style.inputContainer}>
-        <Text style={style.label}>Confirm Password</Text>
-        <View style={style.passwordContainer}>
+      <View style={Style.inputContainer}>
+        <Text style={Style.label}>Confirm Password</Text>
+        <View style={Style.passwordContainer}>
           <Controller
             name="confirmPassword"
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                style={errors.confirmPassword ? style.inputError : style.input}
+                style={errors.confirmPassword ? Style.inputError : Style.input}
                 placeholder="Confirm Password"
                 secureTextEntry={!isConfirmPasswordVisible}
                 onBlur={onBlur}
@@ -146,7 +146,7 @@ const signUp = ({ navigation }) => {
           />
           <TouchableOpacity
             onPress={showOrHideConfirmPassword}
-            style={style.inputRightIcon}
+            style={Style.inputRightIcon}
           >
             <FontAwesomeIcon
               icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
@@ -156,34 +156,34 @@ const signUp = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={style.errorContainer}>
+      <View style={Style.errorContainer}>
         {errors.confirmPassword && (
-          <Text style={style.errorText}>{errors.confirmPassword.message}</Text>
+          <Text style={Style.errorText}>{errors.confirmPassword.message}</Text>
         )}
       </View>
 
       {/* Submit Button */}
       <TouchableOpacity
-        style={style.buttonPrimary}
+        style={Style.buttonPrimary}
         onPress={handleSubmit(submitSignUp)}
         disabled={isLoading}
       >
         {isLoading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <Text style={style.buttonText}>Sign Up</Text>
+          <Text style={Style.buttonText}>Sign Up</Text>
         )}
       </TouchableOpacity>
 
       {/* Login Link */}
-      <View style={style.loginContainer}>
-        <Text style={style.alreadyAccountText}>Already have an account?</Text>
+      <View style={Style.loginContainer}>
+        <Text style={Style.alreadyAccountText}>Already have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-          <Text style={[style.link, style.loginLink]}>Log In</Text>
+          <Text style={[Style.link, Style.loginLink]}>Log In</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-export default signUp;
+export default SignUp;
