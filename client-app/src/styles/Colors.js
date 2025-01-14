@@ -1,5 +1,5 @@
 // Define color constants
-const primary = "#FF5C4F";
+const primary = "#002F36";
 const info = "#17A2B8";
 const success = "#28A745";
 const danger = "#DC3545";

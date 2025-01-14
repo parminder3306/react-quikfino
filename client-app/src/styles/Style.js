@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { primary } from "./Colors";
 
 const style = StyleSheet.create({
   container: {
@@ -115,7 +116,7 @@ const style = StyleSheet.create({
   buttonPrimary: {
     width: "100%",
     height: 50,
-    backgroundColor: "#002f36",
+    backgroundColor: primary,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
@@ -134,7 +135,7 @@ const style = StyleSheet.create({
   bigButton: {
     width: 50,
     height: 50,
-    backgroundColor: "#FF6E40",
+    backgroundColor: primary,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
@@ -146,7 +147,7 @@ const style = StyleSheet.create({
     fontWeight: "bold",
   },
   link: {
-    color: "#FF6E40",
+    color: primary,
     fontSize: 16,
   },
   signupContainer: {
