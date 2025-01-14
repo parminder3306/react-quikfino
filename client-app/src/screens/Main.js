@@ -23,6 +23,7 @@ import faIcon from "../hooks/FaIcon";
 
 // Custom styles
 import style from "../styles/Style";
+import color from "../styles/Color";
 
 // Static assets
 import headerLogo from "../../assets/icons/header-logo.png";
@@ -44,7 +45,7 @@ const Main = ({ navigation }) => {
           <faIcon.icon icon={iconMap[route.name]} color={color} />
         ),
         tabBarStyle: style.tabBar,
-        tabBarActiveTintColor: "#FF6E40",
+        tabBarActiveTintColor: color.primary,
         tabBarInactiveTintColor: "#AAAAAA",
         headerStyle: style.header,
       })}
@@ -71,7 +72,7 @@ const Main = ({ navigation }) => {
             <faIcon.iconBigButton
               icon={faMoneyBillTransfer}
               size={24}
-              color={accessibilityState?.selected ? "#FF6E40" : "#AAAAAA"}
+              color={accessibilityState?.selected ? color.primary : "#AAAAAA"}
               label="Send Money"
               navigateTo="Send"
             />
