@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Keyboard,
 } from "react-native";
 
 // Third-party libraries
@@ -45,9 +46,10 @@ const Login = ({ navigation }) => {
   const submitLogin = async (data) => {
     try {
       setIsLoading(true);
+      Keyboard.dismiss();
       const result = await apiCall.login(data.email, data.password);
       if (result) {
-        session.set({ token: result.token });
+        session.set({ ...result });
         redirect.goToMain(navigation);
       }
     } catch (error) {

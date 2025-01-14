@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Keyboard,
 } from "react-native";
 
 // Third-party libraries
@@ -49,6 +50,7 @@ const SignUp = ({ navigation }) => {
   const submitSignUp = async (data) => {
     try {
       setIsLoading(true);
+      Keyboard.dismiss();
       const result = await apiCall.signUp(data.email, data.password);
       if (result) {
         redirect.goToLogin(navigation);
