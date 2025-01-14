@@ -19,10 +19,10 @@ import Rewards from "./main/Rewards";
 import Profile from "./main/Profile";
 
 // Custom hooks
-import FaIcon from "../hooks/FaIcon";
+import faIcon from "../hooks/FaIcon";
 
 // Custom styles
-import Style from "../styles/Style";
+import style from "../styles/Style";
 
 // Static assets
 import headerLogo from "../../assets/icons/header-logo.png";
@@ -41,12 +41,12 @@ const Main = ({ navigation }) => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => (
-          <FaIcon.icon icon={iconMap[route.name]} color={color} />
+          <faIcon.icon icon={iconMap[route.name]} color={color} />
         ),
-        tabBarStyle: Style.tabBar,
+        tabBarStyle: style.tabBar,
         tabBarActiveTintColor: "#FF6E40",
         tabBarInactiveTintColor: "#AAAAAA",
-        headerStyle: Style.header,
+        headerStyle: style.header,
       })}
     >
       <Tab.Screen
@@ -68,7 +68,7 @@ const Main = ({ navigation }) => {
         component={Send}
         options={{
           tabBarButton: ({ accessibilityState }) => (
-            <FaIcon.iconBigButton
+            <faIcon.iconBigButton
               icon={faMoneyBillTransfer}
               size={24}
               color={accessibilityState?.selected ? "#FF6E40" : "#AAAAAA"}

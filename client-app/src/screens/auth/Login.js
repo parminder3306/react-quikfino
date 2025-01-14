@@ -15,16 +15,16 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Custom Hooks
-import ApiCall from "../../hooks/ApiCall";
-import Redirect from "../../hooks/Redirect";
-import Validation from "../../hooks/Validation";
+import apiCall from "../../hooks/ApiCall";
+import redirect from "../../hooks/Redirect";
+import validation from "../../hooks/Validation";
 
 // Custom Utils
-import Session from "../../utils/Session";
-import Toast from "../../utils/Toast";
+import session from "../../utils/Session";
+import toast from "../../utils/Toast";
 
 // Custom Styles
-import Style from "../../styles/Style";
+import style from "../../styles/Style";
 
 const Login = ({ navigation }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
@@ -35,7 +35,7 @@ const Login = ({ navigation }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(Validation.login()),
+    resolver: yupResolver(validation.login()),
   });
 
   const showOrHidePassword = () => {
@@ -45,32 +45,32 @@ const Login = ({ navigation }) => {
   const submitLogin = async (data) => {
     try {
       setIsLoading(true);
-      const result = await ApiCall.login(data.email, data.password);
+      const result = await apiCall.login(data.email, data.password);
       if (result) {
-        Session.set({ token: result.token });
-        Redirect.goToMain(navigation);
+        session.set({ token: result.token });
+        redirect.goToMain(navigation);
       }
     } catch (error) {
-      Toast.snackBar(error.message || "Login failed. Please try again.");
+      toast.snackBar(error.message || "Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <View style={Style.container}>
-      <Text style={Style.loginTitle}>Welcome Back</Text>
-      <Text style={Style.loginSubtitle}>Please log in to continue</Text>
+    <View style={style.container}>
+      <Text style={style.loginTitle}>Welcome Back</Text>
+      <Text style={style.loginSubtitle}>Please log in to continue</Text>
 
       {/* Email Input */}
-      <View style={Style.inputContainer}>
-        <Text style={Style.label}>Email Address</Text>
+      <View style={style.inputContainer}>
+        <Text style={style.label}>Email Address</Text>
         <Controller
           name="email"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              style={errors.email ? Style.inputError : Style.input}
+              style={errors.email ? style.inputError : style.input}
               placeholder="Email"
               onBlur={onBlur}
               onChangeText={onChange}

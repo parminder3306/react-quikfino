@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-const Validation = {
+const validation = {
   login: () =>
     Yup.object({
       email: Yup.string()
@@ -25,4 +25,4 @@ const Validation = {
     }),
 };
 
-export default Validation;
+export default validation;

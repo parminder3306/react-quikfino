@@ -1,8 +1,8 @@
-const API_URL = "https://api.example.com";
+const Base_URL = "http://192.168.141.139:86/v1";
 
 const apiUrl = {
-  SIGNUP_URL: `${API_URL}/auth/signup`,
-  LOGIN_URL: `${API_URL}/auth/login`,
+  SIGNUP_URL: `${Base_URL}/auth/signup`,
+  LOGIN_URL: `${Base_URL}/auth/login`,
 };
 
 export default apiUrl;

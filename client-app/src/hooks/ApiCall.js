@@ -1,5 +1,5 @@
 import axios from "axios";
-import ApiUrl from "../configs/ApiUrl";
+import apiUrl from "../configs/ApiUrl";
 import toast from "../utils/Toast";
 
 const apiCall = {
@@ -8,7 +8,7 @@ const apiCall = {
 
     try {
       const parms = { email, password };
-      const response = await axios.post(ApiUrl.LOGIN_URL, parms);
+      const response = await axios.post(apiUrl.LOGIN_URL, parms);
       const { status, code, message, result } = response.data;
 
       if (status === "SUCCESS" && code === 200) {
@@ -32,7 +32,7 @@ const apiCall = {
 
     try {
       const parms = { email, password };
-      const response = await axios.post(ApiUrl.SIGNUP_URL, parms);
+      const response = await axios.post(apiUrl.SIGNUP_URL, parms);
       const { status, code, message, result } = response.data;
 
       if (status === "SUCCESS" && code === 201) {
