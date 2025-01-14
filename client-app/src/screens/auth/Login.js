@@ -81,22 +81,22 @@ const Login = ({ navigation }) => {
           )}
         />
       </View>
-      <View style={Style.errorContainer}>
+      <View style={style.errorContainer}>
         {errors.email && (
-          <Text style={Style.errorText}>{errors.email.message}</Text>
+          <Text style={style.errorText}>{errors.email.message}</Text>
         )}
       </View>
 
       {/* Password Input */}
-      <View style={Style.inputContainer}>
-        <Text style={Style.label}>Password</Text>
-        <View style={Style.passwordContainer}>
+      <View style={style.inputContainer}>
+        <Text style={style.label}>Password</Text>
+        <View style={style.passwordContainer}>
           <Controller
             name="password"
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                style={errors.password ? Style.inputError : Style.input}
+                style={errors.password ? style.inputError : style.input}
                 placeholder="Password"
                 secureTextEntry={!isPasswordVisible}
                 onBlur={onBlur}
@@ -107,7 +107,7 @@ const Login = ({ navigation }) => {
           />
           <TouchableOpacity
             onPress={showOrHidePassword}
-            style={Style.inputRightIcon}
+            style={style.inputRightIcon}
           >
             <FontAwesomeIcon
               icon={isPasswordVisible ? faEyeSlash : faEye}
@@ -117,35 +117,35 @@ const Login = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={Style.errorContainer}>
+      <View style={style.errorContainer}>
         {errors.password && (
-          <Text style={Style.errorText}>{errors.password.message}</Text>
+          <Text style={style.errorText}>{errors.password.message}</Text>
         )}
       </View>
 
       {/* Forgot Password */}
       <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
-        <Text style={Style.link}>Forgot Password?</Text>
+        <Text style={style.link}>Forgot Password?</Text>
       </TouchableOpacity>
 
       {/* Submit Button */}
       <TouchableOpacity
-        style={Style.buttonPrimary}
+        style={style.buttonPrimary}
         onPress={handleSubmit(submitLogin)}
         disabled={isLoading}
       >
         {isLoading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <Text style={Style.buttonText}>Log In</Text>
+          <Text style={style.buttonText}>Log In</Text>
         )}
       </TouchableOpacity>
 
       {/* Sign Up Link */}
-      <View style={Style.signupContainer}>
-        <Text style={Style.noAccountText}>Don't have an account?</Text>
+      <View style={style.signupContainer}>
+        <Text style={style.noAccountText}>Don't have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-          <Text style={[Style.link, Style.signupLink]}>Sign Up</Text>
+          <Text style={[style.link, style.signupLink]}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>
