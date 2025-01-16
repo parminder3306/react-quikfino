@@ -24,6 +24,7 @@ import toast from "../../utils/Toast";
 
 // Custom Styles
 import style from "../../styles/Style";
+import color from "../../styles/Color";
 
 const SignUp = ({ navigation }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
@@ -117,7 +118,7 @@ const SignUp = ({ navigation }) => {
             <FontAwesomeIcon
               icon={isPasswordVisible ? faEyeSlash : faEye}
               size={22}
-              color="#FF6E40"
+              color={color.primary}
             />
           </TouchableOpacity>
         </View>
@@ -153,7 +154,7 @@ const SignUp = ({ navigation }) => {
             <FontAwesomeIcon
               icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
               size={22}
-              color="#FF6E40"
+              color={color.primary}
             />
           </TouchableOpacity>
         </View>
