@@ -1,4 +1,7 @@
 const sendResponse = {
+  info: (res, http) => {
+    return res.status(http.code).json({ ...http });
+  },
   error: (res, http, details = {}) => {
     return res.status(http.code).json({ ...http, details: details });
   },
