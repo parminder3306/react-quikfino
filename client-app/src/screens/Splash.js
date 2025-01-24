@@ -5,17 +5,17 @@ import { View, Animated } from "react-native";
 import fadeAnimation from "../utils/FadeAnimation";
 
 // Custom style
-import useSplashStyle from "../styles/Style";
+import style from "../styles/Style";
 
 // Custom image
 import splashLogo from "../../assets/icons/logo.png";
 
 const Splash = () => {
   return (
-    <View style={useSplashStyle.container}>
+    <View style={style.container}>
       <Animated.Image
         source={splashLogo}
-        style={[useSplashStyle.sPlashLogo, { opacity: fadeAnimation(1, 2000) }]}
+        style={[style.sPlashLogo, { opacity: fadeAnimation(1, 2000) }]}
       />
     </View>
   );
